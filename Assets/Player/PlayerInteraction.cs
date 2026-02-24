@@ -72,6 +72,8 @@ public class PlayerInteraction : MonoBehaviour
         if (!context.started) return;
         
         Debug.Log(PlayerInventory.instance.currentVocalization);
+        
+        ClosestInteractable?.TryCall();
     }
 
     public void OnListen(InputAction.CallbackContext context)
@@ -80,9 +82,10 @@ public class PlayerInteraction : MonoBehaviour
         
         if (!ClosestInteractable)
         {
-            Debug.Log("nothing to listen to");
+            Debug.Log("Nothing to listen to");
             return;
         }
-        Debug.Log($"Listening to {ClosestInteractable.name}");
+        
+        ClosestInteractable.TryListen();
     }
 }

@@ -927,6 +927,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c49fd396f711d842987042fe65fc170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnCall:
+    m_PersistentCalls:
+      m_Calls: []
+  OnListen:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1410622472
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1073,8 +1079,10 @@ GameObject:
   - component: {fileID: 2042940356}
   - component: {fileID: 2042940355}
   - component: {fileID: 2042940354}
-  - component: {fileID: 2042940359}
   - component: {fileID: 2042940358}
+  - component: {fileID: 2042940359}
+  - component: {fileID: 2042940361}
+  - component: {fileID: 2042940360}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1210,6 +1218,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c49fd396f711d842987042fe65fc170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnCall:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2042940360}
+        m_TargetAssemblyTypeName: Listener, Assembly-CSharp
+        m_MethodName: ReactToKey
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnListen:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2042940360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042940353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 946722f739b23cf4e81224f8506250df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnAcceptKey:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRejectKey:
+    m_PersistentCalls:
+      m_Calls: []
+  keyWord: box
+--- !u!114 &2042940361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2042940353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161dac8e1fe8de54d8e4335b0850b99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSpeaking: 0
+  phrase: Placeholder
 --- !u!1 &2135353362
 GameObject:
   m_ObjectHideFlags: 0
