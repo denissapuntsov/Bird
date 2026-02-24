@@ -1,0 +1,88 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerInteraction : MonoBehaviour
+{
+    private Interactable _closestInteractable;
+    private List<Interactable> _availableInteractables;
+
+    public Interactable ClosestInteractable
+    {
+        get => _closestInteractable;
+        set  => _closestInteractable = value;
+    }
+
+    private void Start()
+    {
+        _availableInteractables = new List<Interactable>();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.GetComponent<Interactable>()) return;
+        
+        var newInteractable = other.GetComponent<Interactable>();
+        if (_availableInteractables.Contains(newInteractable)) return;
+        _availableInteractables.Add(newInteractable);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        UpdateClosestInteractable();
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!other.GetComponent<Interactable>()) return;
+        _availableInteractables.Remove(ClosestInteractable);
+    }
+
+    private void UpdateClosestInteractable()
+    {
+        if (_availableInteractables.Count == 0)
+        {
+            ClosestInteractable = null;
+            return;
+        }
+
+        if (!ClosestInteractable)
+        {
+            ClosestInteractable = _availableInteractables[0];
+            return;
+        }
+
+        foreach (var interactable in _availableInteractables)
+        {
+            if (interactable == ClosestInteractable) continue;
+
+            if (Vector3.Distance(
+                    transform.position,
+                    interactable.transform.position) >=
+                Vector3.Distance(
+                    transform.position,
+                    ClosestInteractable.transform.position)) continue;
+            
+            ClosestInteractable = interactable;
+        }
+    }
+    
+    public void OnCall(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        
+        Debug.Log(PlayerInventory.instance.currentVocalization);
+    }
+
+    public void OnListen(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        
+        if (!ClosestInteractable)
+        {
+            Debug.Log("nothing to listen to");
+            return;
+        }
+        Debug.Log($"Listening to {ClosestInteractable.name}");
+    }
+}
