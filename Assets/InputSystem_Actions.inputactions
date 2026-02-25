@@ -190,9 +190,9 @@
                     "name": "",
                     "id": "f3e74bc8-917d-4b93-aa2a-aff697d6f5fc",
                     "path": "<Gamepad>/leftTrigger",
-                    "interactions": "Hold(duration=5)",
+                    "interactions": "Hold(duration=1)",
                     "processors": "",
-                    "groups": ";Gamepad;Keyboard&Mouse;Touch;Joystick;XR",
+                    "groups": ";Gamepad",
                     "action": "Listen",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -212,9 +212,9 @@
                     "name": "",
                     "id": "e3f98df9-304c-4c41-bc9b-7d2ba913b158",
                     "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
+                    "interactions": "Press(pressPoint=1)",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Gamepad",
                     "action": "Call",
                     "isComposite": false,
                     "isPartOfComposite": false
