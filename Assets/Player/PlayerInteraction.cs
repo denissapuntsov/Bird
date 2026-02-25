@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Event = AK.Wwise.Event;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -69,18 +70,20 @@ public class PlayerInteraction : MonoBehaviour
     
     public void OnCall(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-        
-        Debug.Log(PlayerInventory.instance.currentVocalization);
+        if (!context.performed) return;
+
+        Debug.Log("sadaf");
+
+        PlayerInventory.instance.currentVocalization.Post(gameObject);
         
         ClosestInteractable?.TryCall();
     }
 
     public void OnListen(InputAction.CallbackContext context)
     {
-        if (!context.started) return;
-        
-        if (!ClosestInteractable)
+        if (!context.performed) return;
+
+        if (!ClosestInteractable) 
         {
             Debug.Log("Nothing to listen to");
             return;

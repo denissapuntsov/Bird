@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "2486471960",
+    "Type": "Event",
+    "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
+    "Language": "SFX",
+    "Hash": "{F00E54EC-560C-F2ED-9A0A-151D6409D43A}",
+    "ObjectPath": "Play_Honk",
+    "ShortName": "Play_Honk",
+    "Path": "Event/Play_Honk.bnk",
+    "Media": [
+     {
+      "Id": "820018574",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Loose",
+      "ShortName": "horn-clown-horn-honk-short-smartsound-fx-1-00-00.wav",
+      "Path": "Media/820018574.wem",
+      "CachePath": "C2/{C2CD1EF4-61C4-358C-707F-4400CE3A7599}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "2486471960",
+      "Name": "Play_Honk",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Honk",
+      "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.19278005",
+      "DurationMax": "0.19278005",
+      "MediaRefs": [
+       {
+        "Id": "820018574"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{E0D65305-291E-9D43-65F6-B06C6BE5C12B}"
+ }
+}

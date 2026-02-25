@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{8F957633-745D-4F39-8025-E517F97B9428}" SchemaVersion="133">
+	<Containers>
+		<WorkUnit Name="Default Work Unit" ID="{8F957633-745D-4F39-8025-E517F97B9428}" PersistMode="Standalone">
+			<ChildrenList>
+				<Folder Name="SFX" ID="{9BAD7CA7-378A-45B9-B46F-002EDFD3E2ED}" ShortID="898908959">
+					<ChildrenList>
+						<Sound Name="Honk" ID="{4EEB2B04-0BEC-4844-B604-57F1E5BBD8E2}" ShortID="1033992612">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D622CDB2-1A77-43D8-B53F-BBBEB5F14F73}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{971C7565-176B-4FE0-AA95-1276B2A8A313}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="horn-clown-horn-honk-short-smartsound-fx-1-00-00" ID="{1C7A1BD3-9CDB-41B0-8DB0-172F747BDE67}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimBegin" Type="Real64" Value="0.0197524513902981"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.212532496647614"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>horn-clown-horn-honk-short-smartsound-fx-1-00-00.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="820018574"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="horn-clown-horn-honk-short-smartsound-fx-1-00-00" ID="{1C7A1BD3-9CDB-41B0-8DB0-172F747BDE67}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" ShortID="972105978">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D622CDB2-1A77-43D8-B53F-BBBEB5F14F73}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{971C7565-176B-4FE0-AA95-1276B2A8A313}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="crow-caw-gamemaster-audio-1-00-01" ID="{5B1F277A-82BC-4A21-A87C-36A4A16B9863}">
+									<PropertyList>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.610857899588368"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>crow-caw-gamemaster-audio-1-00-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="108311167"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="crow-caw-gamemaster-audio-1-00-01" ID="{5B1F277A-82BC-4A21-A87C-36A4A16B9863}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+					</ChildrenList>
+				</Folder>
+			</ChildrenList>
+		</WorkUnit>
+	</Containers>
+</WwiseDocument>

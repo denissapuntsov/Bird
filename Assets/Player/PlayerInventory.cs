@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerInventory : MonoBehaviour
 {
-    public string currentVocalization = "ka-kow";
+    public AK.Wwise.Event currentVocalization;
     
     public static PlayerInventory instance;
 
