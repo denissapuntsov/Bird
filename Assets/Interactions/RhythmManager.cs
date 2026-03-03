@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
@@ -9,6 +10,7 @@ public class RhythmManager : MonoBehaviour
     [SerializeField] private Letter w, a, s, d;
     private object _myCookieObject;
     private Letter _currentLetter;
+    [SerializeField] private List<string> markers;
 
     public Letter CurrentLetter
     {
@@ -43,6 +45,7 @@ public class RhythmManager : MonoBehaviour
     public void Start()
     {
         AkUnitySoundEngine.PostEvent(soundEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, MyCallbackFunction, _myCookieObject);
+        markers = new List<string>();
     }
 
     private void MyCallbackFunction(object inCookie, AkCallbackType inType, object inInfo)
@@ -52,7 +55,12 @@ public class RhythmManager : MonoBehaviour
             AkMarkerCallbackInfo info = (AkMarkerCallbackInfo)inInfo;
             
             //Debug.Log((float)info.uPosition / AkUnitySoundEngine.GetSampleRate());
-            Debug.Log(info.strLabel);
+            //Debug.Log(info.strLabel);
+            
+            if (!markers.Contains(info.uIdentifier.ToString()))
+            {
+                markers.Add(info.uIdentifier.ToString());
+            }
 
             MakeLetterActive(info.strLabel);
         }
@@ -82,11 +90,25 @@ public class RhythmManager : MonoBehaviour
         letter.DOPunchScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f, 0, 1f);
     }
 
-    public void OnTryLetter(InputAction.CallbackContext context)
+    public void OnTryKey(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (!context.started) return;
+
+        string letter = "";
+        var input = ((int)context.ReadValue<Vector2>().x, (int)context.ReadValue<Vector2>().y);
+
+        letter = input switch
         {
-            
+            (0, 1) => "w",
+            (-1, 0) => "a",
+            (0, -1) => "s",
+            (1, 0) => "d",
+            _ => "",
+        };
+
+        if (letter == _currentLetter.key)
+        {
+            _currentLetter.IsMatched = true;
         }
     }
 }
