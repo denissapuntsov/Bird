@@ -14,7 +14,7 @@ public class InputMapManager : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.actions = _actions.asset;
         
-        SetCurrentActionMap(ActionMap.Player);
+        SetCurrentActionMap(ActionMap.Listening);
     }
 
     public static void SetCurrentActionMap(ActionMap actionMap)

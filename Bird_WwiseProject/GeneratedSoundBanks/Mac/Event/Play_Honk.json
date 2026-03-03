@@ -10,7 +10,7 @@
     "Type": "Event",
     "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
     "Language": "SFX",
-    "Hash": "{F00E54EC-560C-F2ED-9A0A-151D6409D43A}",
+    "Hash": "{6B7023C9-FA5F-ADDA-90CA-A5D5288CB548}",
     "ObjectPath": "Play_Honk",
     "ShortName": "Play_Honk",
     "Path": "Event/Play_Honk.bnk",
@@ -22,7 +22,7 @@
       "Location": "Loose",
       "ShortName": "horn-clown-horn-honk-short-smartsound-fx-1-00-00.wav",
       "Path": "Media/820018574.wem",
-      "CachePath": "C2/{C2CD1EF4-61C4-358C-707F-4400CE3A7599}.wem"
+      "CachePath": "06/{06D8F67D-ACC3-4FF0-4997-DB051322FEF4}.wem"
      }
     ],
     "Events": [
@@ -43,6 +43,6 @@
     ]
    }
   ],
-  "FileHash": "{CC2B7672-BBDA-238B-6D75-4399B69EBEBD}"
+  "FileHash": "{333C564B-A5C0-1CA3-AA19-CA5670B3E81C}"
  }
 }

@@ -53,7 +53,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        ActiveUI = UIMode.None;
+        ActiveUI = UIMode.Listening;
     }
 }
 
