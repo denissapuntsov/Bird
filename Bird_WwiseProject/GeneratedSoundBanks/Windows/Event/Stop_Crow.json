@@ -1,0 +1,33 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "1544569845",
+    "Type": "Event",
+    "GUID": "{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}",
+    "Language": "SFX",
+    "Hash": "{0E09E308-8CD6-DCB0-A5A8-6EC4B8606936}",
+    "ObjectPath": "Stop_Crow",
+    "ShortName": "Stop_Crow",
+    "Path": "Event/Stop_Crow.bnk",
+    "Events": [
+     {
+      "Id": "1544569845",
+      "Name": "Stop_Crow",
+      "ObjectPath": "\\Events\\Default Work Unit\\Stop_Crow",
+      "GUID": "{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}",
+      "MaxAttenuation": "0",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     }
+    ]
+   }
+  ],
+  "FileHash": "{9873D95C-625F-62AA-27CF-A9217E1C2916}"
+ }
+}

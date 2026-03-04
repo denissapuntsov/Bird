@@ -2427,7 +2427,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1126798106
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2718,14 +2718,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802ce069753c1dc418d6d8c85366af7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundEvent:
-    idInternal: 0
-    valueGuidInternal: 
-    WwiseObjectReference: {fileID: 11400000, guid: bddc44e1f2a392246a9c288e7d573b26, type: 2}
-  w: {fileID: 1759213666}
-  a: {fileID: 2003396255}
-  s: {fileID: 1712684742}
-  d: {fileID: 847326849}
+  currentSpeaker: {fileID: 1410622476}
+  w: {fileID: 1759213662}
+  a: {fileID: 2003396252}
+  s: {fileID: 847326848}
+  d: {fileID: 1712684739}
   markers: []
 --- !u!4 &1354986261
 Transform:
@@ -2808,19 +2805,7 @@ MonoBehaviour:
       m_Calls: []
   OnListen:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1410622476}
-        m_TargetAssemblyTypeName: Speaker, Assembly-CSharp
-        m_MethodName: TakeSound
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!65 &1410622472
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2923,10 +2908,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSpeaking: 0
-  sound:
+  interactionStartEvent:
     idInternal: 0
     valueGuidInternal: 
     WwiseObjectReference: {fileID: 11400000, guid: bddc44e1f2a392246a9c288e7d573b26, type: 2}
+  interactionEndEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: d73a02902a395a041b513202ddfc6963, type: 2}
+  extractedSound:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: cefad75a3030daa47bd86face3c3b64a, type: 2}
 --- !u!1 &1492686090
 GameObject:
   m_ObjectHideFlags: 0

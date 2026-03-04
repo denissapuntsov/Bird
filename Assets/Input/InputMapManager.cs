@@ -26,7 +26,6 @@ public class InputMapManager : MonoBehaviour
         {
             if (map.name == enumMapName)
             {
-                Debug.Log("Found ActionMap: " + map.name);
                 map.Enable();
                 return;
             }

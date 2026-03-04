@@ -25,12 +25,14 @@ public class UIManager : MonoBehaviour
                     _activeCanvasGroup = listeningGroup;
                     break;
                 case UIMode.None:
+                    InputMapManager.SetCurrentActionMap(ActionMap.Player);
                     _activeCanvasGroup = null;
                     break;
             }
             
-            foreach (CanvasGroup group in GetComponentsInChildren<CanvasGroup>())
+            foreach (CanvasGroup group in GetComponentsInChildren<CanvasGroup>(true))
             {
+                Debug.Log(group.name);
                 group.gameObject.SetActive(group == _activeCanvasGroup);
             }
         }
@@ -49,11 +51,6 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start()
-    {
-        ActiveUI = UIMode.Listening;
     }
 }
 

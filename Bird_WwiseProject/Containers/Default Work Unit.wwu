@@ -32,7 +32,7 @@
 								<ActiveSource Name="horn-clown-horn-honk-short-smartsound-fx-1-00-00" ID="{1C7A1BD3-9CDB-41B0-8DB0-172F747BDE67}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
-						<Sound Name="Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" ShortID="972105978">
+						<Sound Name="Puzzle_Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" ShortID="972105978">
 							<PropertyList>
 								<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
 							</PropertyList>
@@ -65,8 +65,13 @@
 											</Marker>
 											<Marker Name="" ID="{1855EC62-EF5D-49C6-B5E4-68F721617B46}">
 												<PropertyList>
-													<Property Name="Label" Type="string" Value="w"/>
+													<Property Name="Label" Type="string" Value="s"/>
 													<Property Name="Time" Type="Real64" Value="0.908227386961249"/>
+												</PropertyList>
+											</Marker>
+											<Marker Name="" ID="{4E071065-1F34-4443-A973-D8EFA281DD7E}">
+												<PropertyList>
+													<Property Name="Label" Type="string" Value="end"/>
 												</PropertyList>
 											</Marker>
 										</ObjectList>
@@ -75,6 +80,33 @@
 							</ChildrenList>
 							<ActiveSourceList>
 								<ActiveSource Name="crow-caw-gamemaster-audio-1-00-01" ID="{5B1F277A-82BC-4A21-A87C-36A4A16B9863}" Platform="Linked"/>
+							</ActiveSourceList>
+						</Sound>
+						<Sound Name="Player_Crow" ID="{22AD6FFB-63AC-4E3D-AC41-04CA8D4059E8}" ShortID="112875985">
+							<ReferenceList>
+								<Reference Name="Conversion">
+									<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{D622CDB2-1A77-43D8-B53F-BBBEB5F14F73}"/>
+								</Reference>
+								<Reference Name="OutputBus">
+									<ObjectRef Name="Main Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{971C7565-176B-4FE0-AA95-1276B2A8A313}"/>
+								</Reference>
+							</ReferenceList>
+							<ChildrenList>
+								<AudioFileSource Name="crow-caw-gamemaster-audio-1-00-01" ID="{046586D5-91FA-4E5F-A1F5-2BEE574F7160}">
+									<PropertyList>
+										<Property Name="MarkerInputMode" Type="int16" Value="2"/>
+										<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+										<Property Name="TrimEnd" Type="Real64" Value="0.674077731011848"/>
+									</PropertyList>
+									<Language>SFX</Language>
+									<AudioFile>crow-caw-gamemaster-audio-1-00-01.wav</AudioFile>
+									<MediaIDList>
+										<MediaID ID="237954606"/>
+									</MediaIDList>
+								</AudioFileSource>
+							</ChildrenList>
+							<ActiveSourceList>
+								<ActiveSource Name="crow-caw-gamemaster-audio-1-00-01" ID="{046586D5-91FA-4E5F-A1F5-2BEE574F7160}" Platform="Linked"/>
 							</ActiveSourceList>
 						</Sound>
 					</ChildrenList>

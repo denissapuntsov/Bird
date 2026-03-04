@@ -8,16 +8,4 @@ public class Letter : MonoBehaviour
     public string key;
     
     private bool _isMatched;
-
-    public bool IsMatched
-    {
-        get => _isMatched;
-        set
-        {
-            _isMatched = value;
-            matched.SetActive(_isMatched);
-            unmatched.SetActive(!_isMatched);
-            Debug.Log(_isMatched);
-        }
-    }
 }

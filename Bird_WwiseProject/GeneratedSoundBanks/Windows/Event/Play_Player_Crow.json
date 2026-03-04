@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "692116557",
+    "Type": "Event",
+    "GUID": "{066B6404-BDF1-4900-9328-883746E27563}",
+    "Language": "SFX",
+    "Hash": "{37C461C8-4C81-C287-076F-FA40BAD1F6ED}",
+    "ObjectPath": "Play_Player_Crow",
+    "ShortName": "Play_Player_Crow",
+    "Path": "Event/Play_Player_Crow.bnk",
+    "Media": [
+     {
+      "Id": "237954606",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Loose",
+      "ShortName": "crow-caw-gamemaster-audio-1-00-01.wav",
+      "Path": "Media/237954606.wem",
+      "CachePath": "32/{329C5DE1-A40E-DC1C-3134-315F0446F469}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "692116557",
+      "Name": "Play_Player_Crow",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Player_Crow",
+      "GUID": "{066B6404-BDF1-4900-9328-883746E27563}",
+      "DurationType": "OneShot",
+      "DurationMin": "0.67407775",
+      "DurationMax": "0.67407775",
+      "MediaRefs": [
+       {
+        "Id": "237954606"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{2B9510B2-BB86-6DE3-46D6-6DD678202C16}"
+ }
+}

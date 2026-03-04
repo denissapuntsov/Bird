@@ -15,6 +15,8 @@ namespace AK
     {
         static const AkUniqueID PLAY_CROW = 3219523343U;
         static const AkUniqueID PLAY_HONK = 2486471960U;
+        static const AkUniqueID PLAY_PLAYER_CROW = 692116557U;
+        static const AkUniqueID STOP_CROW = 1544569845U;
     } // namespace EVENTS
 
     namespace BUSSES

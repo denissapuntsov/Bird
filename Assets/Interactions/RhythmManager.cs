@@ -6,24 +6,24 @@ using UnityEngine.InputSystem;
 
 public class RhythmManager : MonoBehaviour
 {
-    [SerializeField] private AK.Wwise.Event soundEvent;
-    [SerializeField] private Letter w, a, s, d;
+    [SerializeField] private Speaker currentSpeaker;
+    private AK.Wwise.Event _playEvent, _stopEvent;
+    [SerializeField] private GameObject w, a, s, d;
     private object _myCookieObject;
-    private Letter _currentLetter;
-    [SerializeField] private List<string> markers;
+    private Marker _currentMarker;
+    [SerializeField] private List<Marker> markers;
 
-    public Letter CurrentLetter
+    public Marker CurrentMarker
     {
-        get => _currentLetter;
+        get => _currentMarker;
         set
         {
-            _currentLetter = value;
-            Debug.Log($"Current Letter: {_currentLetter}");
-            if (_currentLetter.IsMatched)
+            _currentMarker = value;
+            if (_currentMarker.isMatched)
             {
-                _currentLetter.IsMatched = false;
+                _currentMarker.isMatched = false;
             }
-            ExpandLetter(_currentLetter.transform);
+            ExpandLetter(_currentMarker.key);
         }
     }
     
@@ -44,50 +44,75 @@ public class RhythmManager : MonoBehaviour
 
     public void Start()
     {
-        AkUnitySoundEngine.PostEvent(soundEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, MyCallbackFunction, _myCookieObject);
-        markers = new List<string>();
+        Setup();
     }
 
-    private void MyCallbackFunction(object inCookie, AkCallbackType inType, object inInfo)
+    private void Setup()
     {
-        if (inType == AkCallbackType.AK_Marker)
+        UIManager.instance.ActiveUI = UIMode.Listening;
+        _playEvent = currentSpeaker.interactionStartEvent;
+        _stopEvent = currentSpeaker.interactionEndEvent;
+        AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
+        markers = new List<Marker>();
+    }
+
+    private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)
+    {
+        if (inType != AkCallbackType.AK_Marker) return;
+        AkMarkerCallbackInfo info = (AkMarkerCallbackInfo)inInfo;
+
+        if (info.strLabel == "end")
         {
-            AkMarkerCallbackInfo info = (AkMarkerCallbackInfo)inInfo;
-            
-            //Debug.Log((float)info.uPosition / AkUnitySoundEngine.GetSampleRate());
-            //Debug.Log(info.strLabel);
-            
-            if (!markers.Contains(info.uIdentifier.ToString()))
+
+            if (!AreAllMarkersMatched())
             {
-                markers.Add(info.uIdentifier.ToString());
+                ResetMarkerMatches();
+                return;
             }
-
-            MakeLetterActive(info.strLabel);
+            ExtractAndClose();
+            return;
         }
+        
+        UpdateCurrentMarker(info);
     }
 
-    private void MakeLetterActive(string key)
+    private void UpdateCurrentMarker(AkMarkerCallbackInfo info)
     {
-        switch (key.ToUpper())
+        Marker incomingMarker = new Marker(info.uPosition, info.strLabel);
+        if (!markers.Contains(incomingMarker))
         {
-            case "W":
-                CurrentLetter = w;
-                break;
-            case "A":
-                CurrentLetter = a;
-                break;
-            case "S":
-                CurrentLetter = s;
-                break;
-            case "D":
-                CurrentLetter = d;
-                break;
+            markers.Add(incomingMarker);
+        }
+
+        foreach (Marker marker in markers)
+        {
+            if (marker.Equals(incomingMarker)) CurrentMarker = marker;
         }
     }
 
-    private void ExpandLetter(Transform letter)
+    private void ResetMarkerMatches()
     {
-        letter.DOPunchScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f, 0, 1f);
+        foreach (Marker marker in markers) marker.isMatched = false;
+    }
+
+    private void ExpandLetter(string letter)
+    {
+        var letterGameObject = GetLetterGameObject(letter);
+
+        letterGameObject?.transform.DOPunchScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f, 0, 1f);
+    }
+
+    private GameObject GetLetterGameObject(string letter)
+    {
+        GameObject letterGameObject = letter switch
+        {
+            "a" => a.gameObject,
+            "w" => w.gameObject,
+            "s" => s.gameObject,
+            "d" => d.gameObject,
+            _ => null
+        };
+        return letterGameObject;
     }
 
     public void OnTryKey(InputAction.CallbackContext context)
@@ -106,9 +131,31 @@ public class RhythmManager : MonoBehaviour
             _ => "",
         };
 
-        if (letter == _currentLetter.key)
+        if (letter != CurrentMarker.key || CurrentMarker.isMatched)
         {
-            _currentLetter.IsMatched = true;
+            ResetMarkerMatches();
+            return;
         }
+        
+        CurrentMarker.isMatched = true;
+    }
+
+    private void ExtractAndClose()
+    {
+        AkUnitySoundEngine.PostEvent(_stopEvent.Name, gameObject);
+        UIManager.instance.ActiveUI = UIMode.None;
+        PlayerInventory.instance.currentVocalization = currentSpeaker.extractedSound;
+    }
+
+    private bool AreAllMarkersMatched()
+    {
+        if (markers.Count < 1) return false;
+        
+        foreach (Marker marker in markers)
+        {
+            if (!marker.isMatched) return false;
+        }
+
+        return true;
     }
 }

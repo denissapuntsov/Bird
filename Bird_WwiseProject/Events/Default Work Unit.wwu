@@ -19,7 +19,32 @@
 						<Action Name="" ID="{443A65AA-79A5-43FE-859A-5AE33CADC27D}" ShortID="778828924">
 							<ReferenceList>
 								<Reference Name="Target">
-									<ObjectRef Name="Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+									<ObjectRef Name="Puzzle_Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Crow" ID="{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}">
+					<ChildrenList>
+						<Action Name="" ID="{2F56EAF8-67B8-4705-9CD5-8741BF0D4A8B}" ShortID="740619214">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Puzzle_Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Player_Crow" ID="{066B6404-BDF1-4900-9328-883746E27563}">
+					<ChildrenList>
+						<Action Name="" ID="{65B6A7D2-FC79-4B14-80B1-9646794E1A2B}" ShortID="422060314">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Player_Crow" ID="{22AD6FFB-63AC-4E3D-AC41-04CA8D4059E8}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
 								</Reference>
 							</ReferenceList>
 						</Action>
