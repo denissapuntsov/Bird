@@ -50,8 +50,8 @@ public class RhythmManager : MonoBehaviour
     private void Setup()
     {
         UIManager.instance.ActiveUI = UIMode.Listening;
-        _playEvent = currentSpeaker.interactionStartEvent;
-        _stopEvent = currentSpeaker.interactionEndEvent;
+        _playEvent = currentSpeaker.InteractionStartEvent;
+        _stopEvent = currentSpeaker.InteractionEndEvent;
         AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
         markers = new List<Marker>();
     }
@@ -144,7 +144,7 @@ public class RhythmManager : MonoBehaviour
     {
         AkUnitySoundEngine.PostEvent(_stopEvent.Name, gameObject);
         UIManager.instance.ActiveUI = UIMode.None;
-        PlayerInventory.instance.currentVocalization = currentSpeaker.extractedSound;
+        PlayerInventory.instance.currentVocalization = currentSpeaker.ExtractedSoundEvent;
     }
 
     private bool AreAllMarkersMatched()
