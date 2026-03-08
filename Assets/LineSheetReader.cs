@@ -16,7 +16,7 @@ public class LineSheetReader : MonoBehaviour
     [SerializeField] private string rangeMax = "J";
     
     private static string spreadsheetId = "1cxG14Y6nzJhHcV808kAELi5T5duPYRSI-4ROHRH1yG8";
-    private static string jsonPath = "/bird-489617-d643e97e02c9.json";
+    private static string jsonPath = "/Credentials/bird-489617-8a2372cf4532.json";
  
     private static SheetsService _service;
     
