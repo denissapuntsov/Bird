@@ -731,6 +731,7 @@ MonoBehaviour:
   sheet: Sheet1
   rangeMin: A2
   rangeMax: J
+  update: 0
 --- !u!1 &241230934
 GameObject:
   m_ObjectHideFlags: 0
@@ -2851,7 +2852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802ce069753c1dc418d6d8c85366af7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentSpeaker: {fileID: 1410622476}
   w: {fileID: 1759213662}
   a: {fileID: 2003396252}
   s: {fileID: 847326848}
@@ -2884,9 +2884,9 @@ GameObject:
   - component: {fileID: 1410622474}
   - component: {fileID: 1410622473}
   - component: {fileID: 1410622472}
+  - component: {fileID: 1410622470}
   - component: {fileID: 1410622471}
   - component: {fileID: 1410622476}
-  - component: {fileID: 1410622470}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -2935,10 +2935,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnCall:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: Listener, Assembly-CSharp
+        m_MethodName: ReactToKey
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnListen:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1410622476}
+        m_TargetAssemblyTypeName: Speaker, Assembly-CSharp
+        m_MethodName: Listen
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  connectSpeaker: 0
+  connectListener: 0
 --- !u!65 &1410622472
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3944,6 +3970,8 @@ MonoBehaviour:
   OnListen:
     m_PersistentCalls:
       m_Calls: []
+  connectSpeaker: 0
+  connectListener: 0
 --- !u!114 &2042940360
 MonoBehaviour:
   m_ObjectHideFlags: 0

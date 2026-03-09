@@ -7,7 +7,6 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using UnityEngine;
 
-
 [ExecuteInEditMode]
 public class LineSheetReader : MonoBehaviour
 {

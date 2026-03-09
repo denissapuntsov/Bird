@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class RhythmManager : MonoBehaviour
 {
-    [SerializeField] private Speaker currentSpeaker;
+    private Speaker currentSpeaker = null;
     private AK.Wwise.Event _playEvent, _stopEvent;
     [SerializeField] private GameObject w, a, s, d;
     private object _myCookieObject;
@@ -42,13 +42,9 @@ public class RhythmManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Start()
+    public void Setup(Speaker newSpeaker)
     {
-        Setup();
-    }
-
-    private void Setup()
-    {
+        currentSpeaker = newSpeaker;
         UIManager.instance.ActiveUI = UIMode.Listening;
         _playEvent = currentSpeaker.InteractionStartEvent;
         _stopEvent = currentSpeaker.InteractionEndEvent;
