@@ -47,5 +47,5 @@ public enum ActionMap
 {
     Player,
     UI,
-    Listening,
+    Listening
 }

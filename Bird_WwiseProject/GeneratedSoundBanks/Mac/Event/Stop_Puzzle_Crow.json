@@ -6,19 +6,19 @@
   "SoundBankVersion": "172",
   "SoundBanks": [
    {
-    "Id": "1544569845",
+    "Id": "3676932982",
     "Type": "Event",
     "GUID": "{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}",
     "Language": "SFX",
-    "Hash": "{0E09E308-8CD6-DCB0-A5A8-6EC4B8606936}",
-    "ObjectPath": "Stop_Crow",
-    "ShortName": "Stop_Crow",
-    "Path": "Event/Stop_Crow.bnk",
+    "Hash": "{D7CACD33-E025-8C46-565F-703816B229D2}",
+    "ObjectPath": "Stop_Puzzle_Crow",
+    "ShortName": "Stop_Puzzle_Crow",
+    "Path": "Event/Stop_Puzzle_Crow.bnk",
     "Events": [
      {
-      "Id": "1544569845",
-      "Name": "Stop_Crow",
-      "ObjectPath": "\\Events\\Default Work Unit\\Stop_Crow",
+      "Id": "3676932982",
+      "Name": "Stop_Puzzle_Crow",
+      "ObjectPath": "\\Events\\Default Work Unit\\Stop_Puzzle_Crow",
       "GUID": "{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}",
       "MaxAttenuation": "0",
       "DurationType": "OneShot",
@@ -28,6 +28,6 @@
     ]
    }
   ],
-  "FileHash": "{349B79CA-FCC0-2EC1-CBE8-0CF9FF3D0F22}"
+  "FileHash": "{90C6FF0C-5B6F-47F1-C482-51BD88EFE36F}"
  }
 }

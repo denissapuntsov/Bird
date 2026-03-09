@@ -9,10 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9abbd2aa19189f041b1a6dec6cb0ac47, type: 3}
-  m_Name: 4A6A6A49-C28E-4DDB-8599-68F181BEB47D
+  m_Script: {fileID: 11500000, guid: ef1bf81f7ad7b2746b146d2ccd3d68e4, type: 3}
+  m_Name: Fountain
   m_EditorClassIdentifier: 
-  objectName: Play_Player_Honk
-  id: 1225229226
-  guid: 4A6A6A49-C28E-4DDB-8599-68F181BEB47D
-  IsInUserDefinedSoundBank: 0

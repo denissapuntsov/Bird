@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup pauseGroup, listeningGroup;
+    [SerializeField] private CanvasGroup pauseGroup, listeningRhythmGroup, listeningDroneGroup;
     
     private CanvasGroup _activeCanvasGroup;
 
@@ -20,9 +20,13 @@ public class UIManager : MonoBehaviour
                     InputMapManager.SetCurrentActionMap(ActionMap.UI);
                     _activeCanvasGroup = pauseGroup;
                     break;
-                case UIMode.Listening:
+                case UIMode.ListeningRhythm:
                     InputMapManager.SetCurrentActionMap(ActionMap.Listening);
-                    _activeCanvasGroup = listeningGroup;
+                    _activeCanvasGroup = listeningRhythmGroup;
+                    break;
+                case UIMode.ListeningDrone:
+                    InputMapManager.SetCurrentActionMap(ActionMap.Listening);
+                    _activeCanvasGroup = listeningDroneGroup;
                     break;
                 case UIMode.None:
                     InputMapManager.SetCurrentActionMap(ActionMap.Player);
@@ -57,6 +61,7 @@ public class UIManager : MonoBehaviour
 public enum UIMode
 {
     Pause,
-    Listening,
+    ListeningRhythm,
+    ListeningDrone,
     None
 }

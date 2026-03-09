@@ -3,7 +3,7 @@
 	<Events>
 		<WorkUnit Name="Default Work Unit" ID="{7DBFE38B-2A82-4845-92A7-553BB3E4270A}" PersistMode="Standalone">
 			<ChildrenList>
-				<Event Name="Play_Honk" ID="{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}">
+				<Event Name="Play_Player_Honk" ID="{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}">
 					<ChildrenList>
 						<Action Name="" ID="{D2D3724C-F0C4-4FF1-AC16-5D0F948193C2}" ShortID="42004241">
 							<ReferenceList>
@@ -14,9 +14,12 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="Play_Crow" ID="{642CCA04-9405-469B-AB2B-FC993333802F}">
+				<Event Name="Play_Puzzle_Crow" ID="{642CCA04-9405-469B-AB2B-FC993333802F}">
 					<ChildrenList>
 						<Action Name="" ID="{443A65AA-79A5-43FE-859A-5AE33CADC27D}" ShortID="778828924">
+							<PropertyList>
+								<Property Name="Delay" Type="Real64" Value="0.5"/>
+							</PropertyList>
 							<ReferenceList>
 								<Reference Name="Target">
 									<ObjectRef Name="Puzzle_Crow" ID="{9A6B4569-F5D7-4546-B6F1-130199AB85B6}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
@@ -25,7 +28,7 @@
 						</Action>
 					</ChildrenList>
 				</Event>
-				<Event Name="Stop_Crow" ID="{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}">
+				<Event Name="Stop_Puzzle_Crow" ID="{3614D97F-2B5A-4D22-8D8B-4049049A5F5B}">
 					<ChildrenList>
 						<Action Name="" ID="{2F56EAF8-67B8-4705-9CD5-8741BF0D4A8B}" ShortID="740619214">
 							<PropertyList>

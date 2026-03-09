@@ -1,22 +1,36 @@
 using System;
 using UnityEngine;
+using UnityEditor;
+using UnityEngine.Serialization;
 
 public class Speaker : MonoBehaviour
 {
     [SerializeField] private bool isSpeaking = false;
-    [SerializeField] private SpeakerInfo speakerInfo;
-    public AK.Wwise.Event InteractionStartEvent => speakerInfo.interactionStartEvent;
-    public AK.Wwise.Event InteractionEndEvent => speakerInfo.interactionEndEvent;
-    public AK.Wwise.Event ExtractedSoundEvent => speakerInfo.extractedSound;
+    [HideInInspector] public SpeakerType speakerType;
+    [HideInInspector] public SpeakerRhythmInfo speakerRhythmInfo;
+    [HideInInspector] public SpeakerDroneInfo speakerDroneInfo;
+    public AK.Wwise.Event InteractionStartEvent => speakerRhythmInfo.interactionStartEvent;
+    public AK.Wwise.Event InteractionEndEvent => speakerRhythmInfo.interactionEndEvent;
+    public AK.Wwise.Event ExtractedSoundEvent => speakerRhythmInfo.extractedSound;
 
     public void Listen()
     {
         InputMapManager.SetCurrentActionMap(ActionMap.Listening);
-        RhythmManager.instance.Setup(this);
+        switch (speakerType)
+        {
+            case SpeakerType.Rhythm:
+                RhythmManager.instance.Setup(this);
+                break;
+            case SpeakerType.Drone:
+                break;
+        }
     }
 
-    private void Start()
-    {
-        
-    }
+   
+}
+
+public enum SpeakerType
+{
+    Rhythm,
+    Drone
 }

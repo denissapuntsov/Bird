@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,15 +7,12 @@ public class Interactable : MonoBehaviour
 {
     
     public UnityEvent OnCall, OnListen;
-
-    [InspectorButton("ConnectSpeaker", ButtonWidth = 200)]
-    public bool connectSpeaker;
-    [InspectorButton("ConnectListener", ButtonWidth = 200)] 
-    public bool connectListener;
     
     private Listener _listener;
+    public Listener Listener => _listener;
     private Speaker _speaker;
-    
+    public Speaker Speaker => _speaker;
+
     public void TryCall()
     {
         OnCall.Invoke();
@@ -25,7 +23,7 @@ public class Interactable : MonoBehaviour
         OnListen.Invoke();
     }
 
-    private void ConnectListener()
+    public void ConnectListener()
     {
         _listener = GetComponent<Listener>();
         if (_listener == null)
@@ -40,7 +38,7 @@ public class Interactable : MonoBehaviour
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
     }
 
-    private void ConnectSpeaker()
+    public void ConnectSpeaker()
     {
         _speaker = GetComponent<Speaker>();
         if (_speaker == null)
@@ -53,5 +51,19 @@ public class Interactable : MonoBehaviour
             if (OnListen.GetPersistentMethodName(i).Equals(nameof(_speaker.Listen))) return;
         } 
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnListen, _speaker.Listen);
+    }
+
+    public void DisconnectListener()
+    {
+        UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnCall, _listener.ReactToKey);
+        DestroyImmediate(_listener);
+        _listener = null;
+    }
+
+    public void DisconnectSpeaker()
+    {
+        UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnListen, _speaker.Listen);
+        DestroyImmediate(_speaker);
+        _speaker = null;
     }
 }

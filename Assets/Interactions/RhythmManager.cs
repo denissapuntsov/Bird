@@ -45,11 +45,12 @@ public class RhythmManager : MonoBehaviour
     public void Setup(Speaker newSpeaker)
     {
         currentSpeaker = newSpeaker;
-        UIManager.instance.ActiveUI = UIMode.Listening;
+        UIManager.instance.ActiveUI = UIMode.ListeningRhythm;
         _playEvent = currentSpeaker.InteractionStartEvent;
         _stopEvent = currentSpeaker.InteractionEndEvent;
-        AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
         markers = new List<Marker>();
+        
+        AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
     }
 
     private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)

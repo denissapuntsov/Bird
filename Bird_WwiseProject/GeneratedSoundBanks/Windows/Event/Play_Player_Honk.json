@@ -6,14 +6,14 @@
   "SoundBankVersion": "172",
   "SoundBanks": [
    {
-    "Id": "2486471960",
+    "Id": "1225229226",
     "Type": "Event",
     "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
     "Language": "SFX",
-    "Hash": "{6B7023C9-FA5F-ADDA-90CA-A5D5288CB548}",
-    "ObjectPath": "Play_Honk",
-    "ShortName": "Play_Honk",
-    "Path": "Event/Play_Honk.bnk",
+    "Hash": "{EAC2DCFC-AD76-D23A-0F9A-70B2D4AC8EC6}",
+    "ObjectPath": "Play_Player_Honk",
+    "ShortName": "Play_Player_Honk",
+    "Path": "Event/Play_Player_Honk.bnk",
     "Media": [
      {
       "Id": "820018574",
@@ -27,9 +27,9 @@
     ],
     "Events": [
      {
-      "Id": "2486471960",
-      "Name": "Play_Honk",
-      "ObjectPath": "\\Events\\Default Work Unit\\Play_Honk",
+      "Id": "1225229226",
+      "Name": "Play_Player_Honk",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Player_Honk",
       "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
       "DurationType": "OneShot",
       "DurationMin": "0.19278005",
@@ -43,6 +43,6 @@
     ]
    }
   ],
-  "FileHash": "{6F3C12CE-6B32-1E48-DDF6-F8CD625F6521}"
+  "FileHash": "{01F8A945-FFA9-C63E-D676-588DA6511902}"
  }
 }

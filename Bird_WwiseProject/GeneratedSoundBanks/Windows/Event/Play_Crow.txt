@@ -1,3 +1,0 @@
-Event	ID	Name			Wwise Object Path	Notes
-	3219523343	Play_Crow			\Default Work Unit\Play_Crow	
-

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9abbd2aa19189f041b1a6dec6cb0ac47, type: 3}
   m_Name: 3614D97F-2B5A-4D22-8D8B-4049049A5F5B
   m_EditorClassIdentifier: 
-  objectName: Stop_Crow
-  id: 1544569845
+  objectName: Stop_Puzzle_Crow
+  id: 3676932982
   guid: 3614D97F-2B5A-4D22-8D8B-4049049A5F5B
   IsInUserDefinedSoundBank: 0

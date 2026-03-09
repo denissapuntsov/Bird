@@ -1,0 +1,3 @@
+Event	ID	Name			Wwise Object Path	Notes
+	3676932982	Stop_Puzzle_Crow			\Default Work Unit\Stop_Puzzle_Crow	
+

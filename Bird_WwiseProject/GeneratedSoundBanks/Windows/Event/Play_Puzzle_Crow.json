@@ -6,14 +6,14 @@
   "SoundBankVersion": "172",
   "SoundBanks": [
    {
-    "Id": "3219523343",
+    "Id": "1819305424",
     "Type": "Event",
     "GUID": "{642CCA04-9405-469B-AB2B-FC993333802F}",
     "Language": "SFX",
-    "Hash": "{42425C24-82EF-3079-3119-CEFEFE32CF3B}",
-    "ObjectPath": "Play_Crow",
-    "ShortName": "Play_Crow",
-    "Path": "Event/Play_Crow.bnk",
+    "Hash": "{B777A166-CB21-1FB0-33E0-BC4017CE2FEA}",
+    "ObjectPath": "Play_Puzzle_Crow",
+    "ShortName": "Play_Puzzle_Crow",
+    "Path": "Event/Play_Puzzle_Crow.bnk",
     "Media": [
      {
       "Id": "108311167",
@@ -22,14 +22,14 @@
       "Location": "Loose",
       "ShortName": "crow-caw-gamemaster-audio-1-00-01.wav",
       "Path": "Media/108311167.wem",
-      "CachePath": "5E/{5EEB8441-ACBD-6DF0-6925-7165E06436C0}.wem"
+      "CachePath": "2D/{2D860851-83E8-F83B-4AC1-5C4A908117E2}.wem"
      }
     ],
     "Events": [
      {
-      "Id": "3219523343",
-      "Name": "Play_Crow",
-      "ObjectPath": "\\Events\\Default Work Unit\\Play_Crow",
+      "Id": "1819305424",
+      "Name": "Play_Puzzle_Crow",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Puzzle_Crow",
       "GUID": "{642CCA04-9405-469B-AB2B-FC993333802F}",
       "DurationType": "Infinite",
       "MediaRefs": [
@@ -41,6 +41,6 @@
     ]
    }
   ],
-  "FileHash": "{B19E9628-27AF-A9A7-7C26-FE80ADA4E8AE}"
+  "FileHash": "{65BEF10A-3E98-0E78-50F3-804B06E99831}"
  }
 }
