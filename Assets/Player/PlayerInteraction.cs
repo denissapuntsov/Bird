@@ -72,8 +72,6 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!context.performed) return;
 
-        Debug.Log("sadaf");
-
         PlayerInventory.instance.currentVocalization.Post(gameObject);
         
         ClosestInteractable?.TryCall();

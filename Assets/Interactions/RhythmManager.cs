@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class RhythmManager : MonoBehaviour
 {
-    private Speaker currentSpeaker = null;
+    private Speaker _currentSpeaker = null;
     private AK.Wwise.Event _playEvent, _stopEvent;
     [SerializeField] private GameObject w, a, s, d;
     private object _myCookieObject;
@@ -44,13 +44,20 @@ public class RhythmManager : MonoBehaviour
 
     public void Setup(Speaker newSpeaker)
     {
-        currentSpeaker = newSpeaker;
+        _currentSpeaker = newSpeaker;
         UIManager.instance.ActiveUI = UIMode.ListeningRhythm;
-        _playEvent = currentSpeaker.InteractionStartEvent;
-        _stopEvent = currentSpeaker.InteractionEndEvent;
+        _playEvent = _currentSpeaker.InteractionStartEvent;
+        _stopEvent = _currentSpeaker.InteractionEndEvent;
         markers = new List<Marker>();
         
         AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
+    }
+
+    public void OnExit(InputAction.CallbackContext context)
+    {
+        if (UIManager.instance.ActiveUI != UIMode.ListeningRhythm) return;
+        if (!context.started) return;
+        Close();
     }
 
     private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)
@@ -114,6 +121,7 @@ public class RhythmManager : MonoBehaviour
 
     public void OnTryKey(InputAction.CallbackContext context)
     {
+        if (UIManager.instance.ActiveUI != UIMode.ListeningRhythm) return;
         if (!context.started) return;
 
         string letter = "";
@@ -139,9 +147,14 @@ public class RhythmManager : MonoBehaviour
 
     private void ExtractAndClose()
     {
+        Close();
+        PlayerInventory.instance.currentVocalization = _currentSpeaker.ExtractedSoundEvent;
+    }
+
+    private void Close()
+    {
         AkUnitySoundEngine.PostEvent(_stopEvent.Name, gameObject);
-        UIManager.instance.ActiveUI = UIMode.None;
-        PlayerInventory.instance.currentVocalization = currentSpeaker.ExtractedSoundEvent;
+        UIManager.instance.Exit();
     }
 
     private bool AreAllMarkersMatched()

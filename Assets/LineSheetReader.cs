@@ -7,7 +7,6 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using UnityEngine;
 
-[ExecuteInEditMode]
 public class LineSheetReader : MonoBehaviour
 {
     [SerializeField] private string sheet = "Sheet1";
@@ -18,8 +17,6 @@ public class LineSheetReader : MonoBehaviour
     private static string jsonPath = "/Credentials/bird-489617-8a2372cf4532.json";
  
     private static SheetsService _service;
-    
-    [InspectorButton("UpdateValues")] public bool update;
     
     static LineSheetReader()
     {
@@ -35,7 +32,7 @@ public class LineSheetReader : MonoBehaviour
         });
     }
 
-    private void UpdateValues()
+    public void UpdateValues()
     {
         var sheetRangeValues = GetSheetRange($"{sheet}!{rangeMin}:{rangeMax}");
         
@@ -43,7 +40,7 @@ public class LineSheetReader : MonoBehaviour
        {
            foreach (object column in row)
            {
-               Debug.Log(column);
+               if (!Equals(column, string.Empty)) Debug.Log(column);
            }
        }
     }

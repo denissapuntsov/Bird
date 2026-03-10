@@ -13,8 +13,6 @@ public class InputMapManager : MonoBehaviour
         _actions = new InputSystem_Actions();
         _playerInput = GetComponent<PlayerInput>();
         _playerInput.actions = _actions.asset;
-        
-        SetCurrentActionMap(ActionMap.Player);
     }
 
     public static void SetCurrentActionMap(ActionMap actionMap)

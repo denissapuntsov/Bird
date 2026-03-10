@@ -22,6 +22,7 @@ public class Speaker : MonoBehaviour
                 RhythmManager.instance.Setup(this);
                 break;
             case SpeakerType.Drone:
+                DroneManager.instance.Setup(this);
                 break;
         }
     }

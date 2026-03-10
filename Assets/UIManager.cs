@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -7,13 +8,14 @@ public class UIManager : MonoBehaviour
     
     private CanvasGroup _activeCanvasGroup;
 
-    private UIMode _activeUI;
+    private UIMode _activeUI = UIMode.None;
 
     public UIMode ActiveUI
     {
         get => _activeUI;
         set
         {
+            _activeUI = value;
             switch (value)
             {
                 case UIMode.Pause:
@@ -36,7 +38,6 @@ public class UIManager : MonoBehaviour
             
             foreach (CanvasGroup group in GetComponentsInChildren<CanvasGroup>(true))
             {
-                Debug.Log(group.name);
                 group.gameObject.SetActive(group == _activeCanvasGroup);
             }
         }
@@ -55,6 +56,27 @@ public class UIManager : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(gameObject);
+    }
+
+    public void Exit()
+    {
+        switch (ActiveUI)
+        {
+            case UIMode.ListeningDrone:
+            case UIMode.ListeningRhythm:
+            case UIMode.Pause:
+                ActiveUI = UIMode.None;
+                break;
+            case UIMode.None:
+                ActiveUI = UIMode.Pause;
+                break;
+        }
+    }
+
+    public void OnExit(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        Exit();
     }
 }
 

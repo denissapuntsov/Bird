@@ -62,6 +62,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""ce0eba47-bff3-4713-bc53-b46be9561d52"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -262,6 +271,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0682d9c9-9868-4fa5-a8dd-a7bf7de295f9"",
+                    ""path"": ""*/{Cancel}"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -291,7 +311,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Cancel"",
                     ""type"": ""Button"",
                     ""id"": ""15cef263-9014-4fd5-94d9-4e4a6234a6ef"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -793,6 +813,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""961337bc-4b09-4d7f-849f-d6fd0db802a2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -894,6 +923,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""TryKey"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8208aaf4-283b-4aca-9cda-2a4f30051cf2"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -967,6 +1007,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_Listen = m_Player.FindAction("Listen", throwIfNotFound: true);
         m_Player_Call = m_Player.FindAction("Call", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -982,6 +1023,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         // Listening
         m_Listening = asset.FindActionMap("Listening", throwIfNotFound: true);
         m_Listening_TryKey = m_Listening.FindAction("TryKey", throwIfNotFound: true);
+        m_Listening_Exit = m_Listening.FindAction("Exit", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1054,6 +1096,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Listen;
     private readonly InputAction m_Player_Call;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Pause;
     public struct PlayerActions
     {
         private @InputSystem_Actions m_Wrapper;
@@ -1062,6 +1105,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         public InputAction @Listen => m_Wrapper.m_Player_Listen;
         public InputAction @Call => m_Wrapper.m_Player_Call;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1083,6 +1127,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1099,6 +1146,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1239,11 +1289,13 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Listening;
     private List<IListeningActions> m_ListeningActionsCallbackInterfaces = new List<IListeningActions>();
     private readonly InputAction m_Listening_TryKey;
+    private readonly InputAction m_Listening_Exit;
     public struct ListeningActions
     {
         private @InputSystem_Actions m_Wrapper;
         public ListeningActions(@InputSystem_Actions wrapper) { m_Wrapper = wrapper; }
         public InputAction @TryKey => m_Wrapper.m_Listening_TryKey;
+        public InputAction @Exit => m_Wrapper.m_Listening_Exit;
         public InputActionMap Get() { return m_Wrapper.m_Listening; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1256,6 +1308,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TryKey.started += instance.OnTryKey;
             @TryKey.performed += instance.OnTryKey;
             @TryKey.canceled += instance.OnTryKey;
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
         }
 
         private void UnregisterCallbacks(IListeningActions instance)
@@ -1263,6 +1318,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @TryKey.started -= instance.OnTryKey;
             @TryKey.performed -= instance.OnTryKey;
             @TryKey.canceled -= instance.OnTryKey;
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
         }
 
         public void RemoveCallbacks(IListeningActions instance)
@@ -1331,6 +1389,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         void OnListen(InputAction.CallbackContext context);
         void OnCall(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
@@ -1348,5 +1407,6 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     public interface IListeningActions
     {
         void OnTryKey(InputAction.CallbackContext context);
+        void OnExit(InputAction.CallbackContext context);
     }
 }

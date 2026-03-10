@@ -5,7 +5,7 @@ using UnityEditor;
 public class SpeakerEditor : Editor
 {
     private string buttonText;
-
+    
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();

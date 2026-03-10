@@ -37,5 +37,7 @@ public class InteractableEditor : Editor
             }
             interactable.ConnectSpeaker();
         }
+        
+        EditorGUILayout.Space(10);
     }
 }
