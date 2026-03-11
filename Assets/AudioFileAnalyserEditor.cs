@@ -8,12 +8,7 @@ public class AudioFileAnalyserEditor : Editor
     {
         DrawDefaultInspector();
         AudioFileAnalyser analyser = (AudioFileAnalyser)target;
-        if (GUILayout.Button("Analyse"))
-        {
-            analyser.Analyse();
-        }
-
-        else if (GUI.changed)
+        if (GUILayout.Button("Analyse") || GUI.changed)
         {
             if (analyser.audioClip != null)
             {
