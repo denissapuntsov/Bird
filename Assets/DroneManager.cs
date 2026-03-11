@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class DroneManager : MonoBehaviour
+public class DroneManager : MonoBehaviour, ISpeakerManager
 {
     [SerializeField] private GameObject cursor;
     private Speaker _currentSpeaker;
@@ -23,28 +22,33 @@ public class DroneManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Setup(Speaker newSpeaker)
+    #region ISpeakerManager
+
+    public void Setup(Speaker speaker)
     {
-        _currentSpeaker = newSpeaker;
-        UIManager.instance.ActiveUI = UIMode.ListeningDrone;
+        _currentSpeaker = speaker;
     }
     
-    public void OnExit(InputAction.CallbackContext context)
+    public void ProcessKeys(InputAction.CallbackContext context)
     {
-        if (UIManager.instance.ActiveUI != UIMode.ListeningDrone) return;
-        if (!context.started) return;
-        Close();
-    }
-
-    public void OnKey(InputAction.CallbackContext context)
-    {
-        Debug.Log("OnKey");
         if (UIManager.instance.ActiveUI != UIMode.ListeningDrone) return;
         _input = context.ReadValue<Vector2>();
-        Debug.Log("Input: " + _input);
         _input = _input.normalized;
     }
+    
+    public void Extract()
+    {
+        UIManager.instance.Exit();
+        Close();
+    }
+    
+    public void Close()
+    {
+        return;
+    }
 
+    #endregion
+    
     private void Update()
     {
         ApplyMovementVector(_input);
@@ -53,10 +57,5 @@ public class DroneManager : MonoBehaviour
     private void ApplyMovementVector(Vector2 input)
     {
         cursor.transform.position += new Vector3(input.x, input.y, 0);
-    }
-    
-    private void Close()
-    {
-        UIManager.instance.Exit();
     }
 }

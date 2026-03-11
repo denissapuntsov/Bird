@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 
-public class RhythmManager : MonoBehaviour
+public class RhythmManager : MonoBehaviour, ISpeakerManager
 {
     private Speaker _currentSpeaker = null;
     private AK.Wwise.Event _playEvent, _stopEvent;
@@ -13,7 +12,7 @@ public class RhythmManager : MonoBehaviour
     private Marker _currentMarker;
     [SerializeField] private List<Marker> markers;
 
-    public Marker CurrentMarker
+    private Marker CurrentMarker
     {
         get => _currentMarker;
         set
@@ -42,23 +41,56 @@ public class RhythmManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void Setup(Speaker newSpeaker)
+    #region ISpeakerManager
+
+    public void Setup(Speaker speaker)
     {
-        _currentSpeaker = newSpeaker;
-        UIManager.instance.ActiveUI = UIMode.ListeningRhythm;
+        _currentSpeaker = speaker;
         _playEvent = _currentSpeaker.InteractionStartEvent;
         _stopEvent = _currentSpeaker.InteractionEndEvent;
         markers = new List<Marker>();
         
         AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
     }
-
-    public void OnExit(InputAction.CallbackContext context)
+    
+    public void ProcessKeys(InputAction.CallbackContext context)
     {
-        if (UIManager.instance.ActiveUI != UIMode.ListeningRhythm) return;
         if (!context.started) return;
-        Close();
+
+        string letter = "";
+        var input = ((int)context.ReadValue<Vector2>().x, (int)context.ReadValue<Vector2>().y);
+
+        letter = input switch
+        {
+            (0, 1) => "w",
+            (-1, 0) => "a",
+            (0, -1) => "s",
+            (1, 0) => "d",
+            _ => "",
+        };
+
+        if (letter != CurrentMarker.key || CurrentMarker.isMatched)
+        {
+            ResetMarkerMatches();
+            return;
+        }
+        
+        CurrentMarker.isMatched = true;
     }
+    
+    public void Extract()
+    {
+        UIManager.instance.Exit();
+        Close();
+        PlayerInventory.instance.currentVocalization = _currentSpeaker.ExtractedSoundEvent;
+    }
+    
+    public void Close()
+    {
+        AkUnitySoundEngine.PostEvent(_stopEvent.Name, gameObject);
+    }
+
+    #endregion
 
     private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)
     {
@@ -73,7 +105,7 @@ public class RhythmManager : MonoBehaviour
                 ResetMarkerMatches();
                 return;
             }
-            ExtractAndClose();
+            Extract();
             return;
         }
         
@@ -117,44 +149,6 @@ public class RhythmManager : MonoBehaviour
             _ => null
         };
         return letterGameObject;
-    }
-
-    public void OnTryKey(InputAction.CallbackContext context)
-    {
-        if (UIManager.instance.ActiveUI != UIMode.ListeningRhythm) return;
-        if (!context.started) return;
-
-        string letter = "";
-        var input = ((int)context.ReadValue<Vector2>().x, (int)context.ReadValue<Vector2>().y);
-
-        letter = input switch
-        {
-            (0, 1) => "w",
-            (-1, 0) => "a",
-            (0, -1) => "s",
-            (1, 0) => "d",
-            _ => "",
-        };
-
-        if (letter != CurrentMarker.key || CurrentMarker.isMatched)
-        {
-            ResetMarkerMatches();
-            return;
-        }
-        
-        CurrentMarker.isMatched = true;
-    }
-
-    private void ExtractAndClose()
-    {
-        Close();
-        PlayerInventory.instance.currentVocalization = _currentSpeaker.ExtractedSoundEvent;
-    }
-
-    private void Close()
-    {
-        AkUnitySoundEngine.PostEvent(_stopEvent.Name, gameObject);
-        UIManager.instance.Exit();
     }
 
     private bool AreAllMarkersMatched()

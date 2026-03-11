@@ -650,20 +650,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1354986260}
-        m_TargetAssemblyTypeName: RhythmManager, Assembly-CSharp
-        m_MethodName: OnTryKey
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1444686644}
-        m_TargetAssemblyTypeName: DroneManager, Assembly-CSharp
+      - m_Target: {fileID: 1295811095}
+        m_TargetAssemblyTypeName: SpeakerManager, Assembly-CSharp
         m_MethodName: OnKey
         m_Mode: 0
         m_Arguments:
@@ -694,20 +682,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Pause[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1354986260}
-        m_TargetAssemblyTypeName: RhythmManager, Assembly-CSharp
-        m_MethodName: OnExit
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1444686644}
-        m_TargetAssemblyTypeName: DroneManager, Assembly-CSharp
+      - m_Target: {fileID: 1295811095}
+        m_TargetAssemblyTypeName: SpeakerManager, Assembly-CSharp
         m_MethodName: OnExit
         m_Mode: 0
         m_Arguments:
@@ -2982,12 +2958,12 @@ GameObject:
   - component: {fileID: 1295811096}
   - component: {fileID: 1295811095}
   m_Layer: 0
-  m_Name: AudioManager
+  m_Name: SpeakerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1295811095
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3388,7 +3364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSpeaking: 0
-  speakerType: 1
+  speakerType: 0
   speakerRhythmInfo: {fileID: 11400000, guid: 625dea10356f6e440b09fe1b9d8ca423, type: 2}
   speakerDroneInfo: {fileID: 11400000, guid: 85cf400bac47f334e8a78620c645dfb5, type: 2}
 --- !u!1 &1444686643
@@ -4866,8 +4842,8 @@ SceneRoots:
   - {fileID: 1064993747}
   - {fileID: 737623319}
   - {fileID: 1944658131}
-  - {fileID: 1354986261}
   - {fileID: 194437822}
   - {fileID: 586789410}
-  - {fileID: 1444686645}
   - {fileID: 1295811096}
+  - {fileID: 1354986261}
+  - {fileID: 1444686645}

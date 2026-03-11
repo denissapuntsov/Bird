@@ -15,19 +15,8 @@ public class Speaker : MonoBehaviour
 
     public void Listen()
     {
-        InputMapManager.SetCurrentActionMap(ActionMap.Listening);
-        switch (speakerType)
-        {
-            case SpeakerType.Rhythm:
-                RhythmManager.instance.Setup(this);
-                break;
-            case SpeakerType.Drone:
-                DroneManager.instance.Setup(this);
-                break;
-        }
+        SpeakerManager.instance.Setup(this);
     }
-
-   
 }
 
 public enum SpeakerType
