@@ -14,12 +14,13 @@ public class AudioFileAnalyser : MonoBehaviour
         BinaryReader reader = new BinaryReader(audioFile);
 
         byte[] nextChunk = reader.ReadBytes(4);
-        while (Encoding.ASCII.GetString(nextChunk) != "cue")
+        while (Encoding.ASCII.GetString(nextChunk) != "cue ")
         {
             nextChunk = reader.ReadBytes(4);
             if (reader.BaseStream.Position == reader.BaseStream.Length)
             {
                 Debug.Log("Nothing found.");
+                reader.Close();
                 return;
             }
         }
