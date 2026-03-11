@@ -52,7 +52,7 @@ public class DroneManager : MonoBehaviour
 
     private void ApplyMovementVector(Vector2 input)
     {
-        cursor.transform.position += new Vector3(input.x, 0, input.y);
+        cursor.transform.position += new Vector3(input.x, input.y, 0);
     }
     
     private void Close()

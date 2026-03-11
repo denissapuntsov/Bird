@@ -31,10 +31,10 @@ public class Interactable : MonoBehaviour
             _listener = gameObject.AddComponent<Listener>();
         }
 
-        for (int i = 0; i < OnCall.GetPersistentEventCount(); i++)
+        /*for (int i = 0; i < OnCall.GetPersistentEventCount(); i++)
         {
             if (OnCall.GetPersistentMethodName(i).Equals(nameof(_listener.ReactToKey))) return;
-        }
+        }*/
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
     }
 
@@ -46,10 +46,10 @@ public class Interactable : MonoBehaviour
             _speaker = gameObject.AddComponent<Speaker>();
         }
 
-        for (int i = 0; i < OnListen.GetPersistentEventCount(); i++)
+        /*for (int i = 0; i < OnListen.GetPersistentEventCount(); i++)
         {
             if (OnListen.GetPersistentMethodName(i).Equals(nameof(_speaker.Listen))) return;
-        } 
+        } */
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnListen, _speaker.Listen);
     }
 
