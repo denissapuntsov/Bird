@@ -24,33 +24,25 @@ public class Interactable : MonoBehaviour
         OnListen.Invoke();
     }
 
-    public void ConnectSpeaker()
+    public void ConnectListenerEvent()
     {
-        
-        _speaker = GetComponent<Speaker>();
-        if (_speaker == null)
-        {
-            _speaker = gameObject.AddComponent<Speaker>();
-        }
-
-        /*for (int i = 0; i < OnListen.GetPersistentEventCount(); i++)
-        {
-            if (OnListen.GetPersistentMethodName(i).Equals(nameof(_speaker.Listen))) return;
-        } */
-        UnityEditor.Events.UnityEventTools.AddPersistentListener(OnListen, _speaker.Listen);
+        UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
     }
 
-    public void DisconnectListener()
+    public void DisconnectListenerEvent()
     {
         UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnCall, _listener.ReactToKey);
-        DestroyImmediate(_listener);
         _listener = null;
     }
 
-    public void DisconnectSpeaker()
+    public void ConnectSpeakerEvent()
+    {
+        UnityEditor.Events.UnityEventTools.AddPersistentListener(OnListen, _speaker.Listen);
+    }
+
+    public void DisconnectSpeakerEvent()
     {
         UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnListen, _speaker.Listen);
-        DestroyImmediate(_speaker);
         _speaker = null;
     }
 }

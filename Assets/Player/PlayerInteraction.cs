@@ -41,12 +41,13 @@ public class PlayerInteraction : MonoBehaviour
         /*if (_availableInteractables.Contains(newInteractable)) return;
         _availableInteractables.Add(newInteractable);*/
 
-        if (newInteractable.Speaker != null && !_availableSpeakers.Contains(newInteractable))
+        if (newInteractable.Speaker && !_availableSpeakers.Contains(newInteractable))
         {
+            Debug.Log(newInteractable.Speaker);
             _availableSpeakers.Add(newInteractable);
         }
 
-        if (newInteractable.Listener != null && !_availableListeners.Contains(newInteractable))
+        if (newInteractable.Listener&& !_availableListeners.Contains(newInteractable))
         {
             _availableListeners.Add(newInteractable);
         }
@@ -54,9 +55,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        UpdateClosest(_availableInteractables, ClosestInteractable);
-        UpdateClosest(_availableSpeakers, ClosestSpeaker);
-        UpdateClosest(_availableListeners, ClosestListener);
+        ClosestInteractable = UpdateClosest(_availableInteractables, _closestInteractable);
+        ClosestSpeaker = UpdateClosest(_availableSpeakers, _closestSpeaker);
+        ClosestListener = UpdateClosest(_availableListeners, _closestListener);
     }
 
     private void OnTriggerExit(Collider other)
@@ -68,33 +69,33 @@ public class PlayerInteraction : MonoBehaviour
         _availableSpeakers.Remove(exitingInteractable);
     }
 
-    private void UpdateClosest(List<Interactable> group, Interactable closestInGroup)
+    private Interactable UpdateClosest(List<Interactable> group, Interactable closestInGroupField)
     {
         if (group.Count == 0)
-        {
-            closestInGroup = null;
-            return;
+        { 
+            return null;
         }
 
-        if (!closestInGroup)
+        if (!closestInGroupField || group.Count == 1)
         {
-            closestInGroup = group[0];
-            return;
+            return group[0];
         }
 
         foreach (var interactable in group)
         {
-            if (interactable == closestInGroup) continue;
+            if (interactable == closestInGroupField) continue;
 
             if (Vector3.Distance(
                     transform.position,
                     interactable.transform.position) >=
                 Vector3.Distance(
                     transform.position,
-                    closestInGroup.transform.position)) continue;
+                    closestInGroupField.transform.position)) continue;
             
-            closestInGroup = interactable;
+            return interactable;
         }
+
+        return null;
     }
 
     /*private void UpdateClosestInteractable()

@@ -2,6 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Events;
 
 [CustomEditor(typeof(Interactable))]
 public class InteractableEditor : Editor
@@ -25,14 +26,15 @@ public class InteractableEditor : Editor
             if (interactable.Listener)
             {
                 DestroyImmediate(interactable.Listener);
-                serializedInteractable.FindProperty("_listener").objectReferenceValue = null;
+                interactable.DisconnectListenerEvent();
             }
             else
             {
-                serializedInteractable.FindProperty("_listener").objectReferenceValue = Undo.AddComponent<Listener>(interactable.gameObject); 
+                var newListener = Undo.AddComponent<Listener>(interactable.gameObject);
+                serializedInteractable.FindProperty("_listener").objectReferenceValue = newListener;
+                serializedInteractable.ApplyModifiedProperties();
+                interactable.ConnectListenerEvent();
             }
-
-            serializedInteractable.ApplyModifiedProperties();
         }
         
         EditorGUILayout.Space(10);
@@ -44,14 +46,15 @@ public class InteractableEditor : Editor
             if (interactable.Speaker)
             {
                 DestroyImmediate(interactable.Speaker);
-                serializedInteractable.FindProperty("_speaker").objectReferenceValue = null;
+                interactable.DisconnectSpeakerEvent();
             }
             else
             {
-                serializedInteractable.FindProperty("_speaker").objectReferenceValue = Undo.AddComponent<Speaker>(interactable.gameObject);
+                var newSpeaker = Undo.AddComponent<Speaker>(interactable.gameObject);
+                serializedInteractable.FindProperty("_speaker").objectReferenceValue = newSpeaker;
+                serializedInteractable.ApplyModifiedProperties();
+                interactable.ConnectSpeakerEvent();
             }
-            
-            serializedInteractable.ApplyModifiedProperties();
         }
         
         EditorGUILayout.Space(10);
