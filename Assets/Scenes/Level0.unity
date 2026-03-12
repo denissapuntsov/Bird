@@ -3328,6 +3328,7 @@ GameObject:
   - component: {fileID: 1410622472}
   - component: {fileID: 1410622470}
   - component: {fileID: 1410622471}
+  - component: {fileID: 1410622476}
   m_Layer: 0
   m_Name: CubeSpeaker
   m_TagString: Untagged
@@ -3379,9 +3380,21 @@ MonoBehaviour:
       m_Calls: []
   OnListen:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1410622476}
+        m_TargetAssemblyTypeName: Speaker, Assembly-CSharp
+        m_MethodName: Listen
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _listener: {fileID: 0}
-  _speaker: {fileID: 0}
+  _speaker: {fileID: 1410622476}
 --- !u!65 &1410622472
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3471,6 +3484,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -37.237, z: 0}
+--- !u!114 &1410622476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410622469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 161dac8e1fe8de54d8e4335b0850b99a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSpeaking: 0
+  speakerType: 0
+  speakerRhythmInfo: {fileID: 11400000, guid: 625dea10356f6e440b09fe1b9d8ca423, type: 2}
+  speakerDroneInfo: {fileID: 0}
 --- !u!1 &1444686643
 GameObject:
   m_ObjectHideFlags: 0
@@ -4545,7 +4574,7 @@ MonoBehaviour:
   OnListen:
     m_PersistentCalls:
       m_Calls: []
-  _listener: {fileID: 0}
+  _listener: {fileID: 2042940360}
   _speaker: {fileID: 0}
 --- !u!114 &2042940360
 MonoBehaviour:

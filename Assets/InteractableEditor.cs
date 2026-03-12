@@ -30,7 +30,11 @@ public class InteractableEditor : Editor
             }
             else
             {
-                var newListener = Undo.AddComponent<Listener>(interactable.gameObject);
+                Listener newListener =
+                    interactable.GetComponent<Listener>()
+                        ? interactable.GetComponent<Listener>()
+                        : interactable.AddComponent<Listener>();
+                
                 serializedInteractable.FindProperty("_listener").objectReferenceValue = newListener;
                 serializedInteractable.ApplyModifiedProperties();
                 interactable.ConnectListenerEvent();
@@ -50,7 +54,11 @@ public class InteractableEditor : Editor
             }
             else
             {
-                var newSpeaker = Undo.AddComponent<Speaker>(interactable.gameObject);
+                Speaker newSpeaker = 
+                    interactable.GetComponent<Speaker>() 
+                        ? interactable.GetComponent<Speaker>() 
+                        : interactable.AddComponent<Speaker>();
+                
                 serializedInteractable.FindProperty("_speaker").objectReferenceValue = newSpeaker;
                 serializedInteractable.ApplyModifiedProperties();
                 interactable.ConnectSpeakerEvent();

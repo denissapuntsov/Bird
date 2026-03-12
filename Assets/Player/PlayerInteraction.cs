@@ -38,12 +38,14 @@ public class PlayerInteraction : MonoBehaviour
         if (!other.GetComponent<Interactable>()) return;
         
         var newInteractable = other.GetComponent<Interactable>();
-        /*if (_availableInteractables.Contains(newInteractable)) return;
-        _availableInteractables.Add(newInteractable);*/
+
+        if (!_availableInteractables.Contains(newInteractable))
+        {
+            _availableInteractables.Add(newInteractable);
+        }
 
         if (newInteractable.Speaker && !_availableSpeakers.Contains(newInteractable))
         {
-            Debug.Log(newInteractable.Speaker);
             _availableSpeakers.Add(newInteractable);
         }
 
@@ -97,69 +99,6 @@ public class PlayerInteraction : MonoBehaviour
 
         return null;
     }
-
-    /*private void UpdateClosestInteractable()
-    {
-        if (_availableInteractables.Count == 0)
-        {
-            ClosestInteractable = null;
-            return;
-        }
-
-        if (!ClosestInteractable)
-        {
-            ClosestInteractable = _availableInteractables[0];
-            return;
-        }
-
-        foreach (var interactable in _availableInteractables)
-        {
-            if (interactable == ClosestInteractable) continue;
-
-            if (Vector3.Distance(
-                    transform.position,
-                    interactable.transform.position) >=
-                Vector3.Distance(
-                    transform.position,
-                    ClosestInteractable.transform.position)) continue;
-            
-            ClosestInteractable = interactable;
-        }
-    }
-
-    private void UpdateClosestSpeaker()
-    {
-        if (_availableSpeakers.Count == 0)
-        {
-            ClosestSpeaker = null;
-            return;
-        }
-
-        if (!ClosestSpeaker)
-        {
-            ClosestSpeaker = _availableSpeakers[0];
-            return;
-        }
-
-        foreach (var speaker in _availableSpeakers)
-        {
-            if (speaker == ClosestSpeaker) continue;
-
-            if (Vector3.Distance(
-                    transform.position,
-                    speaker.transform.position) >=
-                Vector3.Distance(
-                    transform.position,
-                    ClosestSpeaker.transform.position)) continue;
-            
-            ClosestSpeaker = speaker;
-        }
-    }
-
-    private void UpdateClosestListener()
-    {
-        
-    }*/
     
     public void OnCall(InputAction.CallbackContext context)
     {
@@ -173,13 +112,7 @@ public class PlayerInteraction : MonoBehaviour
     public void OnListen(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
-
-        if (!ClosestInteractable) 
-        {
-            Debug.Log("Nothing to listen to");
-            return;
-        }
         
-        ClosestSpeaker.TryListen();
+        ClosestSpeaker?.TryListen();
     }
 }
