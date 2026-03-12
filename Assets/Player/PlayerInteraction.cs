@@ -5,18 +5,32 @@ using Event = AK.Wwise.Event;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    private Interactable _closestInteractable;
-    private List<Interactable> _availableInteractables;
+    private Interactable _closestInteractable, _closestSpeaker, _closestListener;
+    private List<Interactable> _availableInteractables, _availableSpeakers, _availableListeners;
 
-    public Interactable ClosestInteractable
+    private Interactable ClosestInteractable
     {
         get => _closestInteractable;
-        set  => _closestInteractable = value;
+        set => _closestInteractable = value;
+    }
+    
+    private Interactable ClosestSpeaker
+    {
+        get => _closestSpeaker;
+        set => _closestSpeaker = value;
+    }
+
+    private Interactable ClosestListener
+    {
+        get => _closestListener;
+        set => _closestListener = value;
     }
 
     private void Start()
     {
         _availableInteractables = new List<Interactable>();
+        _availableSpeakers = new List<Interactable>();
+        _availableListeners = new List<Interactable>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -24,22 +38,66 @@ public class PlayerInteraction : MonoBehaviour
         if (!other.GetComponent<Interactable>()) return;
         
         var newInteractable = other.GetComponent<Interactable>();
-        if (_availableInteractables.Contains(newInteractable)) return;
-        _availableInteractables.Add(newInteractable);
+        /*if (_availableInteractables.Contains(newInteractable)) return;
+        _availableInteractables.Add(newInteractable);*/
+
+        if (newInteractable.Speaker != null && !_availableSpeakers.Contains(newInteractable))
+        {
+            _availableSpeakers.Add(newInteractable);
+        }
+
+        if (newInteractable.Listener != null && !_availableListeners.Contains(newInteractable))
+        {
+            _availableListeners.Add(newInteractable);
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        UpdateClosestInteractable();
+        UpdateClosest(_availableInteractables, ClosestInteractable);
+        UpdateClosest(_availableSpeakers, ClosestSpeaker);
+        UpdateClosest(_availableListeners, ClosestListener);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.GetComponent<Interactable>()) return;
-        _availableInteractables.Remove(ClosestInteractable);
+        var exitingInteractable =  other.GetComponent<Interactable>();
+        
+        _availableListeners.Remove(exitingInteractable);
+        _availableSpeakers.Remove(exitingInteractable);
     }
 
-    private void UpdateClosestInteractable()
+    private void UpdateClosest(List<Interactable> group, Interactable closestInGroup)
+    {
+        if (group.Count == 0)
+        {
+            closestInGroup = null;
+            return;
+        }
+
+        if (!closestInGroup)
+        {
+            closestInGroup = group[0];
+            return;
+        }
+
+        foreach (var interactable in group)
+        {
+            if (interactable == closestInGroup) continue;
+
+            if (Vector3.Distance(
+                    transform.position,
+                    interactable.transform.position) >=
+                Vector3.Distance(
+                    transform.position,
+                    closestInGroup.transform.position)) continue;
+            
+            closestInGroup = interactable;
+        }
+    }
+
+    /*private void UpdateClosestInteractable()
     {
         if (_availableInteractables.Count == 0)
         {
@@ -67,6 +125,40 @@ public class PlayerInteraction : MonoBehaviour
             ClosestInteractable = interactable;
         }
     }
+
+    private void UpdateClosestSpeaker()
+    {
+        if (_availableSpeakers.Count == 0)
+        {
+            ClosestSpeaker = null;
+            return;
+        }
+
+        if (!ClosestSpeaker)
+        {
+            ClosestSpeaker = _availableSpeakers[0];
+            return;
+        }
+
+        foreach (var speaker in _availableSpeakers)
+        {
+            if (speaker == ClosestSpeaker) continue;
+
+            if (Vector3.Distance(
+                    transform.position,
+                    speaker.transform.position) >=
+                Vector3.Distance(
+                    transform.position,
+                    ClosestSpeaker.transform.position)) continue;
+            
+            ClosestSpeaker = speaker;
+        }
+    }
+
+    private void UpdateClosestListener()
+    {
+        
+    }*/
     
     public void OnCall(InputAction.CallbackContext context)
     {
@@ -74,7 +166,7 @@ public class PlayerInteraction : MonoBehaviour
 
         PlayerInventory.instance.currentVocalization.Post(gameObject);
         
-        ClosestInteractable?.TryCall();
+        ClosestListener?.TryCall();
     }
 
     public void OnListen(InputAction.CallbackContext context)
@@ -87,6 +179,6 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
         
-        ClosestInteractable.TryListen();
+        ClosestSpeaker.TryListen();
     }
 }

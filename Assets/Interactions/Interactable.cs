@@ -8,9 +8,10 @@ public class Interactable : MonoBehaviour
     
     public UnityEvent OnCall, OnListen;
     
-    private Listener _listener;
+    [SerializeField] private Listener _listener;
     public Listener Listener => _listener;
-    private Speaker _speaker;
+    
+    [SerializeField] private Speaker _speaker;
     public Speaker Speaker => _speaker;
 
     public void TryCall()
@@ -23,23 +24,9 @@ public class Interactable : MonoBehaviour
         OnListen.Invoke();
     }
 
-    public void ConnectListener()
-    {
-        _listener = GetComponent<Listener>();
-        if (_listener == null)
-        {
-            _listener = gameObject.AddComponent<Listener>();
-        }
-
-        /*for (int i = 0; i < OnCall.GetPersistentEventCount(); i++)
-        {
-            if (OnCall.GetPersistentMethodName(i).Equals(nameof(_listener.ReactToKey))) return;
-        }*/
-        UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
-    }
-
     public void ConnectSpeaker()
     {
+        
         _speaker = GetComponent<Speaker>();
         if (_speaker == null)
         {

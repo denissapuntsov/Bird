@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
 
@@ -18,24 +20,38 @@ public class InteractableEditor : Editor
 
         if (GUILayout.Button(listenerButtonText))
         {
+            var serializedInteractable = new SerializedObject(interactable);
+            
             if (interactable.Listener)
             {
-                interactable.DisconnectListener();
-                return;
+                DestroyImmediate(interactable.Listener);
+                serializedInteractable.FindProperty("_listener").objectReferenceValue = null;
             }
-            interactable.ConnectListener();
+            else
+            {
+                serializedInteractable.FindProperty("_listener").objectReferenceValue = Undo.AddComponent<Listener>(interactable.gameObject); 
+            }
+
+            serializedInteractable.ApplyModifiedProperties();
         }
         
         EditorGUILayout.Space(10);
 
         if (GUILayout.Button(speakerButtonText))
         {
+            var serializedInteractable = new SerializedObject(interactable);
+
             if (interactable.Speaker)
             {
-                interactable.DisconnectSpeaker();
-                return;
+                DestroyImmediate(interactable.Speaker);
+                serializedInteractable.FindProperty("_speaker").objectReferenceValue = null;
             }
-            interactable.ConnectSpeaker();
+            else
+            {
+                serializedInteractable.FindProperty("_speaker").objectReferenceValue = Undo.AddComponent<Speaker>(interactable.gameObject);
+            }
+            
+            serializedInteractable.ApplyModifiedProperties();
         }
         
         EditorGUILayout.Space(10);
