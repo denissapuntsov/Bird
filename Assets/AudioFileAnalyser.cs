@@ -44,7 +44,15 @@ public class AudioFileAnalyser : MonoBehaviour
             cuePoints.Add(newCuePoint);
             Debug.Log("Marker " + name + " at " + positionInSeconds + " s");
         }
-        reader.Close(); 
+        reader.Close();
+
+        var newScriptableObject = ScriptableObject.CreateInstance<RhythmData>();
+        newScriptableObject.audioClip = audioClip;
+        newScriptableObject.cuePoints = cuePoints;
+
+        AssetDatabase.CreateAsset(newScriptableObject, "Assets/CuePoints.asset");
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 }
 
