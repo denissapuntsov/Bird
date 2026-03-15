@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -17,59 +18,50 @@ public class AudioFileAnalyser : MonoBehaviour
     private List<CuePoint> _tempPoints;
     private string _filePath;
     private long _chunkDataSize, _dwCuePoints;
+    private float _sampleRate;
 
     public void Analyse()
     {
-        _tempPoints = new List<CuePoint>();
-        foreach (var point in cuePoints)
-        {
-            _tempPoints.Add(point);
-        }
         cuePoints = new List<CuePoint>();
-        foreach (var point in _tempPoints)
-        {
-            cuePoints.Add(point);
-        }
         
         _filePath = AssetDatabase.GetAssetPath(audioClip);
         _chunkDataSize = CUE_CHUNK_SIZE;
-        _dwCuePoints = 0;
         
         var audioFile = File.Open(_filePath, FileMode.Open);
         BinaryReader reader = new BinaryReader(audioFile);
 
         reader.ReadBytes(24);
-        float sampleRate = reader.ReadUInt16();
+        _sampleRate = reader.ReadUInt16();
         
         byte[] nextChunk = reader.ReadBytes(2);
         while (Encoding.ASCII.GetString(nextChunk) != "cue ")
         {
             nextChunk = reader.ReadBytes(4);
-            if (reader.BaseStream.Position >= reader.BaseStream.Length)
+            if (reader.BaseStream.Position == reader.BaseStream.Length)
             {
-                Debug.Log("No cue chunk found.");
+                Debug.Log("No cue chunk found. Adding arbitrary cue!");
                 audioFile.Close();
                 reader.Close();
-                UpdateScriptableObject();
+                AddCueChunk();
                 return;
             }
         }
 
         _chunkDataSize = reader.ReadUInt32();
         _dwCuePoints = reader.ReadUInt32();
-        Debug.Log(_dwCuePoints);
 
+        Debug.Log(_sampleRate);
         for (int i = 0; i < _dwCuePoints; i++)
         {
             var name = reader.ReadUInt32();
             var position = reader.ReadUInt32();
-            var positionInSeconds = position / sampleRate;
+            var positionInSeconds = position / _sampleRate;
             var dataChunkId = reader.ReadUInt32();
             var chunkStart = reader.ReadUInt32();
             var blockStart = reader.ReadUInt32();
             var sampleOffset = reader.ReadUInt32();
             
-            CuePoint newCuePoint = new CuePoint(name, position, positionInSeconds, dataChunkId, chunkStart, blockStart, sampleOffset);
+            CuePoint newCuePoint = new CuePoint(name, position, positionInSeconds, dataChunkId, chunkStart, blockStart, position);
             cuePoints.Add(newCuePoint);
             Debug.Log("Marker " + name + " at " + positionInSeconds + " s");
         }
@@ -147,39 +139,27 @@ public class AudioFileAnalyser : MonoBehaviour
     
     private void AddCueChunk()
     {
-        if (_tempPoints.Count < 1)
-        {
-            Debug.Log("Cue list is empty. Cannot update file.");
-            return;
-        }
-        
-        _dwCuePoints =+ _tempPoints.Count;
-        Debug.Log(_dwCuePoints);
-        
         var audioFile = File.Open(_filePath, FileMode.Append);
         BinaryWriter writer = new BinaryWriter(audioFile);
         writer.Write("cue ".ToCharArray()); // chunk id
-        writer.Write(CUE_CHUNK_SIZE + CUE_SIZE * _dwCuePoints); // default size for one cue
-        writer.Write(_dwCuePoints); // _dwCuePoints
+        writer.Write(CUE_CHUNK_SIZE + CUE_SIZE); // default size for one cue
+        writer.Write(1); // _dwCuePoints
         
-        foreach (CuePoint point in _tempPoints)
-        {
-            AddCuePoint(writer, point);
-        }
+        AddCuePoint(writer);
         writer.Close();
         audioFile.Close();
-
+        
         Analyse();
     }
 
-    private void AddCuePoint(BinaryWriter writer, CuePoint point)
+    private void AddCuePoint(BinaryWriter writer)
     {
-        writer.Write(point.cueMarkerName); // id
-        writer.Write(point.positionInSamples); // play order position
+        writer.Write(0); // id
+        writer.Write(122); // play order position
         writer.Write("data ".ToCharArray());
         writer.Write(0);
         writer.Write(0);
-        writer.Write(0);
+        writer.Write(122);
     }
 
     private void UpdateScriptableObject()

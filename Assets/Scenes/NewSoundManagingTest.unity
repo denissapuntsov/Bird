@@ -326,22 +326,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81b2df3d0ebafd4c8873a5d71071de0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 55519d0e322132d49a18362f8f11571c, type: 3}
+  audioClip: {fileID: 8300000, guid: 01cc14391e9f887479b2c88093af9078, type: 3}
   cuePoints:
-  - cueMarkerName: 1
-    positionInSamples: 0
-    positionInSeconds: 0
+  - cueMarkerName: 0
+    positionInSamples: 122
+    positionInSeconds: 0.0025416666
     dataChunkID: 1635017060
-    chunkStart: 0
+    chunkStart: 32
     blockStart: 0
-    sampleOffset: 0
-  - cueMarkerName: 2
-    positionInSamples: 36352
-    positionInSeconds: 0.8243084
-    dataChunkID: 1635017060
-    chunkStart: 0
-    blockStart: 0
-    sampleOffset: 36352
+    sampleOffset: 122
 --- !u!4 &695800913
 Transform:
   m_ObjectHideFlags: 0

@@ -10,21 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 995e7195003afba4ebe9ba42e5d2d56f, type: 3}
-  m_Name: knock_CuePoints
+  m_Name: pickup_CuePoints
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 55519d0e322132d49a18362f8f11571c, type: 3}
+  audioClip: {fileID: 8300000, guid: 01cc14391e9f887479b2c88093af9078, type: 3}
   cuePoints:
-  - cueMarkerName: 1
-    positionInSamples: 0
-    positionInSeconds: 0
+  - cueMarkerName: 0
+    positionInSamples: 122
+    positionInSeconds: 0.0025416666
     dataChunkID: 1635017060
-    chunkStart: 0
+    chunkStart: 32
     blockStart: 0
-    sampleOffset: 0
-  - cueMarkerName: 2
-    positionInSamples: 36352
-    positionInSeconds: 0.8243084
-    dataChunkID: 1635017060
-    chunkStart: 0
-    blockStart: 0
-    sampleOffset: 36352
+    sampleOffset: 122
