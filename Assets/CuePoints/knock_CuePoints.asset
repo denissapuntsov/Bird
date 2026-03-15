@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 995e7195003afba4ebe9ba42e5d2d56f, type: 3}
+  m_Name: knock_CuePoints
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: 55519d0e322132d49a18362f8f11571c, type: 3}
+  cuePoints:
+  - cueMarkerName: 1
+    positionInSamples: 0
+    positionInSeconds: 0
+    dataChunkID: 1635017060
+    chunkStart: 0
+    blockStart: 0
+    sampleOffset: 0
+  - cueMarkerName: 2
+    positionInSamples: 36352
+    positionInSeconds: 0.8243084
+    dataChunkID: 1635017060
+    chunkStart: 0
+    blockStart: 0
+    sampleOffset: 36352
