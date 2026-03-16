@@ -12,6 +12,7 @@ public class AudioFileAnalyser : MonoBehaviour
 {
     private const int CUE_SIZE = 24;
     private const int CUE_CHUNK_SIZE = 12;
+    private Dictionary<AudioClip, float> cueChunkPositions = new Dictionary<AudioClip, float>();
     
     public AudioClip audioClip;
     [SerializeField] private List<CuePoint> cuePoints;
@@ -46,11 +47,12 @@ public class AudioFileAnalyser : MonoBehaviour
                 return;
             }
         }
+        Debug.Log("Found cue chunk.");
+        AddToCueChunkDictionary(reader);
 
         _chunkDataSize = reader.ReadUInt32();
         _dwCuePoints = reader.ReadUInt32();
-
-        Debug.Log(_sampleRate);
+        
         for (int i = 0; i < _dwCuePoints; i++)
         {
             var name = reader.ReadUInt32();
@@ -71,7 +73,14 @@ public class AudioFileAnalyser : MonoBehaviour
         UpdateScriptableObject();
     }
 
-    /*public void ClearMarkers()
+    private void AddToCueChunkDictionary(BinaryReader reader)
+    {
+        cueChunkPositions.Remove(audioClip);
+        cueChunkPositions.Add(audioClip, reader.BaseStream.Position);
+        Debug.Log("Cue chunk at: " + cueChunkPositions[audioClip]);
+    }
+
+    public void ClearMarkers()
     {
         // create temp copy
         var temp = File.Open(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/temp.wav", FileMode.OpenOrCreate);
@@ -96,7 +105,7 @@ public class AudioFileAnalyser : MonoBehaviour
             }
         }
 
-        if (reader.BaseStream.Position >= reader.BaseStream.Length)
+        if (reader.BaseStream.Position == reader.BaseStream.Length)
         {
             audioFile.Close();
             temp.Close();
@@ -123,22 +132,21 @@ public class AudioFileAnalyser : MonoBehaviour
         reader.Close();
         writer.Close();
         
-        temp = File.Open(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/temp.wav", FileMode.OpenOrCreate);
-        audioFile = File.Open(_filePath, FileMode.OpenOrCreate);
-        temp.Position = 0;
-        audioFile.Position = 0;
         // copy the temp copy into the original file
-        temp.CopyTo(audioFile);
-        
-        temp.Close();
-        audioFile.Close();
+        File.Copy(
+            System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/temp.wav", 
+            _filePath,
+            overwrite: true);
         
         // What they're doing is very smart but also very dangerous
-        File.Delete(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/temp.wav");
-    }*/
+        //File.Delete(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop) + "/temp.wav");
+        
+        cuePoints.Clear();
+    }
     
     private void AddCueChunk()
     {
+        _dwCuePoints = 0;
         var audioFile = File.Open(_filePath, FileMode.Append);
         BinaryWriter writer = new BinaryWriter(audioFile);
         writer.Write("cue ".ToCharArray()); // chunk id
@@ -152,14 +160,29 @@ public class AudioFileAnalyser : MonoBehaviour
         Analyse();
     }
 
+    /*private void UpdateCueChunk()
+    {
+        ClearMarkers();
+        var audioFile = File.Open(_filePath, FileMode.Append);
+        BinaryWriter writer = new BinaryWriter(audioFile);
+        writer.Seek((byte)cueChunkPositions[audioClip], SeekOrigin.Begin);
+        writer.Write("cue ".ToCharArray());
+        writer.Write(CUE_CHUNK_SIZE + CUE_CHUNK_SIZE);
+        writer.Write(_dwCuePoints);
+        writer.Close();
+        audioFile.Close();
+    }*/
+
     private void AddCuePoint(BinaryWriter writer)
     {
-        writer.Write(0); // id
-        writer.Write(122); // play order position
+        /*_dwCuePoints++;*/
+        /*UpdateCueChunk();*/
+        writer.Write(1); // id
+        writer.Write(1220); // play order position
         writer.Write("data ".ToCharArray());
         writer.Write(0);
         writer.Write(0);
-        writer.Write(122);
+        writer.Write(1220);
     }
 
     private void UpdateScriptableObject()

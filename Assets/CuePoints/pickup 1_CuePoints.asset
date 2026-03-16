@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 995e7195003afba4ebe9ba42e5d2d56f, type: 3}
+  m_Name: pickup 1_CuePoints
+  m_EditorClassIdentifier: 
+  audioClip: {fileID: 8300000, guid: f5ad8a95b808e1048a63b69e44d56fb8, type: 3}
+  cuePoints:
+  - cueMarkerName: 0
+    positionInSamples: 122
+    positionInSeconds: 0.0025416666
+    dataChunkID: 1635017060
+    chunkStart: 32
+    blockStart: 0
+    sampleOffset: 122

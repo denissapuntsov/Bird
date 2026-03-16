@@ -8,11 +8,19 @@ public class AudioFileAnalyserEditor : Editor
     {
         DrawDefaultInspector();
         AudioFileAnalyser analyser = (AudioFileAnalyser)target;
-        if (GUILayout.Button("Analyse"))
+        if (GUILayout.Button("Find Markers"))
         {
             if (analyser.audioClip != null)
             {
                 analyser.Analyse();
+            }
+        }
+
+        if (GUILayout.Button("Clear Markers"))
+        {
+            if (analyser.audioClip != null)
+            {
+                analyser.ClearMarkers();
             }
         }
     }
