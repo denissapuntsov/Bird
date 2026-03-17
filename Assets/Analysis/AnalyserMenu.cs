@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using NAudio.Wave;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,6 +13,8 @@ public class AnalyserMenu : EditorWindow
     private string _outputFile, _inputFile;
     public List<Cue> cues = new List<Cue>();
     public List<Cue> cuesToAdd;
+    private int toolbarInt;
+    private string[] toolbarStrings = new string[] { "Update/Delete", "Add From List" };
 
     [MenuItem("Window/.wav File Analyser")]
     public static void ShowWindow()
@@ -21,7 +24,7 @@ public class AnalyserMenu : EditorWindow
 
     private void CreateGUI()
     {
-        cues = new List<Cue>() {new Cue("test", 122, 44100)};
+        cues = new List<Cue>();
         var list = new ListView();
         rootVisualElement.Add(list);
         list.makeItem = () => new Label();
@@ -29,16 +32,31 @@ public class AnalyserMenu : EditorWindow
     }
 
     private void OnGUI()
-    {
-        GUILayout.Space(10);
-        GUILayout.Label("Analyser", EditorStyles.boldLabel);
-        
+    {   
         GUILayout.Space(10);
         EditorGUILayout.BeginHorizontal();
         audioClip = EditorGUILayout.ObjectField(audioClip, typeof(AudioClip), true) as AudioClip;
         EditorGUILayout.EndHorizontal();
         GUILayout.Space(10);
-        AddProperty("cues");
+        toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings, GUILayout.Height(20));
+        GUILayout.Space(10);
+        DrawHorizontalGUILine();
+        GUILayout.Space(10);
+        switch (toolbarInt)
+        {
+            case 0:
+                DrawUpdateGUI();
+                break;
+            case 1:
+                DrawAddGUI();
+                break;
+        }
+        GUILayout.Space(10);
+    }
+
+    private void DrawUpdateGUI()
+    {
+        AddProperty(nameof(cues));
 
         GUILayout.Space(10);
         EditorGUILayout.BeginHorizontal();
@@ -51,19 +69,22 @@ public class AnalyserMenu : EditorWindow
         {
             RemoveAllCues();
         }
+        EditorGUILayout.EndHorizontal();
 
+        GUILayout.Space(10);
+    }
+
+    private void DrawAddGUI()
+    {
+        AddProperty(nameof(cuesToAdd));
+        
+        GUILayout.Space(10);
+        EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add From List"))
         {
             AddCuesFromList();
         }
         EditorGUILayout.EndHorizontal();
-
-        GUILayout.Space(10);
-
-        SerializedProperty cueProperty;
-        SerializedProperty cuesToAddProperty;
-
-        AddProperty("cuesToAdd");
     }
 
     private void AddProperty(string propertyToFind)
@@ -229,6 +250,19 @@ public class AnalyserMenu : EditorWindow
 
         UpdateScriptableObject();
 
+    }
+    
+    private static void DrawHorizontalGUILine(int height = 1) {
+        GUILayout.Space(4);
+
+        Rect rect = GUILayoutUtility.GetRect(10, height, GUILayout.ExpandWidth(true));
+        rect.height = height;
+        rect.xMin = 0;
+        rect.xMax = EditorGUIUtility.currentViewWidth;
+
+        Color lineColor = new Color(0.10196f, 0.10196f, 0.10196f, 1);
+        EditorGUI.DrawRect(rect, lineColor);
+        GUILayout.Space(4);
     }
 }
 
