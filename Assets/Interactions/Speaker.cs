@@ -1,7 +1,4 @@
-using System;
 using UnityEngine;
-using UnityEditor;
-using UnityEngine.Serialization;
 
 public class Speaker : MonoBehaviour
 {

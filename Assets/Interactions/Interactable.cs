@@ -1,5 +1,3 @@
-using System;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,6 +22,8 @@ public class Interactable : MonoBehaviour
         OnListen.Invoke();
     }
 
+    #if UNITY_EDITOR
+    
     public void ConnectListenerEvent()
     {
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
@@ -45,4 +45,6 @@ public class Interactable : MonoBehaviour
         UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnListen, _speaker.Listen);
         _speaker = null;
     }
+    
+    #endif
 }
