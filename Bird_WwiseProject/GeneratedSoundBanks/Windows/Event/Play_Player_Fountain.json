@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Windows",
+  "BasePlatform": "Windows",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "219088636",
+    "Type": "Event",
+    "GUID": "{8251572F-8198-435B-BC3F-9372383DD31F}",
+    "Language": "SFX",
+    "Hash": "{4486F102-BBA1-685F-62B9-05EE5A873C29}",
+    "ObjectPath": "Play_Player_Fountain",
+    "ShortName": "Play_Player_Fountain",
+    "Path": "Event/Play_Player_Fountain.bnk",
+    "Media": [
+     {
+      "Id": "141519133",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Loose",
+      "ShortName": "260320_FOUNTAIN_LOOP.wav",
+      "Path": "Media/141519133.wem",
+      "CachePath": "A1/{A1466360-F7F9-EAC3-400E-EDA10A82E463}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "219088636",
+      "Name": "Play_Player_Fountain",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Player_Fountain",
+      "GUID": "{8251572F-8198-435B-BC3F-9372383DD31F}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.8763237",
+      "DurationMax": "1.8763237",
+      "MediaRefs": [
+       {
+        "Id": "141519133"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{D45A90F8-A76F-BEA5-276D-4AFF9D3B97C0}"
+ }
+}

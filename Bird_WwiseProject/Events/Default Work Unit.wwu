@@ -53,6 +53,53 @@
 						</Action>
 					</ChildrenList>
 				</Event>
+				<Event Name="Play_Puzzle_Owner" ID="{A86FC1CD-AEC3-487A-BBB4-40698A87A8C5}">
+					<ChildrenList>
+						<Action Name="" ID="{7A93E914-CB3D-4FD9-AFD0-78D292A1E9ED}" ShortID="527004224">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Puzzle_Owner" ID="{D754D708-6E94-493C-8C52-76CC48DD764C}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Stop_Puzzle_Owner" ID="{F3FDFBF8-0FF0-4DE0-84E3-9F0E0C8144AA}">
+					<ChildrenList>
+						<Action Name="" ID="{616496EA-6B2A-4393-B510-C24D9CEC97A5}" ShortID="99043056">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="2"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Puzzle_Owner" ID="{D754D708-6E94-493C-8C52-76CC48DD764C}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Player_Owner" ID="{054EBB94-DB66-4CF8-BDA0-EE7829CFCEB8}">
+					<ChildrenList>
+						<Action Name="" ID="{8509CEF4-4A87-47E0-B72C-228206F8C542}" ShortID="344680975">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Player_Owner" ID="{DC4C6AB1-08F2-4348-80AF-03A15938AABB}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+				<Event Name="Play_Player_Fountain" ID="{8251572F-8198-435B-BC3F-9372383DD31F}">
+					<ChildrenList>
+						<Action Name="" ID="{EB4D3B17-D1AC-426D-A6B9-662C004CD5FB}" ShortID="103060461">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Player_Fountain" ID="{7F90F547-A473-4D53-B8B2-FDA1A71CE79A}" WorkUnitID="{8F957633-745D-4F39-8025-E517F97B9428}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
 			</ChildrenList>
 		</WorkUnit>
 	</Events>

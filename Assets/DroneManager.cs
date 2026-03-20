@@ -10,7 +10,14 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     private Vector3[] _bounds = new Vector3[4];
     private float _minX, _minY, _maxX, _maxY;
-    //private const string OBJECTIVE_TAG = "DroneObjective";
+    private const string OBJECTIVE_TAG = "DroneObjective";
+    
+    // DEMO PURPOSES
+
+    [SerializeField] private AudioSource source1, source2;
+    [SerializeField] private AudioClip ambience, fountain;
+    
+    [SerializeField] private AK.Wwise.Event objectiveEvent;
     
     private Speaker _currentSpeaker;
     private Vector2 _input;
@@ -52,7 +59,7 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
 
     public void Setup(Speaker speaker)
     {
-        _currentSpeaker = speaker;
+        
     }
     
     public void ProcessKeys(InputAction.CallbackContext context)
@@ -64,7 +71,9 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     public void Extract()
     {
-        PlayerInventory.instance.currentVocalization = null;
+        PlayerInventory.instance.currentVocalization = objectiveEvent;
+        source1.Stop();
+        source2.Stop();
         Close();
     }
     
@@ -79,6 +88,8 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     {
         ApplyMovementVector(_input);
         UpdateDistance();
+
+        if (source1.volume >= 0.5f) Extract();
     }
 
 
@@ -96,18 +107,23 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     private void ProcessTriggerEnter(Collider2D other)
     {
-        if (other.gameObject != objective) return;
+        if (!other.gameObject.CompareTag(OBJECTIVE_TAG)) return;
         cursor.gameObject.SetActive(false);
+        source1.Stop();
+        source2.Stop();
         Extract();
     }
     
     private void ProcessTriggerExit(Collider2D other)
     {
-        if (other.gameObject != objective) return;
+        return;
     }
 
     private void UpdateDistance()
     {
-        if (Vector2.Distance(cursor.transform.position, objective.transform.position) < 50f) Debug.Log("close!");
+        var distance = Vector2.Distance(cursor.transform.position, objective.transform.position);
+        
+        source1.volume = Mathf.Clamp01(distance > 500 ? 0f : (600 - distance) / 500) * 0.5f;
+        source2.volume = (1 - source1.volume) * 0.3f;
     }
 }

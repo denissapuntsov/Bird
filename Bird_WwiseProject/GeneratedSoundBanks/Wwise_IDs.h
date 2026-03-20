@@ -14,9 +14,13 @@ namespace AK
     namespace EVENTS
     {
         static const AkUniqueID PLAY_PLAYER_CROW = 692116557U;
+        static const AkUniqueID PLAY_PLAYER_FOUNTAIN = 219088636U;
         static const AkUniqueID PLAY_PLAYER_HONK = 1225229226U;
+        static const AkUniqueID PLAY_PLAYER_OWNER = 698312701U;
         static const AkUniqueID PLAY_PUZZLE_CROW = 1819305424U;
+        static const AkUniqueID PLAY_PUZZLE_OWNER = 2811655790U;
         static const AkUniqueID STOP_PUZZLE_CROW = 3676932982U;
+        static const AkUniqueID STOP_PUZZLE_OWNER = 915994864U;
     } // namespace EVENTS
 
     namespace BUSSES

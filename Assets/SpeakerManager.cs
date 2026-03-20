@@ -16,14 +16,12 @@ public class SpeakerManager : MonoBehaviour
     
     public void Setup(Speaker newSpeaker)
     {
-        InputMapManager.SetCurrentActionMap(ActionMap.Listening);
         _speakerType = newSpeaker.speakerType;
         switch (_speakerType)
         {
             case SpeakerType.Drone:
-                UIManager.instance.ActiveUI = UIMode.ListeningDrone;
-                _currentManager = DroneManager.instance;
-                break;
+                PlayerInventory.instance.currentVocalization = newSpeaker.speakerDroneInfo.extractionEvent;
+                return;
             case SpeakerType.Rhythm:
                 UIManager.instance.ActiveUI = UIMode.ListeningRhythm;
                 _currentManager = RhythmManager.instance;
@@ -33,6 +31,7 @@ public class SpeakerManager : MonoBehaviour
                 return;
         }
         _currentManager.Setup(newSpeaker);
+        InputMapManager.SetCurrentActionMap(ActionMap.Listening);
     }
 
     public void OnKey(InputAction.CallbackContext context)

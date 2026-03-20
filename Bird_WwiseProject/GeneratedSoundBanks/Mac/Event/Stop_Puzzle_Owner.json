@@ -1,0 +1,33 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Mac",
+  "BasePlatform": "Mac",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "915994864",
+    "Type": "Event",
+    "GUID": "{F3FDFBF8-0FF0-4DE0-84E3-9F0E0C8144AA}",
+    "Language": "SFX",
+    "Hash": "{6A224590-CA47-2563-646B-DF301AB3F18C}",
+    "ObjectPath": "Stop_Puzzle_Owner",
+    "ShortName": "Stop_Puzzle_Owner",
+    "Path": "Event/Stop_Puzzle_Owner.bnk",
+    "Events": [
+     {
+      "Id": "915994864",
+      "Name": "Stop_Puzzle_Owner",
+      "ObjectPath": "\\Events\\Default Work Unit\\Stop_Puzzle_Owner",
+      "GUID": "{F3FDFBF8-0FF0-4DE0-84E3-9F0E0C8144AA}",
+      "MaxAttenuation": "0",
+      "DurationType": "OneShot",
+      "DurationMin": "0",
+      "DurationMax": "0"
+     }
+    ]
+   }
+  ],
+  "FileHash": "{0D62DBE6-F2B4-CC09-61F8-EF6CC69D0B01}"
+ }
+}

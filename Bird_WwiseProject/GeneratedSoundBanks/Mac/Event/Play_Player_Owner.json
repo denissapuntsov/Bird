@@ -1,0 +1,48 @@
+{
+ "SoundBanksInfo": {
+  "Platform": "Mac",
+  "BasePlatform": "Mac",
+  "SchemaVersion": "16",
+  "SoundBankVersion": "172",
+  "SoundBanks": [
+   {
+    "Id": "698312701",
+    "Type": "Event",
+    "GUID": "{054EBB94-DB66-4CF8-BDA0-EE7829CFCEB8}",
+    "Language": "SFX",
+    "Hash": "{18D8F517-A60A-F5A3-C162-6E4951F18665}",
+    "ObjectPath": "Play_Player_Owner",
+    "ShortName": "Play_Player_Owner",
+    "Path": "Event/Play_Player_Owner.bnk",
+    "Media": [
+     {
+      "Id": "692642983",
+      "Language": "SFX",
+      "Streaming": "false",
+      "Location": "Loose",
+      "ShortName": "Puzzle_Owner.wav",
+      "Path": "Media/692642983.wem",
+      "CachePath": "F1/{F1A85EDF-24E7-95BB-6F74-31054423337C}.wem"
+     }
+    ],
+    "Events": [
+     {
+      "Id": "698312701",
+      "Name": "Play_Player_Owner",
+      "ObjectPath": "\\Events\\Default Work Unit\\Play_Player_Owner",
+      "GUID": "{054EBB94-DB66-4CF8-BDA0-EE7829CFCEB8}",
+      "DurationType": "OneShot",
+      "DurationMin": "1.2913088",
+      "DurationMax": "1.2913088",
+      "MediaRefs": [
+       {
+        "Id": "692642983"
+       }
+      ]
+     }
+    ]
+   }
+  ],
+  "FileHash": "{DA1C4966-29D0-F343-69C2-A1550EA6D91E}"
+ }
+}

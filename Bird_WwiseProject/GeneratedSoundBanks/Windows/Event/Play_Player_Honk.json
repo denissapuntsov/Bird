@@ -10,7 +10,7 @@
     "Type": "Event",
     "GUID": "{4A6A6A49-C28E-4DDB-8599-68F181BEB47D}",
     "Language": "SFX",
-    "Hash": "{EAC2DCFC-AD76-D23A-0F9A-70B2D4AC8EC6}",
+    "Hash": "{048E2C4E-8604-C378-EE03-58442D4B4DF8}",
     "ObjectPath": "Play_Player_Honk",
     "ShortName": "Play_Player_Honk",
     "Path": "Event/Play_Player_Honk.bnk",
@@ -43,6 +43,6 @@
     ]
    }
   ],
-  "FileHash": "{01F8A945-FFA9-C63E-D676-588DA6511902}"
+  "FileHash": "{891240AA-CCD4-F8B6-55A9-C672C07284A1}"
  }
 }

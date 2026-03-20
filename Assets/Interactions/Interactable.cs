@@ -34,6 +34,8 @@ public class Interactable : MonoBehaviour
     }
     
     public void UpdateText(string newText) => Popup.Text = newText;
+    
+    public void DeletePopup() => Popup = null;
 
     public void TryCall()
     {
