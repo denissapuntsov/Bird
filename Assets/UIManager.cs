@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup pauseGroup, listeningRhythmGroup, listeningDroneGroup;
+    [SerializeField] private CanvasGroup pauseGroup, listeningRhythmGroup, listeningDroneGroup, worldGroup;
+
+    [SerializeField] private GameObject popupPrefab;
+    private Dictionary<int, Popup> _popups = new Dictionary<int, Popup>();
     
     private CanvasGroup _activeCanvasGroup;
 
@@ -32,7 +36,7 @@ public class UIManager : MonoBehaviour
                     break;
                 case UIMode.None:
                     InputMapManager.SetCurrentActionMap(ActionMap.Player);
-                    _activeCanvasGroup = null;
+                    _activeCanvasGroup = worldGroup;
                     break;
             }
             
@@ -77,6 +81,19 @@ public class UIManager : MonoBehaviour
     {
         if (!context.started) return;
         Exit();
+    }
+
+    public void CreatePopup(Interactable interactable)
+    {
+        if (!interactable || interactable.Popup) return;
+        var newPopup = Instantiate(popupPrefab, worldGroup.transform).GetComponent<Popup>();
+        interactable.Popup = newPopup;
+    }
+    
+    public void HidePopup(Interactable interactable)
+    {
+        if (!interactable) return;
+        interactable.Popup = null;
     }
 }
 

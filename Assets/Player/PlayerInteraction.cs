@@ -17,13 +17,31 @@ public class PlayerInteraction : MonoBehaviour
     private Interactable ClosestSpeaker
     {
         get => _closestSpeaker;
-        set => _closestSpeaker = value;
+        set
+        {
+            if (_closestSpeaker == value) return;
+            
+            UIManager.instance.HidePopup(_closestSpeaker);
+            _closestSpeaker = value;
+            
+            if (!value) return;
+            UIManager.instance.CreatePopup(_closestSpeaker);
+        }
     }
 
     private Interactable ClosestListener
     {
         get => _closestListener;
-        set => _closestListener = value;
+        set 
+        {
+            if (_closestListener == value) return;
+            
+            UIManager.instance.HidePopup(_closestListener);
+            _closestListener = value;
+                
+            if (!value) return;
+            UIManager.instance.CreatePopup(_closestListener);
+        }
     }
 
     private void Start()
@@ -35,9 +53,10 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.GetComponent<Interactable>()) return;
+        if (!other.GetComponentInParent<Interactable>()) return;
         
-        var newInteractable = other.GetComponent<Interactable>();
+        var newInteractable = other.GetComponentInParent<Interactable>();
+        Debug.Log(newInteractable.name);
 
         if (!_availableInteractables.Contains(newInteractable))
         {
@@ -64,8 +83,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.GetComponent<Interactable>()) return;
-        var exitingInteractable =  other.GetComponent<Interactable>();
+        if (!other.GetComponentInParent<Interactable>()) return;
+        var exitingInteractable =  other.GetComponentInParent<Interactable>();
         
         _availableListeners.Remove(exitingInteractable);
         _availableSpeakers.Remove(exitingInteractable);

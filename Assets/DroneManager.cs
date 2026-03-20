@@ -1,14 +1,16 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class DroneManager : MonoBehaviour, ISpeakerManager
 {
     [SerializeField] private DroneCursor cursor;
+    [SerializeField] private GameObject objective;
     [SerializeField] private RectTransform puzzleArea;
     
     private Vector3[] _bounds = new Vector3[4];
     private float _minX, _minY, _maxX, _maxY;
-    private const string OBJECTIVE_TAG = "DroneObjective";
+    //private const string OBJECTIVE_TAG = "DroneObjective";
     
     private Speaker _currentSpeaker;
     private Vector2 _input;
@@ -76,6 +78,7 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     private void Update()
     {
         ApplyMovementVector(_input);
+        UpdateDistance();
     }
 
 
@@ -93,12 +96,18 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     private void ProcessTriggerEnter(Collider2D other)
     {
-        if (!other.CompareTag(OBJECTIVE_TAG)) return;
+        if (other.gameObject != objective) return;
+        cursor.gameObject.SetActive(false);
         Extract();
     }
     
     private void ProcessTriggerExit(Collider2D other)
     {
-        if (!other.CompareTag(OBJECTIVE_TAG)) return;
+        if (other.gameObject != objective) return;
+    }
+
+    private void UpdateDistance()
+    {
+        if (Vector2.Distance(cursor.transform.position, objective.transform.position) < 50f) Debug.Log("close!");
     }
 }

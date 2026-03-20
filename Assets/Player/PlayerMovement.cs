@@ -1,5 +1,8 @@
 using System;
 using System.Numerics;
+using DG.Tweening;
+using DG.Tweening.Core;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements.Experimental;
@@ -15,7 +18,9 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _horizontalInput, _verticalInput;
     private Vector3 _move;
 
-    [Header("Movement")] [SerializeField] private float playerSpeed = 5.0f;
+    [Header("Movement")] 
+    [SerializeField] private float playerSpeed = 5.0f;
+    [SerializeField] private float turnSpeed = 15.0f;
     
     [SerializeField] private float playerJumpHeight = 2.0f;
     [SerializeField] private float gravityMultiplier = 2.0f;
@@ -25,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     private Camera _mainCamera;
 
     private bool _isGrounded;
+    private CinemachineFollow _follow;
 
     public static PlayerMovement instance;
 
@@ -46,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     {
         _characterController = GetComponent<CharacterController>();
         _mainCamera = Camera.main;
+        _follow = FindAnyObjectByType<CinemachineFollow>();
     }
 
     private void Update()
@@ -82,7 +89,8 @@ public class PlayerMovement : MonoBehaviour
     {
         _playerVelocity.y += Gravity * gravityMultiplier * Time.deltaTime;
 
-        transform.forward = _move.magnitude <= 0.2f ? transform.forward : _move;
+        transform.forward = Vector3.Lerp(transform.forward, _move.magnitude <= 0.2f ? transform.forward : _move,
+            Time.deltaTime * turnSpeed);
 
         _finalMove = _move * playerSpeed + Vector3.up * _playerVelocity.y;
         _characterController.Move(_finalMove * Time.deltaTime);

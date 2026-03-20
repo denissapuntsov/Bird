@@ -6,6 +6,7 @@ public class Speaker : MonoBehaviour
     [HideInInspector] public SpeakerType speakerType;
     [HideInInspector] public SpeakerRhythmInfo speakerRhythmInfo;
     [HideInInspector] public SpeakerDroneInfo speakerDroneInfo;
+
     public AK.Wwise.Event InteractionStartEvent => speakerRhythmInfo.interactionStartEvent;
     public AK.Wwise.Event InteractionEndEvent => speakerRhythmInfo.interactionEndEvent;
     public AK.Wwise.Event ExtractedSoundEvent => speakerRhythmInfo.extractedSound;
