@@ -5,7 +5,7 @@ using Event = AK.Wwise.Event;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    private Interactable _closestInteractable, _closestSpeaker, _closestListener;
+    [SerializeField] private Interactable _closestInteractable, _closestSpeaker, _closestListener;
     private List<Interactable> _availableInteractables, _availableSpeakers, _availableListeners;
 
     private Interactable ClosestInteractable
@@ -42,6 +42,13 @@ public class PlayerInteraction : MonoBehaviour
             if (!value) return;
             UIManager.instance.CreatePopup(_closestListener);
         }
+    }
+
+    public void RemoveInteractable(Interactable interactable)
+    {
+        _availableInteractables.Remove(interactable);
+        _availableSpeakers.Remove(interactable);
+        _availableListeners.Remove(interactable);
     }
 
     private void Start()
@@ -123,7 +130,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!context.performed) return;
 
-        PlayerInventory.instance.currentVocalization.Post(gameObject);
+        PlayerInventory.instance.CurrentVocalization.Post(gameObject);
         
         ClosestListener?.TryCall();
     }

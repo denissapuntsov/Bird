@@ -20,7 +20,7 @@ public class SpeakerManager : MonoBehaviour
         switch (_speakerType)
         {
             case SpeakerType.Drone:
-                PlayerInventory.instance.currentVocalization = newSpeaker.speakerDroneInfo.extractionEvent;
+                PlayerInventory.instance.CurrentVocalization = newSpeaker.speakerDroneInfo.extractionEvent;
                 return;
             case SpeakerType.Rhythm:
                 UIManager.instance.ActiveUI = UIMode.ListeningRhythm;

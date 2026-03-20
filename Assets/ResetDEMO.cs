@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ResetDEMO : MonoBehaviour
 {
@@ -7,7 +8,7 @@ public class ResetDEMO : MonoBehaviour
     {
         if (other.GetComponent<PlayerInventory>())
         {
-            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }

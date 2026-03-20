@@ -2131,7 +2131,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -4229,6 +4229,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1322059353}
+        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
+        m_MethodName: RemoveInteractable
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 673798777}
+          m_ObjectArgumentAssemblyTypeName: Interactable, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnRejectKey:
     m_PersistentCalls:
       m_Calls: []
@@ -4635,8 +4647,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.426012, y: 5.03081, z: 8.020813}
-  m_Center: {x: 0.045010567, y: 0.060935736, z: -1.9238167}
+  m_Size: {x: 7.82839, y: 5.746703, z: 8.020813}
+  m_Center: {x: -0.6561777, y: 0.41888145, z: -1.9238168}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -5510,8 +5522,8 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 14.1
-  MaxDistance: 21.09
+  MinDistance: 1.1
+  MaxDistance: 19.52
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -6482,7 +6494,6 @@ GameObject:
   - component: {fileID: 1276281470}
   - component: {fileID: 1276281473}
   - component: {fileID: 1276281472}
-  - component: {fileID: 1276281471}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -6505,27 +6516,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 673798778}
   m_LocalEulerAnglesHint: {x: 0, y: -58.993, z: 0}
---- !u!65 &1276281471
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1276281469}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1276281472
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8778,7 +8768,6 @@ GameObject:
   - component: {fileID: 1841748220}
   - component: {fileID: 1841748223}
   - component: {fileID: 1841748222}
-  - component: {fileID: 1841748221}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -8801,27 +8790,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 673798778}
   m_LocalEulerAnglesHint: {x: 0, y: 8.882, z: 0}
---- !u!65 &1841748221
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1841748219}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1841748222
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -10197,7 +10165,6 @@ GameObject:
   - component: {fileID: 2125223025}
   - component: {fileID: 2125223024}
   - component: {fileID: 2125223023}
-  - component: {fileID: 2125223026}
   m_Layer: 0
   m_Name: Dog
   m_TagString: Untagged
@@ -10232,21 +10199,21 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnRejectKey:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2125223026}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: PlayDelayed
-        m_Mode: 4
+      - m_Target: {fileID: 1322059353}
+        m_TargetAssemblyTypeName: PlayerInteraction, Assembly-CSharp
+        m_MethodName: RemoveInteractable
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 2125223024}
+          m_ObjectArgumentAssemblyTypeName: Interactable, Assembly-CSharp
           m_IntArgument: 0
-          m_FloatArgument: 0.5
+          m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnRejectKey:
+    m_PersistentCalls:
+      m_Calls: []
   keyEvent:
     idInternal: 0
     valueGuidInternal: 
@@ -10302,103 +10269,6 @@ Transform:
   - {fileID: 2074895000}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: -0.106, y: -3.267, z: -1.85}
---- !u!82 &2125223026
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2125223022}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 42691c40b428d934ab795cb332012e2e, type: 3}
-  m_Resource: {fileID: 8300000, guid: 42691c40b428d934ab795cb332012e2e, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &2126695007
 GameObject:
   m_ObjectHideFlags: 0
@@ -10569,6 +10439,14 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 6.73
       objectReference: {fileID: 0}
+    - target: {fileID: 5082798046648655263, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: currentVocalizationText
+      value: 
+      objectReference: {fileID: 207797632}
+    - target: {fileID: 5082798046648655263, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: startingVocalization.WwiseObjectReference
+      value: 
+      objectReference: {fileID: 11400000, guid: b11c6d0b7c3057247bc5299495fee0c0, type: 2}
     - target: {fileID: 6708132699121192827, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
       propertyPath: m_Name
       value: Bird

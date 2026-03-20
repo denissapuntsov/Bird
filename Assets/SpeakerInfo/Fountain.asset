@@ -12,3 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef1bf81f7ad7b2746b146d2ccd3d68e4, type: 3}
   m_Name: Fountain
   m_EditorClassIdentifier: 
+  extractionEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 634b8000d9d8ecb4bba0e7b20ba29ced, type: 2}

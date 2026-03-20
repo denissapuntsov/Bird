@@ -71,7 +71,7 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     public void Extract()
     {
-        PlayerInventory.instance.currentVocalization = objectiveEvent;
+        PlayerInventory.instance.CurrentVocalization = objectiveEvent;
         source1.Stop();
         source2.Stop();
         Close();

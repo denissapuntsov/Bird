@@ -10,7 +10,7 @@ public class Listener : MonoBehaviour
 
     public void ReactToKey()
     {
-        if (PlayerInventory.instance.currentVocalization.ObjectReference == keyEvent.ObjectReference)
+        if (PlayerInventory.instance.CurrentVocalization.ObjectReference == keyEvent.ObjectReference)
         {
             Debug.Log("Accepting Key");
             OnAcceptKey.Invoke();

@@ -82,7 +82,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
     {
         UIManager.instance.Exit();
         Close();
-        PlayerInventory.instance.currentVocalization = _currentSpeaker.ExtractedSoundEvent;
+        PlayerInventory.instance.CurrentVocalization = _currentSpeaker.ExtractedSoundEvent;
     }
     
     public void Close()

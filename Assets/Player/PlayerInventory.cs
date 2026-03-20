@@ -1,8 +1,23 @@
+using System;
+using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    public AK.Wwise.Event currentVocalization;
+    [SerializeField] private TextMeshProUGUI currentVocalizationText;
+    private AK.Wwise.Event _currentVocalization;
+
+    [SerializeField] private AK.Wwise.Event startingVocalization;
+    public AK.Wwise.Event CurrentVocalization
+    {
+        get { return _currentVocalization; }
+        set
+        {
+            _currentVocalization = value;
+            currentVocalizationText.text = $"Current Sound: {value.Name.Replace("Play_Player_", "")}";
+        }
+    }
     
     public static PlayerInventory instance;
 
@@ -16,5 +31,10 @@ public class PlayerInventory : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        CurrentVocalization = startingVocalization;
     }
 }
