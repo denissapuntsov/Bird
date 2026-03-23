@@ -39,11 +39,13 @@ public class Interactable : MonoBehaviour
 
     public void TryCall()
     {
+        if (!Listener) return;
         OnCall.Invoke();
     }
 
     public void TryListen()
     {
+        if (!Speaker) return;
         OnListen.Invoke();
     }
 
