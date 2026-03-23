@@ -123,7 +123,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (!context.performed) return;
 
-        PlayerInventory.instance.currentVocalization.Post(gameObject);
+        PlayerInventory.instance.Speak();
         
         ClosestListener?.TryCall();
     }

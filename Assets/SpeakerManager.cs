@@ -21,9 +21,7 @@ public class SpeakerManager : MonoBehaviour
         switch (_speakerType)
         {
             case SpeakerType.Drone:
-                UIManager.instance.ActiveUI = UIMode.ListeningDrone;
-                _currentManager = DroneManager.instance;
-                break;
+                return;
             case SpeakerType.Rhythm:
                 UIManager.instance.ActiveUI = UIMode.ListeningRhythm;
                 _currentManager = RhythmManager.instance;
@@ -37,6 +35,7 @@ public class SpeakerManager : MonoBehaviour
 
     public void OnKey(InputAction.CallbackContext context)
     {
+        if (!context.started) return;
         _currentManager.ProcessKeys(context);
     }
 
@@ -50,6 +49,7 @@ public class SpeakerManager : MonoBehaviour
 public interface ISpeakerManager
 {
     public void Setup(Speaker speaker);
+    public void Play();
     public void ProcessKeys(InputAction.CallbackContext context);
     public void Extract();
     public void Close();

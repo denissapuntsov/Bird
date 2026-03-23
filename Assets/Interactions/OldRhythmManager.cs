@@ -1,9 +1,10 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 
-public class RhythmManager : MonoBehaviour, ISpeakerManager
+public class OldRhythmManager : MonoBehaviour
 {
     private Speaker _currentSpeaker = null;
     private AK.Wwise.Event _playEvent, _stopEvent;
@@ -12,7 +13,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
     private Marker _currentMarker;
     [SerializeField] private List<Marker> markers;
 
-    private Marker CurrentMarker
+    /*private Marker CurrentMarker
     {
         get => _currentMarker;
         set
@@ -24,9 +25,9 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
             }
             ExpandLetter(_currentMarker.key);
         }
-    }
+    }*/
     
-    public static RhythmManager instance;
+    public static OldRhythmManager instance;
 
     private void Awake()
     {
@@ -43,17 +44,12 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
 
     #region ISpeakerManager
 
-    public void Setup(Speaker speaker)
-    {
-        _currentSpeaker = speaker;
-        _playEvent = _currentSpeaker.InteractionStartEvent;
-        _stopEvent = _currentSpeaker.InteractionEndEvent;
-        markers = new List<Marker>();
-        
-        AkUnitySoundEngine.PostEvent(_playEvent.Name, gameObject, (uint)AkCallbackType.AK_Marker, ProcessMarkerCallback, _myCookieObject);
-    }
-    
     public void ProcessKeys(InputAction.CallbackContext context)
+    {
+        throw new NotImplementedException();
+    }
+
+    /*public void ProcessKeys(InputAction.CallbackContext context)
     {
         if (!context.started) return;
 
@@ -76,13 +72,12 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
         }
         
         CurrentMarker.isMatched = true;
-    }
+    }*/
     
     public void Extract()
     {
         UIManager.instance.Exit();
         Close();
-        PlayerInventory.instance.currentVocalization = _currentSpeaker.ExtractedSoundEvent;
     }
     
     public void Close()
@@ -92,7 +87,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
 
     #endregion
 
-    private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)
+    /*private void ProcessMarkerCallback(object inCookie, AkCallbackType inType, object inInfo)
     {
         if (inType != AkCallbackType.AK_Marker) return;
         AkMarkerCallbackInfo info = (AkMarkerCallbackInfo)inInfo;
@@ -110,9 +105,9 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
         }
         
         UpdateCurrentMarker(info);
-    }
+    }*/
 
-    private void UpdateCurrentMarker(AkMarkerCallbackInfo info)
+    /*private void UpdateCurrentMarker(AkMarkerCallbackInfo info)
     {
         Marker incomingMarker = new Marker(info.uPosition, info.strLabel);
         if (!markers.Contains(incomingMarker))
@@ -124,14 +119,14 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
         {
             if (marker.Equals(incomingMarker)) CurrentMarker = marker;
         }
-    }
+    }*/
 
     private void ResetMarkerMatches()
     {
         foreach (Marker marker in markers) marker.isMatched = false;
     }
 
-    private void ExpandLetter(string letter)
+    /*private void ExpandLetter(string letter)
     {
         var letterGameObject = GetLetterGameObject(letter);
 
@@ -149,7 +144,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
             _ => null
         };
         return letterGameObject;
-    }
+    }*/
 
     private bool AreAllMarkersMatched()
     {
@@ -161,5 +156,19 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
         }
 
         return true;
+    }
+
+    private void OnKeyReceived(CueKey key)
+    {
+        GameObject letterGameObject = key switch
+        {
+            CueKey.A => a.gameObject,
+            CueKey.W => w.gameObject,
+            CueKey.S => s.gameObject,
+            CueKey.D => d.gameObject,
+            _ => null
+        };
+        
+        letterGameObject?.transform.DOPunchScale(new Vector3(1.1f, 1.1f, 1.1f), 0.5f, 0, 1f);
     }
 }

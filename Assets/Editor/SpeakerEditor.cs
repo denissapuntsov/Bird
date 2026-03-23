@@ -27,9 +27,9 @@ public class SpeakerEditor : Editor
 
         if (speaker.speakerType == SpeakerType.Rhythm)
         {
-            speaker.speakerRhythmInfo =
-                EditorGUILayout.ObjectField(speaker.speakerRhythmInfo, typeof(SpeakerRhythmInfo), true) as
-                    SpeakerRhythmInfo;
+            speaker.rhythmData =
+                EditorGUILayout.ObjectField(speaker.rhythmData, typeof(RhythmData), true) as
+                    RhythmData;
         }
         else
         {

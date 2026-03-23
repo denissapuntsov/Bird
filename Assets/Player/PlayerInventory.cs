@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerInventory : MonoBehaviour
 {
-    public AK.Wwise.Event currentVocalization;
+    public AudioClip currentClip;
+    private AudioSource _audioSource;
     
     public static PlayerInventory instance;
 
@@ -16,5 +17,12 @@ public class PlayerInventory : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        _audioSource = GetComponent<AudioSource>();
+    }
+
+    public void Speak()
+    {
+        _audioSource.PlayOneShot(currentClip);
     }
 }

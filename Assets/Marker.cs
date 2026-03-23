@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [System.Serializable]
-public class Marker : IEquatable<Marker>
+public partial class Marker : IEquatable<Marker>
 {
     public int time;
     public string key;

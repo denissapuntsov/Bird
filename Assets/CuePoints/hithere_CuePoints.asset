@@ -14,6 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioClip: {fileID: 8300000, guid: d3edfa03252dddb4cbe85bdc9a734abe, type: 3}
   cuePoints:
-  - label: test
+  - key: 1
+    label: 
     positionInSamples: 22050
     positionInSeconds: 1
+    isMatched: 1
+  - key: 3
+    label: 
+    positionInSamples: 44100
+    positionInSeconds: 2
+    isMatched: 1

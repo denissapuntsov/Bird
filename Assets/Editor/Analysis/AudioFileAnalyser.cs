@@ -118,7 +118,7 @@ public class AudioFileAnalyser : MonoBehaviour
             newAudioData.cuePoints.Add(cue);
         }
         
-        AssetDatabase.CreateAsset(newAudioData, $"Assets/Analysis/CuePoints/{audioClip.name}_CuePoints.asset");
+        AssetDatabase.CreateAsset(newAudioData, $"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }

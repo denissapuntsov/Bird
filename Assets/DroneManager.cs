@@ -54,7 +54,12 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     {
         _currentSpeaker = speaker;
     }
-    
+
+    public void Play()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public void ProcessKeys(InputAction.CallbackContext context)
     {
         if (UIManager.instance.ActiveUI != UIMode.ListeningDrone) return;
@@ -64,8 +69,8 @@ public class DroneManager : MonoBehaviour, ISpeakerManager
     
     public void Extract()
     {
-        PlayerInventory.instance.currentVocalization = null;
-        Close();
+        /*PlayerInventory.instance.currentVocalization = null;
+        Close();*/
     }
     
     public void Close()
