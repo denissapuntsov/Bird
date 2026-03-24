@@ -10,7 +10,6 @@ public class AnalyserMenu : EditorWindow
     public List<Cue> cues = new List<Cue>();
     public List<Cue> cuesToAdd;
     private int toolbarInt;
-    private string[] toolbarStrings = new string[] { "Update/Delete"/*, "Add From List" */};
     private Texture2D _waveform;
 
     [MenuItem("Window/.wav File Analyser")]
@@ -57,24 +56,9 @@ public class AnalyserMenu : EditorWindow
                 GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
             }
         }
-        
-        /*GUILayout.Space(10);
-        toolbarInt = GUILayout.Toolbar(toolbarInt, toolbarStrings, GUILayout.Height(20));
-        GUILayout.Space(10);
-        DrawHorizontalGUILine();*/
         GUILayout.Space(10);
 
         DrawUpdateGUI();
-        /*switch (toolbarInt)
-        {
-            case 0:
-                DrawUpdateGUI();
-                break;
-            case 1:
-                DrawAddGUI();
-                break;
-        }
-        GUILayout.Space(10);*/
     }
 
     private void GetCuesFromScriptableObject()
@@ -94,7 +78,7 @@ public class AnalyserMenu : EditorWindow
             cues.Clear();
             foreach (Cue cue in rhythmDataAsset.cuePoints)
             {
-                cues.Add(cue);
+                cues.Add(new Cue(cue));
             }
         }
     }
@@ -115,7 +99,7 @@ public class AnalyserMenu : EditorWindow
 
         foreach (var cue in cues)
         {
-            rhythmDataAsset.cuePoints.Add(cue);
+            rhythmDataAsset.cuePoints.Add(new Cue(cue));
         }
         
         AssetDatabase.SaveAssets();
@@ -127,8 +111,11 @@ public class AnalyserMenu : EditorWindow
         AddProperty(nameof(cues));
 
         GUILayout.Space(10);
+        GUILayout.FlexibleSpace();
         EditorGUILayout.BeginHorizontal();
         
+        bool areChangesPresent = AreChangesPresent();
+        GUI.enabled = areChangesPresent;
         if (GUILayout.Button("Apply"))
         {
             UpdateScriptableObject();
@@ -138,28 +125,35 @@ public class AnalyserMenu : EditorWindow
         {
             GetCuesFromScriptableObject();
         }
+        GUI.enabled = true;
 
+        GUI.enabled = cues.Count > 0;
         if (GUILayout.Button("Clear"))
         {
             cues.Clear();
         }
+
+        GUI.enabled = true;
         
         EditorGUILayout.EndHorizontal();
 
         GUILayout.Space(10);
     }
 
-    private void DrawAddGUI()
+    private bool AreChangesPresent()
     {
-        AddProperty(nameof(cuesToAdd));
-        
-        GUILayout.Space(10);
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add From List"))
+        RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+
+        if (!rhythmDataAsset) return true;
+
+        if (rhythmDataAsset.cuePoints.Count != cues.Count) return true;
+
+        foreach (Cue cue in cues)
         {
-            //AddCuesFromList();
+            if (!cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)])) return true;
         }
-        EditorGUILayout.EndHorizontal();
+
+        return false;
     }
 
     private void AddProperty(string propertyToFind)

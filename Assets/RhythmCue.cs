@@ -15,6 +15,12 @@ public class Cue
         this.position = position;
     }
 
+    public Cue(Cue other)
+    {
+        key = other.key;
+        position = other.position;
+    }
+
     public override bool Equals(object other)
     {
         if (other is not Cue)
