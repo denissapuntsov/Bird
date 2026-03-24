@@ -83,7 +83,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
 
     private void CheckForPosition(Cue cue)
     {
-        if (_audioSource.timeSamples > cue.positionInSamples && !passedCues.Contains(cue))
+        if (_audioSource.timeSamples > cue.position && !passedCues.Contains(cue))
         {
             //var delay = (_audioSource.timeSamples - cue.positionInSamples) / 22050f * 1000;
             _currentCue = cue;

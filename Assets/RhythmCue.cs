@@ -5,24 +5,14 @@ using UnityEngine;
 public class Cue
 {
     public CueKey key;
-    public string label;
-    public int positionInSamples;
-    public float positionInSeconds;
+    public int position;
 
     [HideInInspector] public bool isMatched;
 
-    public Cue(string label, int positionInSamples, int sampleRate)
+    public Cue(CueKey key, int position, int sampleRate)
     {
-
-        if (!Enum.IsDefined(typeof(CueKey), label.ToUpper()))
-        {
-            this.key = CueKey.None;
-        }
-        else this.key = (CueKey)Enum.Parse(typeof(CueKey), label.ToUpper());
-        
-        this.label = label;
-        this.positionInSamples = positionInSamples;
-        positionInSeconds = (float)positionInSamples / sampleRate;
+        this.key = key;
+        this.position = position;
     }
 
     public override bool Equals(object other)
@@ -36,7 +26,7 @@ public class Cue
 
     public bool Equals(Cue other)
     {
-        return key == other.key && positionInSamples == other.positionInSamples;
+        return key == other.key && position == other.position;
     }
 }
 
