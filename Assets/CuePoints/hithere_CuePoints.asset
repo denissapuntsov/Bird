@@ -15,6 +15,8 @@ MonoBehaviour:
   audioClip: {fileID: 8300000, guid: d3edfa03252dddb4cbe85bdc9a734abe, type: 3}
   cuePoints:
   - key: 0
-    label: 
-    position: 10000
+    position: 0
+    isMatched: 0
+  - key: 3
+    position: 14400
     isMatched: 0

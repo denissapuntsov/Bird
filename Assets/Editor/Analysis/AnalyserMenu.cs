@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,9 @@ public class AnalyserMenu : EditorWindow
     public List<Cue> cuesToAdd;
     private int toolbarInt;
 
+    private bool _waveformFoldout = true;
+    private bool _cuePointHeader = true;
+
     [MenuItem("Window/.wav File Analyser")]
     public static void ShowWindow()
     {
@@ -18,7 +22,7 @@ public class AnalyserMenu : EditorWindow
     }
 
     private void OnGUI()
-    {   
+    {
         GUILayout.Space(20);
         EditorGUILayout.BeginHorizontal();
         
@@ -34,30 +38,64 @@ public class AnalyserMenu : EditorWindow
         
         if (audioClip)
         {
-            GUILayout.Space(10);
+            GUILayout.Space(5);
             float imageWidth = EditorGUIUtility.currentViewWidth - 10;
             float imageHeight = (EditorGUIUtility.currentViewWidth - 10) / 8 < 100 ? (EditorGUIUtility.currentViewWidth - 10) / 8 : 100;
             
             DrawHorizontalGUILine();
-            GUILayout.Space(10);
-            Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
+            GUILayout.Space(5);
+            Rect headerRect = GUILayoutUtility.GetRect(10, 15);
+            _waveformFoldout = EditorGUI.BeginFoldoutHeaderGroup(headerRect, _waveformFoldout, "Waveform and Cue Markers");
+
+            if (_waveformFoldout)
+            {
+                GUILayout.Space(10);
+                Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
+            
+                Texture2D waveform = DrawWaveformTexture(audioClip, (int)imageWidth - 10, (int)imageHeight);
+                if (waveform)
+                {
+                    GUI.DrawTexture(rect, waveform, ScaleMode.ScaleToFit, alphaBlend:true);
+                }
+            
+                Texture2D cueImage = DrawCueMarks(cues, audioClip, (int)imageWidth - 10, (int)imageHeight);
+                if (cueImage)
+                {
+                    GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
+                }
+            }
             GUILayout.Space(10);
             DrawHorizontalGUILine();
             
-            Texture2D waveform = DrawWaveformTexture(audioClip, (int)imageWidth - 10, (int)imageHeight);
-            if (waveform)
-            {
-                GUI.DrawTexture(rect, waveform, ScaleMode.ScaleToFit, alphaBlend:true);
-            }
+            EditorGUI.EndFoldoutHeaderGroup();
+            GUILayout.Space(10);
+        }
+        
+        Rect cueHeaderRect = GUILayoutUtility.GetRect(10, 15);
+        EditorGUILayout.BeginHorizontal();
+        _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
+        /*if (GUILayout.Button("+", new GUIStyle() {fixedWidth = 20, fixedHeight = 20} ))
+        {
+            AddCue();
+        }*/
+        EditorGUILayout.EndHorizontal();
+        GUILayout.Space(10);
             
-            Texture2D cueImage = DrawCueMarks(cues, audioClip, (int)imageWidth - 10, (int)imageHeight);
-            if (cueImage)
+        if (_cuePointHeader && cues != null && cues.Count > 0)
+        {
+            foreach (Cue cue in cues)
             {
-                GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
+                EditorGUILayout.BeginVertical("box");
+                EditorGUILayout.LabelField($"Cue {cues.IndexOf(cue)}", EditorStyles.boldLabel);
+                cue.key = (CueKey)EditorGUILayout.EnumFlagsField("Key", cue.key);
+                GUILayout.Space(5);
+                cue.position = EditorGUILayout.IntField("Position in Samples", cue.position);
+                EditorGUILayout.EndVertical();
+                GUILayout.Space(10);
             }
         }
-        GUILayout.Space(10);
-
+        EditorGUILayout.EndFoldoutHeaderGroup();
+        
         DrawUpdateGUI();
     }
 
@@ -108,7 +146,7 @@ public class AnalyserMenu : EditorWindow
 
     private void DrawUpdateGUI()
     {
-        AddProperty(nameof(cues));
+        //AddProperty(nameof(cues));
 
         GUILayout.Space(10);
         GUILayout.FlexibleSpace();
@@ -157,14 +195,9 @@ public class AnalyserMenu : EditorWindow
         return false;
     }
 
-    private void AddProperty(string propertyToFind)
+    private void AddCue()
     {
-        ScriptableObject target = this;
-        SerializedObject so = new SerializedObject(target);
-        SerializedProperty serializedProperty = so.FindProperty(propertyToFind);
-        
-        EditorGUILayout.PropertyField(serializedProperty, true);
-        so.ApplyModifiedProperties();
+        cues.Add(new Cue(CueKey.W, 0, audioClip.frequency));
     }
     
     private static void DrawHorizontalGUILine(int height = 1) {
