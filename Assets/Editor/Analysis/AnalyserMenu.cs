@@ -10,7 +10,6 @@ public class AnalyserMenu : EditorWindow
     public List<Cue> cues = new List<Cue>();
     public List<Cue> cuesToAdd;
     private int toolbarInt;
-    private Texture2D _waveform;
 
     [MenuItem("Window/.wav File Analyser")]
     public static void ShowWindow()
@@ -20,7 +19,7 @@ public class AnalyserMenu : EditorWindow
 
     private void OnGUI()
     {   
-        GUILayout.Space(10);
+        GUILayout.Space(20);
         EditorGUILayout.BeginHorizontal();
         
         EditorGUI.BeginChangeCheck();
@@ -35,22 +34,23 @@ public class AnalyserMenu : EditorWindow
         
         if (audioClip)
         {
-            _waveform = DrawWaveformTexture(audioClip, (int)EditorGUIUtility.currentViewWidth - 10, 40);
             GUILayout.Space(10);
             float imageWidth = EditorGUIUtility.currentViewWidth - 10;
-            float imageHeight = 40;
+            float imageHeight = (EditorGUIUtility.currentViewWidth - 10) / 8 < 100 ? (EditorGUIUtility.currentViewWidth - 10) / 8 : 100;
             
             DrawHorizontalGUILine();
             GUILayout.Space(10);
-            Rect rect = GUILayoutUtility.GetRect(imageHeight, imageHeight);
+            Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
             GUILayout.Space(10);
             DrawHorizontalGUILine();
-            if (_waveform)
+            
+            Texture2D waveform = DrawWaveformTexture(audioClip, (int)imageWidth - 10, (int)imageHeight);
+            if (waveform)
             {
-                GUI.DrawTexture(rect, _waveform, ScaleMode.ScaleToFit, alphaBlend:true);
+                GUI.DrawTexture(rect, waveform, ScaleMode.ScaleToFit, alphaBlend:true);
             }
             
-            var cueImage = DrawCueMarks(cues, audioClip, (int)EditorGUIUtility.currentViewWidth - 10, 40);
+            Texture2D cueImage = DrawCueMarks(cues, audioClip, (int)imageWidth - 10, (int)imageHeight);
             if (cueImage)
             {
                 GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
@@ -127,7 +127,7 @@ public class AnalyserMenu : EditorWindow
         }
         GUI.enabled = true;
 
-        GUI.enabled = cues.Count > 0;
+        GUI.enabled = cues != null || cues?.Count > 0;
         if (GUILayout.Button("Clear"))
         {
             cues.Clear();
@@ -142,9 +142,10 @@ public class AnalyserMenu : EditorWindow
 
     private bool AreChangesPresent()
     {
+        if (!audioClip) return false;
+        if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
+        
         RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-
-        if (!rhythmDataAsset) return true;
 
         if (rhythmDataAsset.cuePoints.Count != cues.Count) return true;
 
