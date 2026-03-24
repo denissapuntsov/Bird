@@ -9,7 +9,9 @@ public class AnalyserMenu : EditorWindow
     public AudioClip audioClip;
     private string _outputFile, _inputFile;
     public List<Cue> cues = new List<Cue>();
-    public List<Cue> cuesToAdd;
+    
+    private List<Cue> _changedCues = new List<Cue>();
+    
     private int toolbarInt;
 
     private bool _waveformFoldout = true;
@@ -69,27 +71,40 @@ public class AnalyserMenu : EditorWindow
             
             EditorGUI.EndFoldoutHeaderGroup();
             GUILayout.Space(10);
+            
+            EditorGUILayout.BeginHorizontal();
+            Rect cueHeaderRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth - 100, 20);
+            _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
+            if (GUILayout.Button("+", GUILayout.Width(20), GUILayout.Height(15)))
+            {
+                AddCue();
+                _cuePointHeader = true;
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(10);
         }
         
-        Rect cueHeaderRect = GUILayoutUtility.GetRect(10, 15);
-        EditorGUILayout.BeginHorizontal();
-        _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
-        /*if (GUILayout.Button("+", new GUIStyle() {fixedWidth = 20, fixedHeight = 20} ))
-        {
-            AddCue();
-        }*/
-        EditorGUILayout.EndHorizontal();
-        GUILayout.Space(10);
-            
+        
         if (_cuePointHeader && cues != null && cues.Count > 0)
         {
             foreach (Cue cue in cues)
             {
                 EditorGUILayout.BeginVertical("box");
+                EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField($"Cue {cues.IndexOf(cue)}", EditorStyles.boldLabel);
-                cue.key = (CueKey)EditorGUILayout.EnumFlagsField("Key", cue.key);
+                if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(15)))
+                {
+                    cues.Remove(cue);
+                    EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.EndVertical();
+                    break;
+                }
+                EditorGUILayout.EndHorizontal();
+                cue.key = (CueKey)EditorGUILayout.EnumPopup("Key", cue.key);
                 GUILayout.Space(5);
-                cue.position = EditorGUILayout.IntField("Position in Samples", cue.position);
+                
+                cue.position = EditorGUILayout.IntSlider("Position in Samples",  cue.position, 0, audioClip.samples - 1);
+                
                 EditorGUILayout.EndVertical();
                 GUILayout.Space(10);
             }
@@ -146,14 +161,12 @@ public class AnalyserMenu : EditorWindow
 
     private void DrawUpdateGUI()
     {
-        //AddProperty(nameof(cues));
-
         GUILayout.Space(10);
         GUILayout.FlexibleSpace();
         EditorGUILayout.BeginHorizontal();
         
-        bool areChangesPresent = AreChangesPresent();
-        GUI.enabled = areChangesPresent;
+        GUI.enabled = AreChangesPresent();
+        
         if (GUILayout.Button("Apply"))
         {
             UpdateScriptableObject();
@@ -187,12 +200,17 @@ public class AnalyserMenu : EditorWindow
 
         if (rhythmDataAsset.cuePoints.Count != cues.Count) return true;
 
+        _changedCues = new List<Cue>();
+        
         foreach (Cue cue in cues)
         {
-            if (!cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)])) return true;
+            if (!cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)]))
+            {
+                _changedCues.Add(cue);
+            }
         }
 
-        return false;
+        return _changedCues.Count > 0;
     }
 
     private void AddCue()
@@ -235,8 +253,8 @@ public class AnalyserMenu : EditorWindow
             for (int y = 0; y < height; y++)
             {
                 newTexture.SetPixel(x, y, EditorGUIUtility.isProSkin
-                    ? (Color) new Color32 (56, 56, 56, 255)
-                    : (Color) new Color32 (194, 194, 194, 255));
+                    ? new Color32 (56, 56, 56, 255)
+                    : new Color32 (194, 194, 194, 255));
             }
         }
 
@@ -274,13 +292,14 @@ public class AnalyserMenu : EditorWindow
 
             for (int y = 0; y <= height; y++)
             {
-                newTexture.SetPixel(cuePositionScaled, (height / 2) + y, Color.cyan);
-                newTexture.SetPixel(cuePositionScaled, (height / 2) - y, Color.cyan);
+                Color newColor = _changedCues.Contains(cue) ? Color.cyan : Color.white;
+                
+                newTexture.SetPixel(cuePositionScaled, (height / 2) + y, newColor);
+                newTexture.SetPixel(cuePositionScaled, (height / 2) - y, newColor);
             }
         }
 
         newTexture.Apply();
-        
         return newTexture;
     }
 }

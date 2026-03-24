@@ -6,7 +6,7 @@ public class Cue
 {
     public CueKey key;
     public int position;
-
+    
     [HideInInspector] public bool isMatched;
 
     public Cue(CueKey key, int position, int sampleRate)
@@ -23,6 +23,7 @@ public class Cue
 
     public override bool Equals(object other)
     {
+        if (other == null) return false;
         if (other is not Cue)
         {
             return ReferenceEquals(this, other);
@@ -32,6 +33,7 @@ public class Cue
 
     public bool Equals(Cue other)
     {
+        if (other == null) return false;
         return key == other.key && position == other.position;
     }
 }
