@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -182,6 +183,8 @@ public class AnalyserMenu : EditorWindow
         
         rhythmDataAsset.audioClip = audioClip;
         rhythmDataAsset.cuePoints = new List<Cue>();
+        
+        SortCues();
 
         foreach (var cue in cues)
         {
@@ -229,6 +232,8 @@ public class AnalyserMenu : EditorWindow
         if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
         
         RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+        
+        if (cues.Count != rhythmDataAsset.cuePoints.Count) return true;
         
         foreach (Cue cue in cues)
         {
@@ -345,5 +350,59 @@ public class AnalyserMenu : EditorWindow
 
         newTexture.Apply();
         return newTexture;
+    }
+    
+    private void SortCues()
+    {
+        if (!audioClip) return;
+        
+        List<Cue> sortedList = new List<Cue>();
+        
+        // copy values to array
+        Tuple<int, int>[] array = new Tuple<int, int>[cues.Count]; // Item1 is position in samples, Item2 is index in original list
+
+        for (int i = 0; i < cues.Count; i++)
+        {
+            array[i] = new Tuple<int, int>(cues[i].position, i);
+        }
+        
+        QuickSort(array, 0, array.Length - 1);
+
+        foreach (Tuple<int, int> pair in array)
+        {
+            sortedList.Add(cues[pair.Item2]);
+        }
+        
+        cues = new List<Cue>(sortedList);
+    }
+
+    private void QuickSort(Tuple<int, int>[] array, int start, int end)
+    {
+        if (start < end)
+        {
+            int pivot = Partition(array, start, end);
+            QuickSort(array, start, pivot - 1);
+            QuickSort(array, pivot + 1, end);
+        }
+    }
+
+    private int Partition(Tuple<int, int>[] array, int start, int end)
+    {
+        Tuple<int, int> pivot = array[end];
+        int i = start - 1;
+
+        for (int j = start; j < end; j++)
+        {
+            if (array[j].Item1 <= pivot.Item1)
+            {
+                i++;
+                
+                (array[i], array[j]) = (array[j], array[i]);
+            }
+        }
+
+        (array[i + 1], array[end]) = (array[end], array[i + 1]);
+
+        return i + 1;
     }
 }
