@@ -7,13 +7,10 @@ using UnityEngine.UIElements;
 public class AnalyserMenu : EditorWindow
 {
     public AudioClip audioClip;
-    private string _outputFile, _inputFile;
     public List<Cue> cues = new List<Cue>();
     
     private List<Cue> _changedCues = new List<Cue>();
-    
-    private int toolbarInt;
-
+    private List<Cue> _unsavedCues = new List<Cue>();
     private bool _waveformFoldout = true;
     private bool _cuePointHeader = true;
 
@@ -26,8 +23,8 @@ public class AnalyserMenu : EditorWindow
     private void OnGUI()
     {
         GUILayout.Space(20);
-        EditorGUILayout.BeginHorizontal();
         
+        EditorGUILayout.BeginHorizontal();
         EditorGUI.BeginChangeCheck();
         audioClip = EditorGUILayout.ObjectField(audioClip, typeof(AudioClip), true) as AudioClip;
         if (EditorGUI.EndChangeCheck())
@@ -40,82 +37,101 @@ public class AnalyserMenu : EditorWindow
         
         if (audioClip)
         {
-            GUILayout.Space(5);
-            float imageWidth = EditorGUIUtility.currentViewWidth - 10;
-            float imageHeight = (EditorGUIUtility.currentViewWidth - 10) / 8 < 100 ? (EditorGUIUtility.currentViewWidth - 10) / 8 : 100;
-            
-            DrawHorizontalGUILine();
-            GUILayout.Space(5);
-            Rect headerRect = GUILayoutUtility.GetRect(10, 15);
-            _waveformFoldout = EditorGUI.BeginFoldoutHeaderGroup(headerRect, _waveformFoldout, "Waveform and Cue Markers");
-
-            if (_waveformFoldout)
-            {
-                GUILayout.Space(10);
-                Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
-            
-                Texture2D waveform = DrawWaveformTexture(audioClip, (int)imageWidth - 10, (int)imageHeight);
-                if (waveform)
-                {
-                    GUI.DrawTexture(rect, waveform, ScaleMode.ScaleToFit, alphaBlend:true);
-                }
-            
-                Texture2D cueImage = DrawCueMarks(cues, audioClip, (int)imageWidth - 10, (int)imageHeight);
-                if (cueImage)
-                {
-                    GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
-                }
-            }
-            GUILayout.Space(10);
-            DrawHorizontalGUILine();
-            
-            EditorGUI.EndFoldoutHeaderGroup();
-            GUILayout.Space(10);
-            
-            EditorGUILayout.BeginHorizontal();
-            Rect cueHeaderRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth - 100, 20);
-            _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
-            if (GUILayout.Button("+", GUILayout.Width(20), GUILayout.Height(15)))
-            {
-                AddCue();
-                _cuePointHeader = true;
-            }
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(10);
+            ShowHeaders();
         }
-        
         
         if (_cuePointHeader && cues != null && cues.Count > 0)
         {
-            foreach (Cue cue in cues)
-            {
-                EditorGUILayout.BeginVertical("box");
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField($"Cue {cues.IndexOf(cue)}", EditorStyles.boldLabel);
-                if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(15)))
-                {
-                    cues.Remove(cue);
-                    EditorGUILayout.EndHorizontal();
-                    EditorGUILayout.EndVertical();
-                    break;
-                }
-                EditorGUILayout.EndHorizontal();
-                cue.key = (CueKey)EditorGUILayout.EnumPopup("Key", cue.key);
-                GUILayout.Space(5);
-                
-                cue.position = EditorGUILayout.IntSlider("Position in Samples",  cue.position, 0, audioClip.samples - 1);
-                
-                EditorGUILayout.EndVertical();
-                GUILayout.Space(10);
-            }
+            ShowCues();
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
         
         DrawUpdateGUI();
     }
 
+    private void ShowCues()
+    {
+        foreach (Cue cue in cues)
+        {
+            EditorGUILayout.BeginVertical("box");
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField($"Cue {cues.IndexOf(cue)}", EditorStyles.boldLabel);
+            if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(15)))
+            {
+                cues.Remove(cue);
+                _changedCues.Remove(cue);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndVertical();
+                break;
+            }
+            EditorGUILayout.EndHorizontal();
+            cue.key = (CueKey)EditorGUILayout.EnumPopup("Key", cue.key);
+            GUILayout.Space(5);
+                
+            cue.position = EditorGUILayout.IntSlider("Position in Samples",  cue.position, 0, audioClip.samples - 1);
+                
+            EditorGUILayout.EndVertical();
+            GUILayout.Space(10);
+        }
+    }
+
+    private void ShowHeaders()
+    {
+        GUILayout.Space(5);
+        float imageWidth = EditorGUIUtility.currentViewWidth - 10;
+        float imageHeight = (EditorGUIUtility.currentViewWidth - 10) / 8 < 100 ? (EditorGUIUtility.currentViewWidth - 10) / 8 : 100;
+            
+        DrawHorizontalGUILine();
+        GUILayout.Space(5);
+        Rect headerRect = GUILayoutUtility.GetRect(10, 15);
+        _waveformFoldout = EditorGUI.BeginFoldoutHeaderGroup(headerRect, _waveformFoldout, "Waveform and Cue Markers");
+
+        if (_waveformFoldout)
+        {
+            DrawWaveformAndCues(imageWidth, imageHeight);
+        }
+            
+        GUILayout.Space(10);
+        EditorGUI.EndFoldoutHeaderGroup();
+            
+        DrawHorizontalGUILine();
+        GUILayout.Space(10);
+            
+        EditorGUILayout.BeginHorizontal();
+        Rect cueHeaderRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth - 100, 20);
+        _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
+        if (GUILayout.Button("+", GUILayout.Width(20), GUILayout.Height(15)))
+        {
+            AddCue();
+            _cuePointHeader = true;
+        }
+        EditorGUILayout.EndHorizontal();
+        GUILayout.Space(10);
+    }
+
+    private void DrawWaveformAndCues(float imageWidth, float imageHeight)
+    {
+        GUILayout.Space(10);
+        Rect rect = GUILayoutUtility.GetRect(imageWidth, imageHeight);
+            
+        Texture2D waveform = DrawWaveformTexture((int)imageWidth - 10, (int)imageHeight);
+        if (waveform)
+        {
+            GUI.DrawTexture(rect, waveform, ScaleMode.ScaleToFit, alphaBlend:true);
+        }
+            
+        Texture2D cueImage = DrawCueMarks((int)imageWidth - 10, (int)imageHeight);
+        if (cueImage)
+        {
+            GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
+        }
+    }
+
     private void GetCuesFromScriptableObject()
     {
+        _changedCues = new List<Cue>();
+        _unsavedCues = new List<Cue>();
+        
         RhythmData rhythmDataAsset = null;
         if (audioClip != null)
         {
@@ -138,6 +154,9 @@ public class AnalyserMenu : EditorWindow
 
     private void UpdateScriptableObject()
     {
+        _changedCues = new List<Cue>();
+        _unsavedCues = new List<Cue>();
+        
         if (!audioClip) return;
         
         RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
@@ -166,7 +185,6 @@ public class AnalyserMenu : EditorWindow
         EditorGUILayout.BeginHorizontal();
         
         GUI.enabled = AreChangesPresent();
-        
         if (GUILayout.Button("Apply"))
         {
             UpdateScriptableObject();
@@ -178,12 +196,11 @@ public class AnalyserMenu : EditorWindow
         }
         GUI.enabled = true;
 
-        GUI.enabled = cues != null || cues?.Count > 0;
+        GUI.enabled = cues is { Count: > 0 };
         if (GUILayout.Button("Clear"))
         {
-            cues.Clear();
+            cues?.Clear();
         }
-
         GUI.enabled = true;
         
         EditorGUILayout.EndHorizontal();
@@ -197,25 +214,24 @@ public class AnalyserMenu : EditorWindow
         if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
         
         RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-
-        if (rhythmDataAsset.cuePoints.Count != cues.Count) return true;
-
-        _changedCues = new List<Cue>();
         
         foreach (Cue cue in cues)
         {
-            if (!cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)]))
+            if (_unsavedCues.Contains(cue)) continue;
+            if (cues.IndexOf(cue) > rhythmDataAsset.cuePoints.Count - 1 || !cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)]))
             {
                 _changedCues.Add(cue);
             }
         }
 
-        return _changedCues.Count > 0;
+        return _changedCues.Count > 0 || _unsavedCues.Count > 0;
     }
 
     private void AddCue()
     {
-        cues.Add(new Cue(CueKey.W, 0, audioClip.frequency));
+        Cue newCue = new Cue(CueKey.W, 0, audioClip.frequency);
+        cues.Add(newCue);
+        _unsavedCues.Add(newCue);
     }
     
     private static void DrawHorizontalGUILine(int height = 1) {
@@ -231,7 +247,7 @@ public class AnalyserMenu : EditorWindow
         GUILayout.Space(4);
     }
 
-    private Texture2D DrawWaveformTexture(AudioClip audioClip, int width, int height)
+    private Texture2D DrawWaveformTexture(int width, int height)
     {
         if (!audioClip) return null;
         
@@ -272,7 +288,7 @@ public class AnalyserMenu : EditorWindow
         return newTexture;
     }
 
-    private Texture2D DrawCueMarks(List<Cue> cues, AudioClip clip, int width, int height)
+    private Texture2D DrawCueMarks(int width, int height)
     {
         if (!audioClip || cues == null || cues.Count == 0) return null;
         
@@ -288,11 +304,24 @@ public class AnalyserMenu : EditorWindow
         
         foreach (Cue cue in cues)
         {
-            var cuePositionScaled = cue.position / (clip.samples / width);
+            var cuePositionScaled = cue.position / (audioClip.samples / width);
 
             for (int y = 0; y <= height; y++)
             {
-                Color newColor = _changedCues.Contains(cue) ? Color.cyan : Color.white;
+                Color newColor;
+
+                if (_changedCues.Contains(cue))
+                {
+                    newColor = Color.cyan;
+                }
+                else if (_unsavedCues.Contains(cue))
+                {
+                    newColor = Color.yellow;
+                }
+                else
+                {
+                    newColor = Color.white;
+                }
                 
                 newTexture.SetPixel(cuePositionScaled, (height / 2) + y, newColor);
                 newTexture.SetPixel(cuePositionScaled, (height / 2) - y, newColor);
