@@ -13,6 +13,7 @@ public class AnalyserMenu : EditorWindow
     private List<Cue> _unsavedCues = new List<Cue>();
     private bool _waveformFoldout = true;
     private bool _cuePointHeader = true;
+    private Vector2 _scrollPosition;
 
     [MenuItem("Window/.wav File Analyser")]
     public static void ShowWindow()
@@ -42,7 +43,9 @@ public class AnalyserMenu : EditorWindow
         
         if (_cuePointHeader && cues != null && cues.Count > 0)
         {
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition,GUILayout.Width(EditorGUIUtility.currentViewWidth - 7.5f));
             ShowCues();
+            EditorGUILayout.EndScrollView();
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
         
@@ -78,11 +81,23 @@ public class AnalyserMenu : EditorWindow
     private void ShowHeaders()
     {
         GUILayout.Space(5);
+        DrawHorizontalGUILine();
+        
         float imageWidth = EditorGUIUtility.currentViewWidth - 10;
         float imageHeight = (EditorGUIUtility.currentViewWidth - 10) / 8 < 100 ? (EditorGUIUtility.currentViewWidth - 10) / 8 : 100;
             
-        DrawHorizontalGUILine();
         GUILayout.Space(5);
+        ShowWaveformBlock(imageWidth, imageHeight);
+
+        DrawHorizontalGUILine();
+        GUILayout.Space(10);
+            
+        ShowCueBlock();
+        GUILayout.Space(10);
+    }
+
+    private void ShowWaveformBlock(float imageWidth, float imageHeight)
+    {
         Rect headerRect = GUILayoutUtility.GetRect(10, 15);
         _waveformFoldout = EditorGUI.BeginFoldoutHeaderGroup(headerRect, _waveformFoldout, "Waveform and Cue Markers");
 
@@ -93,10 +108,10 @@ public class AnalyserMenu : EditorWindow
             
         GUILayout.Space(10);
         EditorGUI.EndFoldoutHeaderGroup();
-            
-        DrawHorizontalGUILine();
-        GUILayout.Space(10);
-            
+    }
+
+    private void ShowCueBlock()
+    {
         EditorGUILayout.BeginHorizontal();
         Rect cueHeaderRect = GUILayoutUtility.GetRect(EditorGUIUtility.currentViewWidth - 100, 20);
         _cuePointHeader = EditorGUI.BeginFoldoutHeaderGroup(cueHeaderRect, _cuePointHeader, "Cue Point List");
@@ -106,7 +121,6 @@ public class AnalyserMenu : EditorWindow
             _cuePointHeader = true;
         }
         EditorGUILayout.EndHorizontal();
-        GUILayout.Space(10);
     }
 
     private void DrawWaveformAndCues(float imageWidth, float imageHeight)
@@ -180,6 +194,7 @@ public class AnalyserMenu : EditorWindow
 
     private void DrawUpdateGUI()
     {
+        DrawHorizontalGUILine();
         GUILayout.Space(10);
         GUILayout.FlexibleSpace();
         EditorGUILayout.BeginHorizontal();
