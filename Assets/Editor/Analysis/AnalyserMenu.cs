@@ -9,10 +9,9 @@ using UnityEngine.UIElements;
 public class AnalyserMenu : EditorWindow
 {
     public AudioClip audioClip;
-    public List<Cue> cues = new List<Cue>();
-    
-    private List<Cue> _changedCues = new List<Cue>();
-    private List<Cue> _unsavedCues = new List<Cue>();
+    private List<Cue> _cues = new List<Cue>();
+
+    private Dictionary<Cue, int> _positions = new Dictionary<Cue, int>();
     private bool _waveformFoldout = true;
     private bool _cuePointHeader = true;
     private Vector2 _scrollPosition;
@@ -22,7 +21,6 @@ public class AnalyserMenu : EditorWindow
     {
         GetWindow<AnalyserMenu>("Analyser");
     }
-
     private void OnGUI()
     {
         GUILayout.Space(20);
@@ -32,7 +30,7 @@ public class AnalyserMenu : EditorWindow
         audioClip = EditorGUILayout.ObjectField(audioClip, typeof(AudioClip), true) as AudioClip;
         if (EditorGUI.EndChangeCheck())
         {
-            cues = new List<Cue>();
+            _cues = new List<Cue>();
             GetCuesFromScriptableObject();
         }
         
@@ -43,7 +41,7 @@ public class AnalyserMenu : EditorWindow
             ShowHeaders();
         }
         
-        if (_cuePointHeader && cues != null && cues.Count > 0)
+        if (_cuePointHeader && _cues != null && _cues.Count > 0)
         {
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition,GUILayout.Width(EditorGUIUtility.currentViewWidth - 7.5f));
             ShowCues();
@@ -53,18 +51,49 @@ public class AnalyserMenu : EditorWindow
         
         DrawUpdateGUI();
     }
+    private void DrawUpdateGUI()
+    {
+        DrawHorizontalGUILine();
+        GUILayout.Space(10);
+        GUILayout.FlexibleSpace();
+        EditorGUILayout.BeginHorizontal();
+        
+        GUI.enabled = AreChangesPresent();
+        if (GUILayout.Button("Apply"))
+        {
+            UpdateScriptableObject();
+        }
+
+        if (GUILayout.Button("Revert"))
+        {
+            GetCuesFromScriptableObject();
+        }
+        GUI.enabled = true;
+
+        GUI.enabled = _cues is { Count: > 0 };
+        if (GUILayout.Button("Clear"))
+        {
+            _cues?.Clear();
+        }
+        GUI.enabled = true;
+        
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Space(10);
+    }
+
+    #region Blocks
 
     private void ShowCues()
     {
-        foreach (Cue cue in cues)
+        foreach (Cue cue in _cues)
         {
             EditorGUILayout.BeginVertical("box");
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField($"Cue {cues.IndexOf(cue)}", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField($"Cue {_cues.IndexOf(cue)}", EditorStyles.boldLabel);
             if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(15)))
             {
-                cues.Remove(cue);
-                _changedCues.Remove(cue);
+                _cues.Remove(cue);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
                 break;
@@ -125,6 +154,119 @@ public class AnalyserMenu : EditorWindow
         EditorGUILayout.EndHorizontal();
     }
 
+    #endregion
+
+    #region Sync
+
+    private void GetCuesFromScriptableObject()
+    {
+        RhythmData rhythmDataAsset = null;
+        if (audioClip != null)
+        {
+            rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+        }
+
+        if (!rhythmDataAsset)
+        {
+            _cues = null;
+        }
+        else
+        {
+            _cues.Clear();
+            _positions.Clear();
+            foreach (Cue cue in rhythmDataAsset.cuePoints)
+            {
+                cue.state = CueState.Saved;
+                _cues.Add(new Cue(cue));
+                _positions.Add(cue, cue.position);
+            }
+        }
+    }
+    private void UpdateScriptableObject()
+    {
+        if (!audioClip) return;
+        
+        RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+
+        if (!rhythmDataAsset)
+        {
+            AssetDatabase.CreateAsset(rhythmDataAsset, $"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+        }
+        
+        rhythmDataAsset.audioClip = audioClip;
+        rhythmDataAsset.cuePoints = new List<Cue>();
+        
+        SortCues();
+
+        foreach (var cue in _cues)
+        {
+            cue.state = CueState.Saved;
+            rhythmDataAsset.cuePoints.Add(new Cue(cue));
+        }
+        
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
+    private bool AreChangesPresent()
+    {
+        if (!audioClip) return false;
+        if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
+        
+        RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
+        int changedCueCount = 0;
+
+        if (rhythmDataAsset.cuePoints.Count != _cues.Count)
+        {
+            changedCueCount++;
+        }
+
+        bool areNewCuesPresent = false;
+        bool areOverlappedCuesPresent = false;
+        
+        foreach (Cue cue in _cues)
+        {
+            if (cue.isOverlapping)
+            {
+                areOverlappedCuesPresent = true;
+            }
+            if (cue.state == CueState.New)
+            {
+                areNewCuesPresent = true;
+                continue;
+            }
+            if (_cues.IndexOf(cue) > rhythmDataAsset.cuePoints.Count - 1 ||
+                !cue.Equals(rhythmDataAsset.cuePoints[_cues.IndexOf(cue)]))
+            {
+                changedCueCount++;
+                cue.state = CueState.Modified;
+            }
+            else cue.state = CueState.Saved;
+        }
+
+        return changedCueCount > 0 || areNewCuesPresent && !areOverlappedCuesPresent;
+    }
+    private void AddCue()
+    {
+        Cue newCue = new Cue(CueKey.W, 0, audioClip.frequency);
+        _cues.Add(newCue);
+    }
+
+    #endregion
+
+    #region Visuals
+
+    private static void DrawHorizontalGUILine(int height = 1) {
+        GUILayout.Space(4);
+
+        Rect rect = GUILayoutUtility.GetRect(10, height, GUILayout.ExpandWidth(true));
+        rect.height = height;
+        rect.xMin = 0;
+        rect.xMax = EditorGUIUtility.currentViewWidth;
+
+        Color lineColor = new Color(0.10196f, 0.10196f, 0.10196f, 1);
+        EditorGUI.DrawRect(rect, lineColor);
+        GUILayout.Space(4);
+    }
     private void DrawWaveformAndCues(float imageWidth, float imageHeight)
     {
         GUILayout.Space(10);
@@ -142,138 +284,6 @@ public class AnalyserMenu : EditorWindow
             GUI.DrawTexture(rect, cueImage, ScaleMode.ScaleToFit, alphaBlend:true);
         }
     }
-
-    private void GetCuesFromScriptableObject()
-    {
-        _changedCues = new List<Cue>();
-        _unsavedCues = new List<Cue>();
-        
-        RhythmData rhythmDataAsset = null;
-        if (audioClip != null)
-        {
-            rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-        }
-
-        if (!rhythmDataAsset)
-        {
-            cues = null;
-        }
-        else
-        {
-            cues.Clear();
-            foreach (Cue cue in rhythmDataAsset.cuePoints)
-            {
-                cue.state = CueState.Saved;
-                cues.Add(new Cue(cue));
-            }
-        }
-    }
-
-    private void UpdateScriptableObject()
-    {
-        _changedCues = new List<Cue>();
-        _unsavedCues = new List<Cue>();
-        
-        if (!audioClip) return;
-        
-        RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-
-        if (!rhythmDataAsset)
-        {
-            AssetDatabase.CreateAsset(rhythmDataAsset, $"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-        }
-        
-        rhythmDataAsset.audioClip = audioClip;
-        rhythmDataAsset.cuePoints = new List<Cue>();
-        
-        SortCues();
-
-        foreach (var cue in cues)
-        {
-            cue.state = CueState.Saved;
-            rhythmDataAsset.cuePoints.Add(new Cue(cue));
-        }
-        
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-    }
-
-    private void DrawUpdateGUI()
-    {
-        DrawHorizontalGUILine();
-        GUILayout.Space(10);
-        GUILayout.FlexibleSpace();
-        EditorGUILayout.BeginHorizontal();
-        
-        GUI.enabled = AreChangesPresent();
-        if (GUILayout.Button("Apply"))
-        {
-            UpdateScriptableObject();
-        }
-
-        if (GUILayout.Button("Revert"))
-        {
-            GetCuesFromScriptableObject();
-        }
-        GUI.enabled = true;
-
-        GUI.enabled = cues is { Count: > 0 };
-        if (GUILayout.Button("Clear"))
-        {
-            cues?.Clear();
-        }
-        GUI.enabled = true;
-        
-        EditorGUILayout.EndHorizontal();
-
-        GUILayout.Space(10);
-    }
-
-    private bool AreChangesPresent()
-    {
-        if (!audioClip) return false;
-        if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
-        
-        RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-        int changedCueCount = 0;
-
-        if (rhythmDataAsset.cuePoints.Count != cues.Count)
-        {
-            changedCueCount++;
-        }
-        
-        foreach (Cue cue in cues)
-        {
-            if (cue.state == CueState.New) continue;
-            if (cues.IndexOf(cue) > rhythmDataAsset.cuePoints.Count - 1 || !cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)]))
-            {
-                changedCueCount++;
-                cue.state = CueState.Modified;
-            }
-        }
-
-        return changedCueCount > 0;
-    }
-
-    private void AddCue()
-    {
-        Cue newCue = new Cue(CueKey.W, 0, audioClip.frequency);
-        cues.Add(newCue);
-    }
-    
-    private static void DrawHorizontalGUILine(int height = 1) {
-        GUILayout.Space(4);
-
-        Rect rect = GUILayoutUtility.GetRect(10, height, GUILayout.ExpandWidth(true));
-        rect.height = height;
-        rect.xMin = 0;
-        rect.xMax = EditorGUIUtility.currentViewWidth;
-
-        Color lineColor = new Color(0.10196f, 0.10196f, 0.10196f, 1);
-        EditorGUI.DrawRect(rect, lineColor);
-        GUILayout.Space(4);
-    }
-
     private Texture2D DrawWaveformTexture(int width, int height)
     {
         if (!audioClip) return null;
@@ -314,10 +324,9 @@ public class AnalyserMenu : EditorWindow
 
         return newTexture;
     }
-
     private Texture2D DrawCueMarks(int width, int height)
     {
-        if (!audioClip || cues == null || cues.Count == 0) return null;
+        if (!audioClip || _cues == null || _cues.Count == 0) return null;
         
         Texture2D newTexture = new Texture2D(width, height, TextureFormat.RGBA32, false);
 
@@ -329,18 +338,23 @@ public class AnalyserMenu : EditorWindow
             }
         }
         
-        foreach (Cue cue in cues)
+        foreach (Cue cue in _cues)
         {
             var cuePositionScaled = cue.position / (audioClip.samples / width);
 
             for (int y = 0; y <= height; y++)
             {
-                Color newColor = cue.state switch
+                Color newColor;
+
+                if (cue.isOverlapping)
+                {
+                    newColor = Color.red;
+                }
+                else newColor = cue.state switch
                 {
                     CueState.New => Color.yellow,
                     CueState.Saved => Color.white,
                     CueState.Modified => Color.cyan,
-                    CueState.Overlapping => Color.red,
                     _ => Color.magenta
                 };
                 
@@ -352,6 +366,10 @@ public class AnalyserMenu : EditorWindow
         newTexture.Apply();
         return newTexture;
     }
+
+    #endregion
+    
+    #region Sorting
     
     private void SortCues()
     {
@@ -359,24 +377,22 @@ public class AnalyserMenu : EditorWindow
         
         List<Cue> sortedList = new List<Cue>();
         
-        // copy values to array
-        Tuple<int, int>[] array = new Tuple<int, int>[cues.Count]; // Item1 is position in samples, Item2 is index in original list
+        Tuple<int, int>[] array = new Tuple<int, int>[_cues.Count]; // Item1 is position in samples, Item2 is index in original list
 
-        for (int i = 0; i < cues.Count; i++)
+        for (int i = 0; i < _cues.Count; i++)
         {
-            array[i] = new Tuple<int, int>(cues[i].position, i);
+            array[i] = new Tuple<int, int>(_cues[i].position, i);
         }
         
         QuickSort(array, 0, array.Length - 1);
 
         foreach (Tuple<int, int> pair in array)
         {
-            sortedList.Add(cues[pair.Item2]);
+            sortedList.Add(_cues[pair.Item2]);
         }
         
-        cues = new List<Cue>(sortedList);
+        _cues = new List<Cue>(sortedList);
     }
-
     private void QuickSort(Tuple<int, int>[] array, int start, int end)
     {
         if (start < end)
@@ -386,7 +402,6 @@ public class AnalyserMenu : EditorWindow
             QuickSort(array, pivot + 1, end);
         }
     }
-
     private int Partition(Tuple<int, int>[] array, int start, int end)
     {
         Tuple<int, int> pivot = array[end];
@@ -406,4 +421,6 @@ public class AnalyserMenu : EditorWindow
 
         return i + 1;
     }
+    
+    #endregion
 }

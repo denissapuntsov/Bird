@@ -16,7 +16,17 @@ MonoBehaviour:
   cuePoints:
   - key: 0
     position: 0
+    state: 1
+    isMatched: 0
+  - key: 2
+    position: 15121
+    state: 1
     isMatched: 0
   - key: 3
-    position: 14400
+    position: 60807
+    state: 1
+    isMatched: 0
+  - key: 0
+    position: 80272
+    state: 1
     isMatched: 0
