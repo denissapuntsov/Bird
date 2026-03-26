@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -162,6 +163,7 @@ public class AnalyserMenu : EditorWindow
             cues.Clear();
             foreach (Cue cue in rhythmDataAsset.cuePoints)
             {
+                cue.state = CueState.Saved;
                 cues.Add(new Cue(cue));
             }
         }
@@ -188,6 +190,7 @@ public class AnalyserMenu : EditorWindow
 
         foreach (var cue in cues)
         {
+            cue.state = CueState.Saved;
             rhythmDataAsset.cuePoints.Add(new Cue(cue));
         }
         
@@ -232,26 +235,30 @@ public class AnalyserMenu : EditorWindow
         if (!AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset")) return false;
         
         RhythmData rhythmDataAsset = AssetDatabase.LoadAssetAtPath<RhythmData>($"Assets/CuePoints/{audioClip.name}_CuePoints.asset");
-        
-        if (cues.Count != rhythmDataAsset.cuePoints.Count) return true;
+        int changedCueCount = 0;
+
+        if (rhythmDataAsset.cuePoints.Count != cues.Count)
+        {
+            changedCueCount++;
+        }
         
         foreach (Cue cue in cues)
         {
-            if (_unsavedCues.Contains(cue)) continue;
+            if (cue.state == CueState.New) continue;
             if (cues.IndexOf(cue) > rhythmDataAsset.cuePoints.Count - 1 || !cue.Equals(rhythmDataAsset.cuePoints[cues.IndexOf(cue)]))
             {
-                _changedCues.Add(cue);
+                changedCueCount++;
+                cue.state = CueState.Modified;
             }
         }
 
-        return _changedCues.Count > 0 || _unsavedCues.Count > 0;
+        return changedCueCount > 0;
     }
 
     private void AddCue()
     {
         Cue newCue = new Cue(CueKey.W, 0, audioClip.frequency);
         cues.Add(newCue);
-        _unsavedCues.Add(newCue);
     }
     
     private static void DrawHorizontalGUILine(int height = 1) {
@@ -328,20 +335,14 @@ public class AnalyserMenu : EditorWindow
 
             for (int y = 0; y <= height; y++)
             {
-                Color newColor;
-
-                if (_changedCues.Contains(cue))
+                Color newColor = cue.state switch
                 {
-                    newColor = Color.cyan;
-                }
-                else if (_unsavedCues.Contains(cue))
-                {
-                    newColor = Color.yellow;
-                }
-                else
-                {
-                    newColor = Color.white;
-                }
+                    CueState.New => Color.yellow,
+                    CueState.Saved => Color.white,
+                    CueState.Modified => Color.cyan,
+                    CueState.Overlapping => Color.red,
+                    _ => Color.magenta
+                };
                 
                 newTexture.SetPixel(cuePositionScaled, (height / 2) + y, newColor);
                 newTexture.SetPixel(cuePositionScaled, (height / 2) - y, newColor);

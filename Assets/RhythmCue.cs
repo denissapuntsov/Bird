@@ -6,6 +6,7 @@ public class Cue
 {
     public CueKey key;
     public int position;
+    [HideInInspector] public CueState state = CueState.New;
     
     [HideInInspector] public bool isMatched;
 
@@ -19,6 +20,7 @@ public class Cue
     {
         key = other.key;
         position = other.position;
+        state = other.state;
     }
 
     public override bool Equals(object other)
@@ -45,4 +47,12 @@ public enum CueKey
     S,
     D,
     None
+}
+
+public enum CueState
+{
+    New,
+    Saved,
+    Modified,
+    Overlapping
 }
