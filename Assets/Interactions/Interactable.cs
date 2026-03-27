@@ -5,8 +5,9 @@ using UnityEngine.Serialization;
 public class Interactable : MonoBehaviour
 {
     [Header("Interactions")] 
-    public UnityEvent OnCall;
-    public UnityEvent OnListen;
+    private UnityEvent _onCall;
+
+    [HideInInspector] public UnityEvent OnListen;
     
     [SerializeField] private Listener _listener;
     public Listener Listener => _listener;
@@ -14,8 +15,8 @@ public class Interactable : MonoBehaviour
     [SerializeField] private Speaker _speaker;
     public Speaker Speaker => _speaker;
     
-    [Header("Popups")]
-    [SerializeField] private string defaultText;
+    public string defaultText;
+    
     private Popup _popup;
     public Popup Popup
     {
@@ -35,14 +36,30 @@ public class Interactable : MonoBehaviour
     
     public void UpdateText(string newText) => Popup.Text = newText;
 
-    public void TryCall()
+    /*public void TryCall()
     {
-        OnCall.Invoke();
-    }
+        _onCall.Invoke();
+    }*/
 
     public void TryListen()
     {
         OnListen.Invoke();
+    }
+
+    public void TrySubscribe()
+    {
+        if (Listener)
+        {
+            Listener.SubscribeToPlayerAudio();
+        }
+    }
+
+    public void TryUnsubscribe()
+    {
+        if (Listener)
+        {
+            Listener.UnsubscribeFromPlayerAudio();
+        }
     }
 
     public static bool operator == (Interactable a, Interactable b)
@@ -59,7 +76,7 @@ public class Interactable : MonoBehaviour
 
     #if UNITY_EDITOR
     
-    public void ConnectListenerEvent()
+    /*public void ConnectListenerEvent()
     {
         UnityEditor.Events.UnityEventTools.AddPersistentListener(OnCall, _listener.ReactToKey);
     }
@@ -69,6 +86,7 @@ public class Interactable : MonoBehaviour
         UnityEditor.Events.UnityEventTools.RemovePersistentListener(OnCall, _listener.ReactToKey);
         _listener = null;
     }
+    */
 
     public void ConnectSpeakerEvent()
     {

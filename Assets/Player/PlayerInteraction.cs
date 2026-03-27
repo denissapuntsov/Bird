@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Event = AK.Wwise.Event;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class PlayerInteraction : MonoBehaviour
         get => _closestInteractable;
         set => _closestInteractable = value;
     }
-    
+
     private Interactable ClosestSpeaker
     {
         get => _closestSpeaker;
@@ -21,10 +20,12 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (_closestSpeaker == value) return;
             
+            _closestSpeaker?.TryUnsubscribe();
             UIManager.instance.HidePopup(_closestSpeaker);
             _closestSpeaker = value;
             
             if (!value) return;
+            _closestSpeaker.TrySubscribe();
             UIManager.instance.CreatePopup(_closestSpeaker);
         }
     }
@@ -36,10 +37,12 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (_closestListener == value) return;
             
+            _closestListener?.TryUnsubscribe();
             UIManager.instance.HidePopup(_closestListener);
             _closestListener = value;
                 
             if (!value) return;
+            _closestListener.TrySubscribe();
             UIManager.instance.CreatePopup(_closestListener);
         }
     }
@@ -124,8 +127,6 @@ public class PlayerInteraction : MonoBehaviour
         if (!context.performed) return;
 
         PlayerInventory.instance.Speak();
-        
-        ClosestListener?.TryCall();
     }
 
     public void OnListen(InputAction.CallbackContext context)

@@ -4894,10 +4894,10 @@ MonoBehaviour:
   d: {fileID: 1712684742}
   _currentCue:
     key: 0
-    label: 
-    positionInSamples: 0
-    positionInSeconds: 0
+    position: 0
+    state: 0
     isMatched: 0
+    isOverlapping: 0
   passedCues: []
 --- !u!82 &1354986263
 AudioSource:
@@ -5422,7 +5422,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1505407785
 Transform:
   m_ObjectHideFlags: 0
@@ -7059,9 +7059,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c49fd396f711d842987042fe65fc170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnCall:
-    m_PersistentCalls:
-      m_Calls: []
   OnListen:
     m_PersistentCalls:
       m_Calls:
@@ -7110,7 +7107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isSpeaking: 0
   speakerType: 0
-  speakerRhythmInfo: {fileID: 11400000, guid: 625dea10356f6e440b09fe1b9d8ca423, type: 2}
+  speakerRhythmInfo: {fileID: 0}
   speakerDroneInfo: {fileID: 0}
   rhythmData: {fileID: 11400000, guid: f34c765acf82a8841a1ce735e8710e88, type: 2}
 --- !u!1 &2125223022
@@ -7130,7 +7127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2125223023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7161,7 +7158,7 @@ MonoBehaviour:
   OnRejectKey:
     m_PersistentCalls:
       m_Calls: []
-  keyClip: {fileID: 0}
+  keyClip: {fileID: 8300000, guid: d3edfa03252dddb4cbe85bdc9a734abe, type: 3}
 --- !u!114 &2125223024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7174,21 +7171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c49fd396f711d842987042fe65fc170, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnCall:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2125223023}
-        m_TargetAssemblyTypeName: Listener, Assembly-CSharp
-        m_MethodName: ReactToKey
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   OnListen:
     m_PersistentCalls:
       m_Calls: []
@@ -7203,14 +7185,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125223022}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.260002, y: 1.8199997, z: 9.059998}
+  m_LocalRotation: {x: -0, y: 0.17568584, z: -0, w: 0.98444635}
+  m_LocalPosition: {x: -26.739998, y: 1.8199997, z: 14.059998}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1235698524}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 20.237, z: 0}
 --- !u!1 &2126695007
 GameObject:
   m_ObjectHideFlags: 0

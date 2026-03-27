@@ -12,8 +12,13 @@ public class InteractableEditor : Editor
     
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
+        //DrawDefaultInspector();
         Interactable interactable = (Interactable)target;
+
+        EditorGUILayout.Space(10);
+        
+        interactable.defaultText = EditorGUILayout.TextField("Popup Text", interactable.defaultText);
+        
         listenerButtonText = interactable.Listener ? "Disconnect Listener" : "Connect Listener";
         speakerButtonText = interactable.Speaker ? "Disconnect Speaker" : "Connect Speaker";
         
@@ -26,7 +31,7 @@ public class InteractableEditor : Editor
             if (interactable.Listener)
             {
                 DestroyImmediate(interactable.Listener);
-                interactable.DisconnectListenerEvent();
+                //interactable.DisconnectListenerEvent();
             }
             else
             {
@@ -37,7 +42,7 @@ public class InteractableEditor : Editor
                 
                 serializedInteractable.FindProperty("_listener").objectReferenceValue = newListener;
                 serializedInteractable.ApplyModifiedProperties();
-                interactable.ConnectListenerEvent();
+                //interactable.ConnectListenerEvent();
             }
         }
         
@@ -61,6 +66,7 @@ public class InteractableEditor : Editor
                 
                 serializedInteractable.FindProperty("_speaker").objectReferenceValue = newSpeaker;
                 serializedInteractable.ApplyModifiedProperties();
+                Debug.Log("Connected Speaker " + interactable.Speaker);
                 interactable.ConnectSpeakerEvent();
             }
         }
