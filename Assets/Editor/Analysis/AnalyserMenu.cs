@@ -5,13 +5,14 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Debug = System.Diagnostics.Debug;
 
 public class AnalyserMenu : EditorWindow
 {
     public AudioClip audioClip;
     private List<Cue> _cues = new List<Cue>();
 
-    private Dictionary<Cue, int> _positions = new Dictionary<Cue, int>();
+    private Dictionary<int, Cue> _positions = new Dictionary<int, Cue>();
     private bool _waveformFoldout = true;
     private bool _cuePointHeader = true;
     private Vector2 _scrollPosition;
@@ -49,21 +50,22 @@ public class AnalyserMenu : EditorWindow
         }
         EditorGUILayout.EndFoldoutHeaderGroup();
         
-        DrawUpdateGUI();
+        DrawButtons();
     }
-    private void DrawUpdateGUI()
+    private void DrawButtons()
     {
         DrawHorizontalGUILine();
         GUILayout.Space(10);
         GUILayout.FlexibleSpace();
         EditorGUILayout.BeginHorizontal();
         
-        GUI.enabled = AreChangesPresent();
-        if (GUILayout.Button("Apply"))
+        GUI.enabled = AreChangesPresent() && !AreCuesOverlapping();
+        if (GUILayout.Button("Save"))
         {
-            UpdateScriptableObject();
+            Save();
         }
 
+        GUI.enabled = AreChangesPresent();
         if (GUILayout.Button("Revert"))
         {
             GetCuesFromScriptableObject();
@@ -177,12 +179,13 @@ public class AnalyserMenu : EditorWindow
             foreach (Cue cue in rhythmDataAsset.cuePoints)
             {
                 cue.state = CueState.Saved;
-                _cues.Add(new Cue(cue));
-                _positions.Add(cue, cue.position);
+                var newCue = new Cue(cue);
+                _cues.Add(newCue);
+                _positions.Add(newCue.position, newCue);
             }
         }
     }
-    private void UpdateScriptableObject()
+    private void Save()
     {
         if (!audioClip) return;
         
@@ -198,10 +201,13 @@ public class AnalyserMenu : EditorWindow
         
         SortCues();
 
+        _positions.Clear();
         foreach (var cue in _cues)
         {
             cue.state = CueState.Saved;
-            rhythmDataAsset.cuePoints.Add(new Cue(cue));
+            Cue newCue = new Cue(cue);
+            _positions.Add(newCue.position, newCue);
+            rhythmDataAsset.cuePoints.Add(newCue);
         }
         
         AssetDatabase.SaveAssets();
@@ -221,14 +227,9 @@ public class AnalyserMenu : EditorWindow
         }
 
         bool areNewCuesPresent = false;
-        bool areOverlappedCuesPresent = false;
         
         foreach (Cue cue in _cues)
         {
-            if (cue.isOverlapping)
-            {
-                areOverlappedCuesPresent = true;
-            }
             if (cue.state == CueState.New)
             {
                 areNewCuesPresent = true;
@@ -243,7 +244,34 @@ public class AnalyserMenu : EditorWindow
             else cue.state = CueState.Saved;
         }
 
-        return changedCueCount > 0 || areNewCuesPresent && !areOverlappedCuesPresent;
+        return changedCueCount > 0 || areNewCuesPresent;
+    }
+    
+    private bool AreCuesOverlapping()
+    {
+        if (!audioClip || _cues.Count == 0)
+        {
+            _positions.Clear();
+            return false;
+        }
+        
+        int overlappingCuesCount = 0;
+        _positions.Clear();
+        foreach (Cue cue in _cues)
+        {
+            if (!_positions.TryGetValue(cue.position, out Cue duplicate))
+            {
+                _positions.Add(cue.position, cue);
+                cue.isOverlapping = false;
+            }
+            else
+            {
+                overlappingCuesCount++;
+                duplicate.isOverlapping = true;
+                cue.isOverlapping = true;
+            }
+        }
+        return overlappingCuesCount > 0;
     }
     private void AddCue()
     {
