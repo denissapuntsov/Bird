@@ -5,9 +5,12 @@ using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private CanvasGroup pauseGroup, listeningRhythmGroup, listeningDroneGroup, worldGroup;
+    [SerializeField] private CanvasGroup pause, listeningRhythm, listeningDrone, world;
+
+    private UIVisualGroup _pauseGroup;
 
     [SerializeField] private GameObject popupPrefab;
+    [SerializeField] private Canvas canvas;
     private Dictionary<int, Popup> _popups = new Dictionary<int, Popup>();
     
     private CanvasGroup _activeCanvasGroup;
@@ -24,23 +27,25 @@ public class UIManager : MonoBehaviour
             {
                 case UIMode.Pause:
                     InputMapManager.SetCurrentActionMap(ActionMap.UI);
-                    _activeCanvasGroup = pauseGroup;
+                    _activeCanvasGroup = pause;
                     break;
                 case UIMode.ListeningRhythm:
                     InputMapManager.SetCurrentActionMap(ActionMap.Listening);
-                    _activeCanvasGroup = listeningRhythmGroup;
+                    _activeCanvasGroup = listeningRhythm;
                     break;
                 case UIMode.ListeningDrone:
                     InputMapManager.SetCurrentActionMap(ActionMap.Listening);
-                    _activeCanvasGroup = listeningDroneGroup;
+                    _activeCanvasGroup = listeningDrone;
                     break;
-                case UIMode.None:
+                case UIMode.None: 
                     InputMapManager.SetCurrentActionMap(ActionMap.Player);
-                    _activeCanvasGroup = worldGroup;
+                    _activeCanvasGroup = world;
                     break;
             }
             
-            foreach (CanvasGroup group in GetComponentsInChildren<CanvasGroup>(true))
+            Time.timeScale = ActiveUI == UIMode.Pause ? 0f : 1f;
+            
+            foreach (CanvasGroup group in canvas.GetComponentsInChildren<CanvasGroup>(true))
             {
                 group.gameObject.SetActive(group == _activeCanvasGroup);
             }
@@ -62,17 +67,30 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void Start()
+    {
+        _pauseGroup = pause.GetComponent<UIVisualGroup>();
+        Debug.Log(_pauseGroup);
+    }
+
     public void Exit()
     {
         switch (ActiveUI)
         {
             case UIMode.ListeningDrone:
             case UIMode.ListeningRhythm:
-            case UIMode.Pause:
                 ActiveUI = UIMode.None;
+                break;
+            case UIMode.Pause:
+                _pauseGroup.Close(() =>
+                {
+                    Debug.Log("Finished!");
+                    ActiveUI = UIMode.None;
+                });
                 break;
             case UIMode.None:
                 ActiveUI = UIMode.Pause;
+                _pauseGroup.Open();
                 break;
         }
     }
@@ -86,7 +104,7 @@ public class UIManager : MonoBehaviour
     public void CreatePopup(Interactable interactable)
     {
         if (!interactable || interactable.Popup) return;
-        var newPopup = Instantiate(popupPrefab, worldGroup.transform).GetComponent<Popup>();
+        var newPopup = Instantiate(popupPrefab, world.transform).GetComponent<Popup>();
         interactable.Popup = newPopup;
     }
     

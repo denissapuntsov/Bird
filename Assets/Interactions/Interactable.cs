@@ -25,7 +25,8 @@ public class Interactable : MonoBehaviour
         {
             if (!value)
             {
-                Destroy(_popup.gameObject);
+                Destroy(_popup?.gameObject);
+                _popup = null;
                 return;
             }
             _popup = value;
@@ -35,11 +36,6 @@ public class Interactable : MonoBehaviour
     }
     
     public void UpdateText(string newText) => Popup.Text = newText;
-
-    /*public void TryCall()
-    {
-        _onCall.Invoke();
-    }*/
 
     public void TryListen()
     {
@@ -60,6 +56,12 @@ public class Interactable : MonoBehaviour
         {
             Listener.UnsubscribeFromPlayerAudio();
         }
+    }
+
+    private void OnDisable()
+    {
+        if (!Popup) return;
+        UIManager.instance.HidePopup(this);
     }
 
     public static bool operator == (Interactable a, Interactable b)
