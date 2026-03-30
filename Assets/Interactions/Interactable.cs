@@ -25,7 +25,7 @@ public class Interactable : MonoBehaviour
         {
             if (!value)
             {
-                Destroy(_popup?.gameObject);
+                _popup?.Close(() => Destroy(_popup?.gameObject));
                 _popup = null;
                 return;
             }
