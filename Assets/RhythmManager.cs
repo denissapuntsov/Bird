@@ -12,6 +12,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
     [SerializeField] private CueIndicator indicator;
     
     [SerializeField] RhythmData currentRhythmData;
+    [SerializeField] AudioData currentAudioData;
     [SerializeField] private Letter w, a, s, d;
     [SerializeField] private Cue _currentCue;
     
@@ -45,6 +46,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
     {
         if (!speaker) return;
         currentRhythmData = speaker.rhythmData;
+        currentAudioData = speaker.audioData;
 
         foreach (Transform child in layoutGroup.transform)
         {
@@ -191,7 +193,7 @@ public class RhythmManager : MonoBehaviour, ISpeakerManager
     public void Extract()
     {
         _audioSource.clip = null;
-        PlayerInventory.instance.currentClip = currentRhythmData.audioClip;
+        PlayerInventory.instance.currentAudioData = currentAudioData;
         currentRhythmData = null;
         _audioSource.Stop();
         Close();

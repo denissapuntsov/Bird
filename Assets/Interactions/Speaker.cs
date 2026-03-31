@@ -4,13 +4,9 @@ public class Speaker : MonoBehaviour
 {
     [SerializeField] private bool isSpeaking = false;
     [HideInInspector] public SpeakerType speakerType;
-    [HideInInspector] public SpeakerRhythmInfo speakerRhythmInfo;
-    [HideInInspector] public SpeakerDroneInfo speakerDroneInfo;
     [HideInInspector] public RhythmData rhythmData;
-    
-    public AK.Wwise.Event InteractionStartEvent => speakerRhythmInfo.interactionStartEvent;
-    public AK.Wwise.Event InteractionEndEvent => speakerRhythmInfo.interactionEndEvent;
-    public AK.Wwise.Event ExtractedSoundEvent => speakerRhythmInfo.extractedSound;
+    [HideInInspector] public AudioData audioData;
+    [HideInInspector] public SpeakerDroneInfo speakerDroneInfo;
 
     public void Listen()
     {

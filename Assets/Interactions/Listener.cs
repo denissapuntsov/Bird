@@ -21,7 +21,7 @@ public class Listener : MonoBehaviour
     private void ReactToKey()
     {
         Debug.Log($"{gameObject.name} Reacting to sound");
-        if (PlayerInventory.instance.currentClip == keyClip)
+        if (PlayerInventory.instance.CurrentClip == keyClip)
         {
             Debug.Log("Accepting Key");
             OnAcceptKey.Invoke();

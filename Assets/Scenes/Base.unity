@@ -2586,10 +2586,26 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 6.73
       objectReference: {fileID: 0}
+    - target: {fileID: 3789095610592137310, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3789095610592137310, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 3789095610592137310, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.81
+      objectReference: {fileID: 0}
     - target: {fileID: 5082798046648655263, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
       propertyPath: currentClip
       value: 
       objectReference: {fileID: 8300000, guid: 5a9b7f8683d97644da3a7c01b4a0c045, type: 3}
+    - target: {fileID: 5082798046648655263, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
+      propertyPath: currentAudioData
+      value: 
+      objectReference: {fileID: 11400000, guid: e2b8d75e19f14344e99c67a0182a6feb, type: 2}
     - target: {fileID: 6708132699121192827, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
       propertyPath: m_Name
       value: Bird
@@ -2640,7 +2656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8698644267402820379, guid: c7a70c94c81561c4e957fc245c63781c, type: 3}
       propertyPath: turnSpeed
-      value: 15
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3807,6 +3823,7 @@ MonoBehaviour:
   layoutGroup: {fileID: 186388842}
   indicator: {fileID: 3093365582937757724, guid: d2577564ba8334c4f8c1b11387d2cf5d, type: 3}
   currentRhythmData: {fileID: 0}
+  currentAudioData: {fileID: 0}
   w: {fileID: 1759213666}
   a: {fileID: 2003396255}
   s: {fileID: 847326849}
