@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")] 
     [SerializeField] private float playerSpeed = 5.0f;
-    [SerializeField] private float turnSpeed = 15.0f;
+    [SerializeField] private float turnSpeed = 5.0f;
     
     [SerializeField] private float playerJumpHeight = 2.0f;
     [SerializeField] private float gravityMultiplier = 2.0f;
