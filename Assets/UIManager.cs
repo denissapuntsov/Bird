@@ -84,7 +84,6 @@ public class UIManager : MonoBehaviour
             case UIMode.Pause:
                 _pauseGroup.Close(() =>
                 {
-                    Debug.Log("Finished!");
                     ActiveUI = UIMode.None;
                 });
                 break;
@@ -103,15 +102,32 @@ public class UIManager : MonoBehaviour
 
     public void CreatePopup(Interactable interactable)
     {
-        if (!interactable || interactable.Popup) return;
-        var newPopup = Instantiate(popupPrefab, world.transform).GetComponent<Popup>();
-        interactable.Popup = newPopup;
+        if (_popups.ContainsKey(interactable.GetHashCode())) return;
+        var newPopup = Instantiate(popupPrefab, world.transform, true).GetComponent<Popup>();
+        newPopup.name = $"Popup ({interactable.name})";
+        newPopup.Text = interactable.defaultText;
+        newPopup.Open();
+        Link(interactable, newPopup);
+    }
+
+    private void Link(Interactable interactable, Popup newPopup)
+    {
+        newPopup.linkedTransform = interactable.transform;
+        _popups.Add(interactable.GetHashCode(), newPopup);
     }
     
     public void HidePopup(Interactable interactable)
     {
         if (!interactable) return;
-        interactable.Popup = null;
+        _popups.TryGetValue(interactable.GetHashCode(), out var popupToClose);
+        popupToClose?.Close(() => CleanUpPopup(interactable.GetHashCode()));
+    }
+
+    private void CleanUpPopup(int interactableHashCode)
+    {
+        var popupToCleanup = _popups[interactableHashCode];
+        Destroy(popupToCleanup.gameObject);
+        _popups.Remove(interactableHashCode);
     }
 }
 

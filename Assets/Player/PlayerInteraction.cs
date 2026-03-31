@@ -7,12 +7,6 @@ public class PlayerInteraction : MonoBehaviour
     private Interactable _closestInteractable, _closestSpeaker, _closestListener;
     private List<Interactable> _availableInteractables, _availableSpeakers, _availableListeners;
 
-    private Interactable ClosestInteractable
-    {
-        get => _closestInteractable;
-        set => _closestInteractable = value;
-    }
-
     private Interactable ClosestSpeaker
     {
         get => _closestSpeaker;
@@ -79,7 +73,6 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        ClosestInteractable = UpdateClosest(_availableInteractables, _closestInteractable);
         ClosestSpeaker = UpdateClosest(_availableSpeakers, _closestSpeaker);
         ClosestListener = UpdateClosest(_availableListeners, _closestListener);
     }

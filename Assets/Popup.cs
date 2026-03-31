@@ -14,6 +14,10 @@ public class Popup : MonoBehaviour
     private void OnEnable()
     {
         _popupText = GetComponentInChildren<TextMeshProUGUI>();
+    }
+
+    public void Open()
+    {
         transform.localScale = Vector3.zero;
         _scaleTweener = transform.DOScale(1, 0.2f).SetAutoKill(false);
         _scaleTweener.PlayForward();

@@ -17,7 +17,7 @@ public class Interactable : MonoBehaviour
     
     public string defaultText;
     
-    private Popup _popup;
+    /*private Popup _popup;
     public Popup Popup
     {
         get => _popup;
@@ -35,7 +35,7 @@ public class Interactable : MonoBehaviour
         }
     }
     
-    public void UpdateText(string newText) => Popup.Text = newText;
+    public void UpdateText(string newText) => Popup.Text = newText;*/
 
     public void TryListen()
     {
@@ -60,7 +60,6 @@ public class Interactable : MonoBehaviour
 
     private void OnDisable()
     {
-        if (!Popup) return;
         UIManager.instance.HidePopup(this);
     }
 
