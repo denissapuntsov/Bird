@@ -7,6 +7,7 @@ public class PlayerInventory : MonoBehaviour
     public AudioData currentAudioData;
     public AudioClip CurrentClip => currentAudioData.audioClip;
     public Sprite CurrentAudioSprite => currentAudioData.sprite;
+    public Transform popupPivot;
 
     private AudioSource _audioSource;
     [HideInInspector] public UnityEvent OnAudioEnded;

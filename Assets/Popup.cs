@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Popup : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Popup : MonoBehaviour
     public Transform linkedTransform;
 
     private Tweener _scaleTweener;
+
+    [SerializeField] private Image icon;
     
     private void OnEnable()
     {
@@ -32,11 +35,24 @@ public class Popup : MonoBehaviour
     private void Update()
     {
         if (!linkedTransform) return;
-        transform.position = Camera.main.WorldToScreenPoint(linkedTransform.position) + new Vector3(-40f, 100f, 0);
+        transform.position = Camera.main.WorldToScreenPoint(linkedTransform.position);
     }
 
     public string Text
     {
         set => _popupText.text = value;
+    }
+
+    public Sprite Icon
+    {
+        set
+        {
+            if (!value)
+            {
+                Debug.LogWarning("New icon value is null");
+                return;
+            }
+            icon.sprite = value;
+        }
     }
 }

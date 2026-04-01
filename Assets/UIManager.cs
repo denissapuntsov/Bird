@@ -119,6 +119,7 @@ public class UIManager : MonoBehaviour
         var playerPopup = Instantiate(popupPrefab, world.transform, true).GetComponent<Popup>();
         playerPopup.name = $"Popup (Player)";
         playerPopup.Text = "Player";
+        playerPopup.Icon = PlayerInventory.instance.CurrentAudioSprite;
         playerPopup.Open();
         Link(playerPopup);
     }
@@ -131,7 +132,7 @@ public class UIManager : MonoBehaviour
 
     private void Link(Popup newPopup)
     {
-        newPopup.linkedTransform = PlayerInventory.instance.transform;
+        newPopup.linkedTransform = PlayerInventory.instance.popupPivot;
         _popups.Add(PlayerInventory.instance.GetHashCode(), newPopup);
     }
     
