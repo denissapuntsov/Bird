@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: cfa414b231f882a4bb259051d3f4238e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - signPivotGroupPrefab: {fileID: 2528922770268801420, guid: 2d706d952342bf54d968d5fbbc623910, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
