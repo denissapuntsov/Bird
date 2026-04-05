@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection;
+using NAudio.Wave;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -16,12 +18,35 @@ public class AnalyserMenu : EditorWindow
     private bool _waveformFoldout = true;
     private bool _cuePointHeader = true;
     private Vector2 _scrollPosition;
+    private MethodInfo _playMethod, _stopMethod;
 
     [MenuItem("Window/.wav File Analyser")]
     public static void ShowWindow()
     {
         GetWindow<AnalyserMenu>("Analyser");
     }
+
+    private void OnEnable()
+    {
+        Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
+        
+        Type audioUtilClass = unityEditorAssembly.GetType("UnityEditor.AudioUtil");
+        
+        _playMethod = audioUtilClass.GetMethod(
+            "PlayPreviewClip", 
+            BindingFlags.Static | BindingFlags.Public,
+            null,
+            new Type[] { typeof(AudioClip), typeof(int), typeof(bool)},
+            null);
+        
+        _stopMethod = audioUtilClass.GetMethod(
+            "StopAllPreviewClips",
+            BindingFlags.Static | BindingFlags.Public,
+            null,
+            Type.EmptyTypes,
+            null);
+    }
+
     private void OnGUI()
     {
         GUILayout.Space(20);
@@ -93,6 +118,10 @@ public class AnalyserMenu : EditorWindow
             EditorGUILayout.BeginVertical("box");
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField($"Cue {_cues.IndexOf(cue)}", EditorStyles.boldLabel);
+            if (GUILayout.Button('\u25B6'.ToString(), GUILayout.Width(20), GUILayout.Height(15)))
+            {
+                PlayClip(audioClip, cue.position);
+            }
             if (GUILayout.Button("-", GUILayout.Width(20), GUILayout.Height(15)))
             {
                 _cues.Remove(cue);
@@ -451,4 +480,12 @@ public class AnalyserMenu : EditorWindow
     }
     
     #endregion
+
+    private void PlayClip(AudioClip clip, int startSample = 0, bool loop = false)
+    {
+        StopClip();
+        _playMethod?.Invoke(null, new object[] { clip, startSample, loop });
+    }
+
+    private void StopClip() => _stopMethod.Invoke(null, new object[] { });
 }
