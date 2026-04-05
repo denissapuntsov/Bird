@@ -1,13 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
-using NAudio.Wave;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Debug = System.Diagnostics.Debug;
 
 public class AnalyserMenu : EditorWindow
 {
@@ -46,7 +41,6 @@ public class AnalyserMenu : EditorWindow
             Type.EmptyTypes,
             null);
     }
-
     private void OnGUI()
     {
         GUILayout.Space(20);
@@ -275,7 +269,6 @@ public class AnalyserMenu : EditorWindow
 
         return changedCueCount > 0 || areNewCuesPresent;
     }
-    
     private bool AreCuesOverlapping()
     {
         if (!audioClip || _cues.Count == 0)
@@ -481,6 +474,8 @@ public class AnalyserMenu : EditorWindow
     
     #endregion
 
+    #region Playback
+    
     private void PlayClip(AudioClip clip, int startSample = 0, bool loop = false)
     {
         StopClip();
@@ -488,4 +483,6 @@ public class AnalyserMenu : EditorWindow
     }
 
     private void StopClip() => _stopMethod.Invoke(null, new object[] { });
+    
+    #endregion
 }
