@@ -5,7 +5,9 @@ using UnityEngine.InputSystem;
 
 public class CursorFollower : MonoBehaviour
 {
+    private const string TILE_TAG = "Tile";
     private AIPath _aiPath;
+    private RaycastHit _hitInfo;
 
     private void Start()
     {
@@ -15,12 +17,8 @@ public class CursorFollower : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         if (!context.started) return;
-        Ray rayOrigin = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
 
-        if (Physics.Raycast(rayOrigin, out hitInfo))
-        {
-            _aiPath.destination = hitInfo.point;
-        }
+        if (!_hitInfo.collider.transform.parent.CompareTag(TILE_TAG)) return;
+        _aiPath.destination = _hitInfo.point;
     }
 }
