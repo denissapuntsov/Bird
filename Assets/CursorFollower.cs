@@ -7,7 +7,6 @@ public class CursorFollower : MonoBehaviour
 {
     private const string TILE_TAG = "Tile";
     private AIPath _aiPath;
-    private RaycastHit _hitInfo;
 
     private void Start()
     {
@@ -18,7 +17,12 @@ public class CursorFollower : MonoBehaviour
     {
         if (!context.started) return;
 
-        if (!_hitInfo.collider.transform.parent.CompareTag(TILE_TAG)) return;
-        _aiPath.destination = _hitInfo.point;
+        Ray rayOrigin = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hitInfo;
+
+        if (!Physics.Raycast(rayOrigin, out hitInfo)) return;
+        
+        if (!hitInfo.collider.transform.parent.CompareTag(TILE_TAG)) return;
+        _aiPath.destination = hitInfo.point;
     }
 }
