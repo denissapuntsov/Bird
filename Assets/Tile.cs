@@ -1,15 +1,18 @@
+using System;
+using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Tile : MonoBehaviour
 {
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.red);
-    }
+    public GameObject tileChild;
+    public TileType tileType;
+}
 
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        GetComponent<MeshRenderer>().material.SetColor("_BaseColor", Color.white);
-    }
+public enum TileType
+{
+    None,
+    Ground,
+    Water,
+    Grass
 }

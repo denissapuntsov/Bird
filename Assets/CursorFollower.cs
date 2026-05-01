@@ -22,7 +22,7 @@ public class CursorFollower : MonoBehaviour
 
         if (!Physics.Raycast(rayOrigin, out hitInfo)) return;
         
-        if (!hitInfo.collider.transform.parent.CompareTag(TILE_TAG)) return;
+        if (!hitInfo.collider.transform.parent.GetComponent<Tile>()) return;
         _aiPath.destination = hitInfo.point;
     }
 }

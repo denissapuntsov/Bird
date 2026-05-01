@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 525dca53714527d4083ae91b8256f553
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - groundPrefab: {fileID: 9162436901712848010, guid: f5d453f6072990748a29a75fda717326, type: 3}
+  - waterPrefab: {fileID: 9162436901712848010, guid: 557b9996b884e65478d048a51a2fd4bd, type: 3}
+  - grassPrefab: {fileID: 9162436901712848010, guid: 9a5f39d76fc75ba4585c26cbd3a6d289, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
