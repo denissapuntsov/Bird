@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 
 [CustomEditor(typeof(MovingCharacter))]
@@ -8,18 +9,22 @@ public class MovingCharacterEditor : Editor
         var character = target as MovingCharacter;
         if (!character) return;
 
-        if (character.targets.Count == 0) return;
-        for (int i = 0; i < character.targets.Count; i++)
-        {
-            var newTarget = character.targets[i];
-            Handles.Label(newTarget.destination, newTarget.label);
+        if (character.paths.Count == 0) return;
 
-            EditorGUI.BeginChangeCheck();
-            var newPosition = Handles.PositionHandle(newTarget.destination, character.transform.rotation);
-            if (EditorGUI.EndChangeCheck())
+        foreach (var path in character.paths)
+        {
+            for (int i = 0; i < path.targets.Count; i++)
             {
-                newTarget.destination = newPosition;
-                Undo.RecordObject(character, "Move Target " + i);
+                var newTarget = path.targets[i];
+                Handles.Label(newTarget.destination, "Path " + character.paths.IndexOf(path) + " / Target " + path.targets.IndexOf(newTarget));
+
+                EditorGUI.BeginChangeCheck();
+                var newPosition = Handles.PositionHandle(newTarget.destination, character.transform.rotation);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    newTarget.destination = newPosition;
+                    Undo.RecordObject(character, "Move Target " + i);
+                }
             }
         }
     }

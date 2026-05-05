@@ -1,19 +1,32 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class MovingCharacter : MonoBehaviour
 {
-    public List<Target> targets;
+    public List<CharacterPath> paths;
     private AIPath _aiPath;
+
+    private CharacterPath _currentPath;
 
     private void Start()
     {
         _aiPath = GetComponent<AIPath>();
         _aiPath.enableRotation = true;
-        MoveTo(0);
+        TraversePath(0);
+    }
+
+    private void Update()
+    {
+        if (_currentPath == null) return;
+        if (_aiPath.reachedDestination)
+        {
+            _currentPath = null;
+        }
     }
 
     public void OnAcceptSound()
@@ -25,55 +38,67 @@ public class MovingCharacter : MonoBehaviour
     {
         
     }
-    public void MoveTo(int targetIndex)
+
+    public void TraversePath(int index)
     {
-        if (targetIndex > targets.Count)
+        CharacterPath path = new CharacterPath();
+        if (paths.Count <= 0)
         {
-            Debug.LogWarning($"Target index {targetIndex} exceeds the number of targets. Using target {targets.Count - 1} instead");
-            targetIndex = targets.Count - 1;
-        }
-        else if (targetIndex < 0)
-        {
-            Debug.LogWarning($"Target index {targetIndex} is a negative integer. Using target 0 instead");
-        }
-        else if (targets.Count == 0)
-        {
-            Debug.LogWarning($"No targets found for {gameObject.name}");
+            Debug.LogWarning($"No paths are set for {gameObject.name}");
             return;
         }
-        
-        _aiPath.destination = targets[targetIndex].destination;
+        if (paths.Count < index)
+        {
+            path = paths[^1];
+            Debug.LogWarning($"No path at index {index} for {gameObject.name}. Using Path {paths.Count - 1}");
+        }
+        if (index < 0)
+        {
+            path = paths[0];
+            Debug.LogWarning($"Requested path index is a negative integer. Using Path 0");
+        }
+        else
+        {
+            path = paths[index];
+        }
     }
 
-    public void MoveTo(string targetName)
+    private IEnumerator TraversePath(CharacterPath path)
     {
-        var target = FindTargetByName(targetName);
-        if (target == null)
+        while (path.pathType == PathType.Simple)
         {
-            Debug.LogWarning($"No target of name {targetName} found for {gameObject.name}");
-            return;
-        } 
-        
-        _aiPath.destination = target.destination;
-    }
-
-    private Target FindTargetByName(string targetName)
-    {
-        foreach (Target target in targets)
-        {
-            if (target.label == targetName)
+            foreach (var target in path.targets)
             {
-                return target;
+                _aiPath.destination = target.destination;
+                while (!_aiPath.reachedDestination) yield return null;
             }
+            // stop the coroutine
         }
-        return null;
+        while (path.pathType == PathType.Wander)
+        {
+            _aiPath.destination = path.targets[Random.Range(0, path.targets.Count)].destination;
+            while (!_aiPath.reachedDestination) yield return null;
+        }
     }
+    
 }
 
 [Serializable]
-public class Target
+public class CharacterPath
 {
-    public string label = "New Target";
+    public PathType pathType;
+    public List<CharacterTarget> targets;
+}
+
+[Serializable]
+public class CharacterTarget
+{
     public Vector3 destination = new(5, 0, 0);
-    public UnityEvent onTargetReached = new UnityEvent();
+}
+
+public enum PathType
+{
+    Simple,
+    Patrol,
+    Wander
 }
