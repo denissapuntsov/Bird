@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Pathfinding;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class MovingCharacter : MonoBehaviour
@@ -12,67 +11,66 @@ public class MovingCharacter : MonoBehaviour
     private AIPath _aiPath;
 
     private CharacterPath _currentPath;
-    private int _currentTargetIndex;
+    private int _targetIndex = 0;
+    private bool _isReversed = false;
 
     private void Start()
     {
         _aiPath = GetComponent<AIPath>();
         _aiPath.enableRotation = true;
+        StartPath(0);
     }
 
     private void Update()
     {
-        
+        Move();
     }
 
-    private void StartPath(CharacterPath newPath)
+    private void StartPath(int index)
     {
-        _currentTargetIndex = 0;
-        _aiPath.destination = newPath.targets[0].destination;
+        _aiPath.enabled = true;
+        _currentPath = paths[index];
+        _aiPath.destination = _currentPath[0].destination;
     }
 
-    /*public void TraversePath(int index)
+    private void StopPath()
     {
-        CharacterPath path = new CharacterPath();
-        if (paths.Count <= 0)
-        {
-            Debug.LogWarning($"No paths are set for {gameObject.name}");
-            return;
-        }
-        if (paths.Count < index)
-        {
-            path = paths[^1];
-            Debug.LogWarning($"No path at index {index} for {gameObject.name}. Using Path {paths.Count - 1}");
-        }
-        if (index < 0)
-        {
-            path = paths[0];
-            Debug.LogWarning($"Requested path index is a negative integer. Using Path 0");
-        }
-        else
-        {
-            path = paths[index];
-        }
-    }*/
+        _aiPath.enabled = false;
+    }
 
-    /*private IEnumerator TraversePath(CharacterPath path)
+    private void Move()
     {
-        while (path.pathType == PathType.Simple)
+        if (!_aiPath.reachedDestination || _currentPath == null) return;
+        _aiPath.destination = GetNextTarget(_currentPath.pathType);
+    }
+
+    private Vector3 GetNextTarget(PathType pathType)
+    {
+        switch (pathType)
         {
-            foreach (var target in path.targets)
-            {
-                _aiPath.destination = target.destination;
-                while (!_aiPath.reachedDestination) yield return null;
-            }
-            // stop the coroutine
+            case PathType.Simple:
+                if (_targetIndex < _currentPath.targets.Count - 1)
+                {
+                    _targetIndex++;
+                }
+                else
+                {
+                    StopPath();
+                    return transform.position;
+                }
+                return _currentPath[_targetIndex].destination;
+            case PathType.Patrol:
+                if (_targetIndex == _currentPath.targets.Count - 1 || _targetIndex == -1)
+                {
+                    _isReversed = !_isReversed;
+                }
+                _targetIndex = _isReversed ? _targetIndex - 1 : _targetIndex + 1;
+                return _currentPath[_targetIndex].destination;
+            case PathType.Wander:
+                return _currentPath[Random.Range(0, _currentPath.targets.Count)].destination;
         }
-        while (path.pathType == PathType.Wander)
-        {
-            _aiPath.destination = path.targets[Random.Range(0, path.targets.Count)].destination;
-            while (!_aiPath.reachedDestination) yield return null;
-        }
-    }*/
-    
+        return transform.position;
+    }
 }
 
 [Serializable]
@@ -80,6 +78,8 @@ public class CharacterPath
 {
     public PathType pathType;
     public List<CharacterTarget> targets;
+
+    public CharacterTarget this[int index] => targets[index];
 }
 
 [Serializable]

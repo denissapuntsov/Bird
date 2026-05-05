@@ -15,7 +15,7 @@ public class MovingCharacterEditor : Editor
         {
             for (int i = 0; i < path.targets.Count; i++)
             {
-                var newTarget = path.targets[i];
+                var newTarget = path[i];
                 Handles.Label(newTarget.destination, "Path " + character.paths.IndexOf(path) + " / Target " + path.targets.IndexOf(newTarget));
 
                 EditorGUI.BeginChangeCheck();
