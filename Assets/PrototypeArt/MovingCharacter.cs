@@ -12,34 +12,26 @@ public class MovingCharacter : MonoBehaviour
     private AIPath _aiPath;
 
     private CharacterPath _currentPath;
+    private int _currentTargetIndex;
 
     private void Start()
     {
         _aiPath = GetComponent<AIPath>();
         _aiPath.enableRotation = true;
-        TraversePath(0);
     }
 
     private void Update()
     {
-        if (_currentPath == null) return;
-        if (_aiPath.reachedDestination)
-        {
-            _currentPath = null;
-        }
-    }
-
-    public void OnAcceptSound()
-    {
         
     }
 
-    public void OnRejectSound()
+    private void StartPath(CharacterPath newPath)
     {
-        
+        _currentTargetIndex = 0;
+        _aiPath.destination = newPath.targets[0].destination;
     }
 
-    public void TraversePath(int index)
+    /*public void TraversePath(int index)
     {
         CharacterPath path = new CharacterPath();
         if (paths.Count <= 0)
@@ -61,9 +53,9 @@ public class MovingCharacter : MonoBehaviour
         {
             path = paths[index];
         }
-    }
+    }*/
 
-    private IEnumerator TraversePath(CharacterPath path)
+    /*private IEnumerator TraversePath(CharacterPath path)
     {
         while (path.pathType == PathType.Simple)
         {
@@ -79,7 +71,7 @@ public class MovingCharacter : MonoBehaviour
             _aiPath.destination = path.targets[Random.Range(0, path.targets.Count)].destination;
             while (!_aiPath.reachedDestination) yield return null;
         }
-    }
+    }*/
     
 }
 
