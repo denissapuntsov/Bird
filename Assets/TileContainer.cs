@@ -3,8 +3,10 @@ using NUnit.Framework.Interfaces;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour
+[SelectionBase]
+public class TileContainer : MonoBehaviour
 {
+    public Tile tile;
     public GameObject tileChild;
     public TileType tileType;
 }
