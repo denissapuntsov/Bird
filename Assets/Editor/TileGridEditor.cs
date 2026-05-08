@@ -1,35 +1,46 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.TerrainTools;
 
 [CustomEditor(typeof(TileGrid))]
 public class TileGridEditor : Editor
 {
-    private List<TileContainer> _tiles;
     private TileGrid _grid;
     
     private void OnEnable()
     {
         _grid = target as TileGrid;
-        if (!_grid) return;
+    }
 
-        _tiles = _grid.GetComponentsInChildren<TileContainer>().ToList();
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+        GUILayout.Space(10);
+        var scan = GUILayout.Button("Scan");
+        if (scan)
+        {
+            _grid.Scan();
+            DisplayPositions();
+        }
     }
 
     private string FormattedPosition(Vector3 position)
     {
-        return $"{position.x:0.00}\r\n" +
-               $"{position.y:0.00}\r\n" +
-               $"{position.z:0.00}";
+        return $"{position.x} / {position.y} / {position.z}";
     } 
 
     private void OnSceneGUI()
     {
-        foreach (var tile in _tiles)
+        DisplayPositions();
+    }
+
+    private void DisplayPositions()
+    {
+        foreach (KeyValuePair<Vector3, TileContainer> kvp in _grid.positions)
         {
-            Handles.Label(tile.transform.position, FormattedPosition(tile.transform.localPosition), EditorStyles.boldLabel);
+            Handles.Label(kvp.Value.transform.position, FormattedPosition(kvp.Key), EditorStyles.boldLabel);
         }
     }
 }

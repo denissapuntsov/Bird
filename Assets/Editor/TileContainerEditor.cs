@@ -10,11 +10,11 @@ public class TileContainerEditor : Editor
     private void OnEnable()
     {
         _tileContainer = (TileContainer)target;
-        _tileContainer.gameObject.name = "Tile (" + (_tileContainer.tile ? _tileContainer.tile.name : "None") + ")";
     }
 
     public override void OnInspectorGUI()
     {
+        DrawDefaultInspector();
         _tileContainer = (TileContainer)target;
         
         EditorGUI.BeginChangeCheck();
@@ -22,8 +22,6 @@ public class TileContainerEditor : Editor
         if (EditorGUI.EndChangeCheck()) 
         {
             _tileContainer.tile = tile;
-            _tileContainer.name = "Tile (" + (_tileContainer.tile ? _tileContainer.tile.name : "None") + ")";
-            Undo.SetCurrentGroupName("Change Tile Type to " + (_tileContainer.tile ? _tileContainer.tile.name : "None"));
             int group = Undo.GetCurrentGroup();
             
             Undo.RecordObject(target, "Change Tile Type");
