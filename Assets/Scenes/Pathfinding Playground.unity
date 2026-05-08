@@ -2747,6 +2747,7 @@ MonoBehaviour:
     targets:
     - destination: {x: -5, y: 0, z: 0}
     - destination: {x: 5, y: 0, z: 0}
+    - destination: {x: 5, y: 0, z: 5}
 --- !u!114 &921414851
 MonoBehaviour:
   m_ObjectHideFlags: 0

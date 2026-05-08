@@ -60,11 +60,16 @@ public class MovingCharacter : MonoBehaviour
                 }
                 return _currentPath[_targetIndex].destination;
             case PathType.Patrol:
-                if (_targetIndex == _currentPath.targets.Count - 1 || _targetIndex == -1)
+                if (_targetIndex == _currentPath.targets.Count - 1)
                 {
-                    _isReversed = !_isReversed;
+                    _isReversed = true;
+                }
+                else if (_targetIndex == 0 && _isReversed)
+                {
+                    _isReversed = false;
                 }
                 _targetIndex = _isReversed ? _targetIndex - 1 : _targetIndex + 1;
+                Debug.Log(_targetIndex);
                 return _currentPath[_targetIndex].destination;
             case PathType.Wander:
                 return _currentPath[Random.Range(0, _currentPath.targets.Count)].destination;
@@ -79,7 +84,7 @@ public class CharacterPath
     public PathType pathType;
     public List<CharacterTarget> targets;
 
-    public CharacterTarget this[int index] => targets[index];
+    public CharacterTarget this[int index] => this.targets[index];
 }
 
 [Serializable]
