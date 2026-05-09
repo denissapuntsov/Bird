@@ -1,7 +1,5 @@
-using System;
-using NUnit.Framework.Interfaces;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 [SelectionBase]
 public class TileContainer : MonoBehaviour
@@ -9,6 +7,17 @@ public class TileContainer : MonoBehaviour
     public Tile tile;
     public GameObject tileChild;
     public TileType tileType;
+
+    public Vector3 GridPosition =>
+        new (
+            transform.localPosition.x / 2.5f,
+            transform.localPosition.y / 2.5f,
+            transform.localPosition.z / 2.5f
+            );
+    public Dictionary<Vector3, TileContainer> Neighbors { get; set; }
+
+    public float gScore, hScore;
+    public float FScore => gScore + hScore;
 }
 
 public enum TileType
