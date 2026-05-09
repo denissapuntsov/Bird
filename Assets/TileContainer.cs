@@ -7,6 +7,7 @@ public class TileContainer : MonoBehaviour
     public Tile tile;
     public GameObject tileChild;
     public TileType tileType;
+    public bool isOccupied = false;
 
     public Vector3 GridPosition =>
         new (
@@ -15,9 +16,6 @@ public class TileContainer : MonoBehaviour
             transform.localPosition.z / 2.5f
             );
     public Dictionary<Vector3, TileContainer> Neighbors { get; set; }
-
-    public float gScore, hScore;
-    public float FScore => gScore + hScore;
 }
 
 public enum TileType

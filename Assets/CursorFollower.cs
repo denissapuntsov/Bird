@@ -6,11 +6,11 @@ using UnityEngine.InputSystem;
 public class CursorFollower : MonoBehaviour
 {
     private const string TILE_TAG = "Tile";
-    private AIPath _aiPath;
+    private Character _character;
 
     private void Start()
     {
-        _aiPath = GetComponent<AIPath>();
+        _character = GetComponent<Character>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -23,6 +23,12 @@ public class CursorFollower : MonoBehaviour
         if (!Physics.Raycast(rayOrigin, out hitInfo)) return;
         
         if (!hitInfo.collider.transform.parent.GetComponent<TileContainer>()) return;
-        _aiPath.destination = hitInfo.point;
+        var hitTile = hitInfo.collider.transform.parent.GetComponent<TileContainer>();
+        
+        foreach (var tile in AStar.instance.CalculatePath(_character.OccupiedTile, hitTile))
+        {
+            Debug.Log(tile.GridPosition);
+        }
+        
     }
 }

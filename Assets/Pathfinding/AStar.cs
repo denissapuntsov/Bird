@@ -4,26 +4,24 @@ using UnityEngine;
 
 public class AStar : MonoBehaviour
 {
+    public static AStar instance;
+    
     public float step = 2.5f;
 
     [SerializeField] private TileContainer tileStart, tileGoal;
     
     // key is GridPosition, value is TileContainer
     private Dictionary<Vector3, TileContainer> _tiles = new Dictionary<Vector3, TileContainer>();
-    
-    public float GetManhattanDistance(TileContainer current, TileContainer goal)
+
+    private void Awake()
     {
-        return Mathf.Abs(current.GridPosition.x - goal.GridPosition.x) + Mathf.Abs(current.GridPosition.z - goal.GridPosition.z);
+        if (instance == null) instance = this;
+        else if (instance != this) Destroy(gameObject);
     }
 
     private void Start()
     {
         SetupGrid();
-
-        foreach (var tile in CalculatePath(tileStart, tileGoal))
-        {
-            Debug.Log(tile.GridPosition);
-        }
     }
 
     private void SetupGrid()
@@ -72,21 +70,24 @@ public class AStar : MonoBehaviour
         
         var openList = new List<TileContainer> { start };
         var closedList = new List<TileContainer>();
-
-        start.gScore = 0;
-        start.hScore = GetManhattanDistance(start, goal);
+        
+        Dictionary<TileContainer, float> gScoreMap = new Dictionary<TileContainer, float> { [start] = 0 };
+        Dictionary<TileContainer, float> hScoreMap = new Dictionary<TileContainer, float> { [start] = GetManhattanDistance(start, goal) };
         
         /*var gScore = new Dictionary<TileContainer, float> { [start] = 0 };
         var hScore = new Dictionary<TileContainer, float> { [start] = GetManhattanDistance(start, goal) };*/
         
         var parentMap = new Dictionary<TileContainer, TileContainer>();
 
+        var current = openList[0];
+        
         while (openList.Count > 0)
         { 
-            var current = openList[0];
+            current = openList[0];
             foreach (var tile in openList)
             {
-                if (tile.FScore < start.FScore)
+                if (!gScoreMap.ContainsKey(tile) || !hScoreMap.ContainsKey(tile)) continue;
+                if (hScoreMap[tile] + gScoreMap[tile] < hScoreMap[start] + gScoreMap[start])
                 {
                     current = tile;
                 }
@@ -103,12 +104,12 @@ public class AStar : MonoBehaviour
             foreach (var neighbor in current.Neighbors.Values)
             {
                 if (closedList.Contains(neighbor)) continue;
-                float tentativeGScore = current.gScore + GetManhattanDistance(current, neighbor);
+                float tentativeGScore = gScoreMap[current] + GetManhattanDistance(current, neighbor);
 
-                if (neighbor.gScore == 0 || tentativeGScore < neighbor.gScore)
+                if (!gScoreMap.ContainsKey(neighbor) || tentativeGScore < gScoreMap[neighbor])
                 {
-                    neighbor.gScore = tentativeGScore;
-                    neighbor.hScore = GetManhattanDistance(neighbor, goal);
+                    gScoreMap[neighbor] = tentativeGScore;
+                    hScoreMap[neighbor] = GetManhattanDistance(neighbor, goal);
 
                     parentMap[neighbor] = current;
 
@@ -117,7 +118,9 @@ public class AStar : MonoBehaviour
                 }
             }
         }
-        Debug.LogWarning("No path found");
+        // the goal is unreachable
+        // find the closest reachable node to the goal and plot a new path to it
+        // return CalculatePath(start, closest reachable node)
         return null;
     }
 
@@ -133,5 +136,10 @@ public class AStar : MonoBehaviour
 
         path.Reverse();
         return path;
+    }
+    
+    public float GetManhattanDistance(TileContainer current, TileContainer goal)
+    {
+        return Mathf.Abs(current.GridPosition.x - goal.GridPosition.x) + Mathf.Abs(current.GridPosition.z - goal.GridPosition.z);
     }
 }
