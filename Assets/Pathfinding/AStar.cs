@@ -83,6 +83,7 @@ public class AStar : MonoBehaviour
         
         while (openList.Count > 0)
         { 
+            // find tile with lowest fCost
             current = openList[0];
             foreach (var tile in openList)
             {
@@ -90,9 +91,11 @@ public class AStar : MonoBehaviour
                 if (hScoreMap[tile] + gScoreMap[tile] < hScoreMap[start] + gScoreMap[start])
                 {
                     current = tile;
+                    Debug.Log(current.GridPosition);
                 }
             }
 
+            // once the goal is reached, reconstruct the map
             if (current == goal)
             {
                 return ReconstructMap(parentMap, current);
@@ -103,12 +106,15 @@ public class AStar : MonoBehaviour
             
             foreach (var neighbor in current.Neighbors.Values)
             {
+                if (neighbor.isOccupied) continue;
                 if (closedList.Contains(neighbor)) continue;
                 float tentativeGScore = gScoreMap[current] + GetManhattanDistance(current, neighbor);
 
                 if (!gScoreMap.ContainsKey(neighbor) || tentativeGScore < gScoreMap[neighbor])
                 {
+                    // cost of already travelled tiles
                     gScoreMap[neighbor] = tentativeGScore;
+                    // cost of travelling from the neighbor to the goal
                     hScoreMap[neighbor] = GetManhattanDistance(neighbor, goal);
 
                     parentMap[neighbor] = current;

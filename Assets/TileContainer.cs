@@ -9,6 +9,7 @@ public class TileContainer : MonoBehaviour
     public TileType tileType;
     public bool isOccupied = false;
 
+    public Vector3 WorldPosition => transform.position;
     public Vector3 GridPosition =>
         new (
             transform.localPosition.x / 2.5f,

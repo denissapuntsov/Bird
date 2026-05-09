@@ -9,7 +9,10 @@ public class Character : MonoBehaviour
         get => _occupiedTile;
         private set
         {
-            _occupiedTile.isOccupied = false;
+            if (_occupiedTile != null)
+            {
+                _occupiedTile.isOccupied = false;
+            }
             _occupiedTile = value;
             _occupiedTile.isOccupied = true;
         }
