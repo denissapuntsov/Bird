@@ -21,10 +21,10 @@ public class AStar : MonoBehaviour
 
     private void Start()
     {
-        SetupGrid();
+        Scan();
     }
 
-    private void SetupGrid()
+    private void Scan()
     {
         foreach (TileContainer tile in GetComponentsInChildren<TileContainer>())
         {
@@ -63,8 +63,9 @@ public class AStar : MonoBehaviour
         }
     }
 
-    public List<TileContainer> CalculatePath(TileContainer start, TileContainer goal)
+    public List<TileContainer> CalculatePath(TileContainer start, TileContainer goal, out TileContainer reachableGoal)
     {
+        TileContainer tileClosestToGoal = start;
         start = _tiles[start.GridPosition];
         goal = _tiles[goal.GridPosition];
         
@@ -91,13 +92,17 @@ public class AStar : MonoBehaviour
                 if (hScoreMap[tile] + gScoreMap[tile] < hScoreMap[start] + gScoreMap[start])
                 {
                     current = tile;
-                    Debug.Log(current.GridPosition);
+                }
+                if (GetManhattanDistance(tile, goal) <= GetManhattanDistance(tileClosestToGoal, goal))
+                {
+                    tileClosestToGoal = tile;
                 }
             }
 
             // once the goal is reached, reconstruct the map
             if (current == goal)
             {
+                reachableGoal = goal;
                 return ReconstructMap(parentMap, current);
             }
             
@@ -124,8 +129,14 @@ public class AStar : MonoBehaviour
                 }
             }
         }
-        Debug.LogWarning("Tile blocked!");
-        return null;
+
+        if (start == tileClosestToGoal)
+        {
+            reachableGoal = null;
+            return null;
+        }
+        var bestPath = CalculatePath(start, tileClosestToGoal, out reachableGoal);
+        return bestPath;
     }
 
     private List<TileContainer> ReconstructMap(Dictionary<TileContainer, TileContainer> parentMap, TileContainer current)

@@ -27,8 +27,13 @@ public class CursorFollower : MonoBehaviour
         var hitTile = hitInfo.collider.transform.parent.GetComponent<TileContainer>();
         if (hitTile == _character.OccupiedTile) return;
 
-        var path = AStar.instance.CalculatePath(_character.OccupiedTile, hitTile);
-        StartPath(path, hitTile);
+        /*if (AStar.instance.GetManhattanDistance(_character.OccupiedTile, hitTile) > 4)
+        {
+            Debug.Log("Tile too far away!");
+            return;
+        }*/
+        var path = AStar.instance.CalculatePath(_character.OccupiedTile, hitTile, out TileContainer reachableGoal);
+        StartPath(path, reachableGoal);
     }
 
     private void StartPath(List<TileContainer> path, TileContainer goal)
@@ -47,8 +52,8 @@ public class CursorFollower : MonoBehaviour
                     Debug.Log("Destination reached");
                     return;
                 }
-                var nextPath = AStar.instance.CalculatePath(_character.OccupiedTile, goal);
-                StartPath(nextPath, goal);
+                var nextPath = AStar.instance.CalculatePath(_character.OccupiedTile, goal, out TileContainer reachableGoal);
+                StartPath(nextPath, reachableGoal);
             });
     }
 }
