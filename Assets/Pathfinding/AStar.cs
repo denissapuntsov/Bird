@@ -124,9 +124,7 @@ public class AStar : MonoBehaviour
                 }
             }
         }
-        // the goal is unreachable
-        // find the closest reachable node to the goal and plot a new path to it
-        // return CalculatePath(start, closest reachable node)
+        Debug.LogWarning("Tile blocked!");
         return null;
     }
 
