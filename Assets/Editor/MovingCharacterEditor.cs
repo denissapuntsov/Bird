@@ -1,12 +1,10 @@
-using Unity.VisualScripting;
+/*using Unity.VisualScripting;
 using UnityEditor;
-
-[CustomEditor(typeof(MovingCharacter))]
 public class MovingCharacterEditor : Editor
 {
     public void OnSceneGUI()
     {
-        var character = target as MovingCharacter;
+        var character = target as OldMovingCharacter;
         if (!character) return;
 
         if (character.paths.Count == 0) return;
@@ -28,4 +26,4 @@ public class MovingCharacterEditor : Editor
             }
         }
     }
-}
+}*/

@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class MovingCharacter : MonoBehaviour
+public class OldMovingCharacter : MonoBehaviour
 {
-    public List<CharacterPath> paths;
+    /*public List<CharacterPath> paths;
     private AIPath _aiPath;
 
     private CharacterPath _currentPath;
@@ -41,14 +41,14 @@ public class MovingCharacter : MonoBehaviour
     private void Move()
     {
         if (!_aiPath.reachedDestination || _currentPath == null) return;
-        _aiPath.destination = GetNextTarget(_currentPath.pathType);
+        _aiPath.destination = GetNextTarget(_currentPath.movementType);
     }
 
-    private Vector3 GetNextTarget(PathType pathType)
+    private Vector3 GetNextTarget(MovementType movementType)
     {
-        switch (pathType)
+        switch (movementType)
         {
-            case PathType.Simple:
+            case MovementType.Simple:
                 if (_targetIndex < _currentPath.targets.Count - 1)
                 {
                     _targetIndex++;
@@ -59,7 +59,7 @@ public class MovingCharacter : MonoBehaviour
                     return transform.position;
                 }
                 return _currentPath[_targetIndex].destination;
-            case PathType.Patrol:
+            case MovementType.Patrol:
                 if (_targetIndex == _currentPath.targets.Count - 1)
                 {
                     _isReversed = true;
@@ -71,31 +71,26 @@ public class MovingCharacter : MonoBehaviour
                 _targetIndex = _isReversed ? _targetIndex - 1 : _targetIndex + 1;
                 Debug.Log(_targetIndex);
                 return _currentPath[_targetIndex].destination;
-            case PathType.Wander:
+            case MovementType.Wander:
                 return _currentPath[Random.Range(0, _currentPath.targets.Count)].destination;
         }
         return transform.position;
-    }
+    }*/
 }
 
+/*
 [Serializable]
-public class CharacterPath
+/*public class CharacterPath
 {
-    public PathType pathType;
+    public MovementType movementType;
     public List<CharacterTarget> targets;
 
     public CharacterTarget this[int index] => this.targets[index];
-}
+}#1#
 
 [Serializable]
 public class CharacterTarget
 {
     public Vector3 destination = new(5, 0, 0);
 }
-
-public enum PathType
-{
-    Simple,
-    Patrol,
-    Wander
-}
+*/

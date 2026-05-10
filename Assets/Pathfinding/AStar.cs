@@ -17,10 +17,6 @@ public class AStar : MonoBehaviour
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(gameObject);
-    }
-
-    private void Start()
-    {
         Scan();
     }
 
