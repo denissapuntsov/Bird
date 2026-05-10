@@ -50,6 +50,7 @@ public class MovingCharacter : MonoBehaviour
     {
         if (path == null) return;
         _move?.Kill();
+        path[1].isOccupied = true;
         _move = transform
             .DOMove(path[1].WorldPosition, speed)
             .SetSpeedBased(true)
