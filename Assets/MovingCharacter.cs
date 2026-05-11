@@ -14,12 +14,12 @@ public class MovingCharacter : MonoBehaviour
         get => _occupiedTile;
         private set
         {
-            if (_occupiedTile != null)
+            if (_occupiedTile)
             {
-                _occupiedTile.isOccupied = false;
+                _occupiedTile.owner = null;
             }
             _occupiedTile = value;
-            _occupiedTile.isOccupied = true;
+            _occupiedTile.owner = this;
         }
     }
 
@@ -63,7 +63,7 @@ public class MovingCharacter : MonoBehaviour
                     onCompletePath?.Invoke();
                     return;
                 }
-                var nextPath = AStar.instance.CalculatePath(OccupiedTile, goal, out TileContainer reachableGoal);
+                var nextPath = AStar.instance.CalculatePath(this, goal, out TileContainer reachableGoal);
                 StartPath(nextPath, reachableGoal, onCompletePath);
             });
     }

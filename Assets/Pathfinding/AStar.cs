@@ -59,8 +59,32 @@ public class AStar : MonoBehaviour
         }
     }
 
-    public List<TileContainer> CalculatePath(TileContainer start, TileContainer goal, out TileContainer reachableGoal)
+    public List<TileContainer> GetNeighborsInRange(TileContainer origin, int range)
     {
+        List<TileContainer> neighbors = new List<TileContainer>();
+            
+        foreach (var tileKvp in _tiles)
+        {
+            if (tileKvp.Value == origin) continue;
+            if (GetManhattanDistance(tileKvp.Value, origin) <= range)
+            {
+                neighbors.Add(tileKvp.Value);
+            }
+        }
+
+        return neighbors;
+    }
+
+    /// <summary>
+    /// Returns list of TileContainers that form a path from a MovingCharacter's current Occupied Tile to the goal Tile (or its "closest" [see reachableGoal] alternative).
+    /// </summary>
+    /// <param name="character"> MovingCharacter to move along path. Start Tile is set to the character's OccupiedTile. </param>
+    /// <param name="goal"> Desired end Tile for the path. </param>
+    /// <param name="reachableGoal"> Desired goal if the path is unobstructed; otherwise returns the path to the Tile with the lowest Manhattan distance to the desired goal. </param>
+    /// <returns></returns>
+    public List<TileContainer> CalculatePath(MovingCharacter character, TileContainer goal, out TileContainer reachableGoal)
+    {
+        var start = character.OccupiedTile;
         TileContainer tileClosestToGoal = start;
         start = _tiles[start.GridPosition];
         goal = _tiles[goal.GridPosition];
@@ -71,17 +95,12 @@ public class AStar : MonoBehaviour
         Dictionary<TileContainer, float> gScoreMap = new Dictionary<TileContainer, float> { [start] = 0 };
         Dictionary<TileContainer, float> hScoreMap = new Dictionary<TileContainer, float> { [start] = GetManhattanDistance(start, goal) };
         
-        /*var gScore = new Dictionary<TileContainer, float> { [start] = 0 };
-        var hScore = new Dictionary<TileContainer, float> { [start] = GetManhattanDistance(start, goal) };*/
-        
         var parentMap = new Dictionary<TileContainer, TileContainer>();
-
-        var current = openList[0];
         
         while (openList.Count > 0)
         { 
             // find tile with lowest fCost
-            current = openList[0];
+            var current = openList[0];
             foreach (var tile in openList)
             {
                 if (!gScoreMap.ContainsKey(tile) || !hScoreMap.ContainsKey(tile)) continue;
@@ -107,15 +126,17 @@ public class AStar : MonoBehaviour
             
             foreach (var neighbor in current.Neighbors.Values)
             {
-                if (neighbor.isOccupied) continue;
+                // same as isOccupied, WIP 
+                if (neighbor.owner && neighbor.owner != character) continue;
+                
                 if (closedList.Contains(neighbor)) continue;
                 float tentativeGScore = gScoreMap[current] + GetManhattanDistance(current, neighbor);
 
                 if (!gScoreMap.ContainsKey(neighbor) || tentativeGScore < gScoreMap[neighbor])
                 {
-                    // cost of already travelled tiles
+                    // cost of already traveled tiles
                     gScoreMap[neighbor] = tentativeGScore;
-                    // cost of travelling from the neighbor to the goal
+                    // cost of traveling from the neighbor to the goal
                     hScoreMap[neighbor] = GetManhattanDistance(neighbor, goal);
 
                     parentMap[neighbor] = current;
@@ -131,7 +152,7 @@ public class AStar : MonoBehaviour
             reachableGoal = null;
             return null;
         }
-        var bestPath = CalculatePath(start, tileClosestToGoal, out reachableGoal);
+        var bestPath = CalculatePath(character, tileClosestToGoal, out reachableGoal);
         return bestPath;
     }
 

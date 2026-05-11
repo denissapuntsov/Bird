@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 71480620}
   - component: {fileID: 71480623}
   - component: {fileID: 71480624}
+  - component: {fileID: 71480625}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -151,6 +152,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1827806342}
+  - {fileID: 1619194706}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &71480623
@@ -178,6 +180,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+--- !u!114 &71480625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 71480617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 758286a7fb34bcd40b00e6bd7fbf2454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &112743899
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +225,7 @@ MonoBehaviour:
   tileChild: {fileID: 693584283}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &112743901
 Transform:
   m_ObjectHideFlags: 0
@@ -261,6 +276,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &214818927
 Transform:
   m_ObjectHideFlags: 0
@@ -915,6 +931,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 08ae2797-5785-49de-817b-a35e843a00f0
     m_ActionName: 'Player/Move[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 71480625}
+        m_TargetAssemblyTypeName: PlayerActions, Assembly-CSharp
+        m_MethodName: OnSpeak
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1e4bd8b1-343e-4f8f-9a51-e5e076b413b5
+    m_ActionName: 'Player/Speak[/Mouse/leftButton]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -1076,6 +1108,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &628907840
 Transform:
   m_ObjectHideFlags: 0
@@ -1449,6 +1482,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &712478556
 Transform:
   m_ObjectHideFlags: 0
@@ -1498,6 +1532,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &726907169
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,6 +1690,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &761828434
 Transform:
   m_ObjectHideFlags: 0
@@ -1920,6 +1956,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &852124156
 Transform:
   m_ObjectHideFlags: 0
@@ -1947,6 +1984,7 @@ GameObject:
   - component: {fileID: 921414853}
   - component: {fileID: 921414854}
   - component: {fileID: 921414855}
+  - component: {fileID: 921414856}
   m_Layer: 7
   m_Name: NPC
   m_TagString: Untagged
@@ -2000,6 +2038,36 @@ MonoBehaviour:
     targets:
     - {fileID: 112743900}
     - {fileID: 1514202730}
+--- !u!114 &921414856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921414849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb0ce269efd3d943b34e3ac29ce9803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactionsList:
+  - key: {fileID: 11400000, guid: 960306f3bc92ac74da2b738d3756f8c3, type: 2}
+    onAcceptKey:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 921414855}
+          m_TargetAssemblyTypeName: PathFollower, Assembly-CSharp
+          m_MethodName: MoveAlongPath
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    isInfinite: 0
 --- !u!1 &927240875
 GameObject:
   m_ObjectHideFlags: 0
@@ -2098,6 +2166,7 @@ MonoBehaviour:
   tileChild: {fileID: 676111517}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1030262033
 Transform:
   m_ObjectHideFlags: 0
@@ -2494,6 +2563,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1275238004
 Transform:
   m_ObjectHideFlags: 0
@@ -3097,6 +3167,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1514202731
 Transform:
   m_ObjectHideFlags: 0
@@ -3438,6 +3509,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1864319464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1619194705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1619194706}
+  - component: {fileID: 1619194707}
+  m_Layer: 7
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1619194706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619194705}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 71480620}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1619194707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1619194705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b4733c83aa14d049af64c2daa039c75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentSoundItem: {fileID: 11400000, guid: 960306f3bc92ac74da2b738d3756f8c3, type: 2}
 --- !u!1 &1718328558
 GameObject:
   m_ObjectHideFlags: 0
@@ -3471,6 +3587,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1718328560
 Transform:
   m_ObjectHideFlags: 0
@@ -3520,6 +3637,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1733169968
 Transform:
   m_ObjectHideFlags: 0
@@ -3657,7 +3775,7 @@ GameObject:
   - component: {fileID: 1827806344}
   - component: {fileID: 1827806343}
   m_Layer: 7
-  m_Name: Cylinder
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3787,6 +3905,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1864319464
 Transform:
   m_ObjectHideFlags: 0
@@ -3836,6 +3955,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &1874256893
 Transform:
   m_ObjectHideFlags: 0
@@ -3993,6 +4113,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &2050044125
 Transform:
   m_ObjectHideFlags: 0
@@ -4042,6 +4163,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &2058048953
 Transform:
   m_ObjectHideFlags: 0
@@ -4091,6 +4213,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &2070113465
 Transform:
   m_ObjectHideFlags: 0
@@ -4140,6 +4263,7 @@ MonoBehaviour:
   tileChild: {fileID: 843635998}
   tileType: 0
   isOccupied: 0
+  owner: {fileID: 0}
 --- !u!4 &2105700842
 Transform:
   m_ObjectHideFlags: 0

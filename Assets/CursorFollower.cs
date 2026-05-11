@@ -23,7 +23,7 @@ public class CursorFollower : MonoBehaviour
         var hitTile = hitInfo.collider.transform.parent.GetComponent<TileContainer>();
         if (hitTile == _movingCharacter.OccupiedTile) return;
         
-        var path = AStar.instance.CalculatePath(_movingCharacter.OccupiedTile, hitTile, out TileContainer reachableGoal);
+        var path = AStar.instance.CalculatePath(_movingCharacter, hitTile, out TileContainer reachableGoal);
         _movingCharacter.StartPath(path, reachableGoal);
     }
 }

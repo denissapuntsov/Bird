@@ -18,11 +18,6 @@ public class PathFollower : MonoBehaviour
         _onReachTarget += GoToNextTarget;
     }
 
-    private void Start()
-    {
-        MoveAlongPath(0);
-    }
-
     private void GoToNextTarget()
     {
         switch (_activePath.movementType)
@@ -69,7 +64,7 @@ public class PathFollower : MonoBehaviour
 
     private void MoveToTargetOnPath(CharacterPath characterPath, int targetIndex)
     {
-        var path = AStar.instance.CalculatePath(_movingCharacter.OccupiedTile, characterPath[targetIndex], out var goal);
+        var path = AStar.instance.CalculatePath(_movingCharacter, characterPath[targetIndex], out var goal);
         _movingCharacter.StartPath(path, goal, _onReachTarget);
     }
 }
