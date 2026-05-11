@@ -100,55 +100,6 @@ public class UIManager : MonoBehaviour
         Exit();
     }
 
-    public void CreatePopup(Interactable interactable)
-    {
-        if (_popups.ContainsKey(interactable.GetHashCode())) return;
-        var newPopup = Instantiate(popupPrefab, world.transform, true).GetComponent<Popup>();
-        newPopup.name = $"Popup ({interactable.name})";
-        newPopup.Text = interactable.defaultText;
-        newPopup.Open();
-        Link(interactable, newPopup);
-    }
-
-    /// <summary>
-    /// Creates a popup for the player.
-    /// </summary>
-    public void CreatePopup()
-    {
-        if (_popups.ContainsKey(PlayerInventory.instance.GetHashCode())) return;
-        var playerPopup = Instantiate(popupPrefab, world.transform, true).GetComponent<Popup>();
-        playerPopup.name = $"Popup (Player)";
-        playerPopup.Text = "Player";
-        playerPopup.Icon = PlayerInventory.instance.CurrentAudioSprite;
-        playerPopup.Open();
-        Link(playerPopup);
-    }
-
-    private void Link(Interactable interactable, Popup newPopup)
-    {
-        newPopup.linkedTransform = interactable.transform;
-        _popups.Add(interactable.GetHashCode(), newPopup);
-    }
-
-    private void Link(Popup newPopup)
-    {
-        newPopup.linkedTransform = PlayerInventory.instance.popupPivot;
-        _popups.Add(PlayerInventory.instance.GetHashCode(), newPopup);
-    }
-    
-    public void HidePopup(Interactable interactable)
-    {
-        if (!interactable) return;
-        _popups.TryGetValue(interactable.GetHashCode(), out var popupToClose);
-        popupToClose?.Close(() => CleanUpPopup(interactable.GetHashCode()));
-    }
-
-    public void HidePopup()
-    {
-        _popups.TryGetValue(PlayerInventory.instance.GetHashCode(), out var popupToClose);
-        popupToClose?.Close(() => CleanUpPopup(PlayerInventory.instance.GetHashCode()));
-    }
-
     private void CleanUpPopup(int interactableHashCode)
     {
         var popupToCleanup = _popups[interactableHashCode];

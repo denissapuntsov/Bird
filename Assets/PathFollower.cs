@@ -6,7 +6,8 @@ using Random = UnityEngine.Random;
 public class PathFollower : MonoBehaviour
 {
     private MovingCharacter _movingCharacter;
-    public CharacterPath targets;
+    public List<CharacterPath> paths = new List<CharacterPath>();
+    private CharacterPath _activePath = new CharacterPath();
     private Action _onReachTarget;
     private int _currentTargetIndex = 0;
     private bool _isReversed = false;
@@ -19,15 +20,15 @@ public class PathFollower : MonoBehaviour
 
     private void Start()
     {
-        MoveAlongPath(targets, MovementType.Simple);
+        MoveAlongPath(0);
     }
 
     private void GoToNextTarget()
     {
-        switch (targets.movementType)
+        switch (_activePath.movementType)
         {
             case MovementType.Simple:
-                if (_currentTargetIndex == targets.Length - 1)
+                if (_currentTargetIndex == _activePath.Length - 1)
                 {
                     Debug.Log("Reached end of path");
                     return;
@@ -38,12 +39,12 @@ public class PathFollower : MonoBehaviour
                 var newIndex = _currentTargetIndex;
                 while (newIndex == _currentTargetIndex)
                 {
-                    newIndex = Random.Range(0, targets.Length);
+                    newIndex = Random.Range(0, _activePath.Length);
                 }
                 _currentTargetIndex = newIndex;
                 break; 
             case MovementType.Patrol:
-                if (_currentTargetIndex == targets.Length - 1)
+                if (_currentTargetIndex == _activePath.Length - 1)
                 {
                     _isReversed = true;
                 }
@@ -55,13 +56,15 @@ public class PathFollower : MonoBehaviour
                 break;
         }
         Debug.Log(_currentTargetIndex);
-        MoveToTargetOnPath(targets, _currentTargetIndex);
+        MoveToTargetOnPath(_activePath, _currentTargetIndex);
     }
     
-    public void MoveAlongPath(CharacterPath newTargets, MovementType movementType)
+    public void MoveAlongPath(int indexOfPath)
     {
+        if (indexOfPath < 0 || indexOfPath >= paths.Count) return;
+        _activePath = paths[indexOfPath];
         _isReversed = false;
-        MoveToTargetOnPath(newTargets, _currentTargetIndex);
+        MoveToTargetOnPath(_activePath, _currentTargetIndex);
     }
 
     private void MoveToTargetOnPath(CharacterPath characterPath, int targetIndex)

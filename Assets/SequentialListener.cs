@@ -7,12 +7,12 @@ public class SequentialListener : MonoBehaviour
 
     public void SubscribeToPlayerAudio()
     {
-        PlayerInventory.instance.OnAudioEnded.AddListener(React);
+        //PlayerInventory.instance.OnAudioEnded.AddListener(React);
     }
 
     public void UnsubscribeFromPlayerAudio()
     {
-        PlayerInventory.instance.OnAudioEnded.RemoveListener(React);
+        //PlayerInventory.instance.OnAudioEnded.RemoveListener(React);
     }
 
     private void React()
