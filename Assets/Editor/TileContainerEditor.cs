@@ -10,11 +10,11 @@ public class TileContainerEditor : Editor
     private void OnEnable()
     {
         _tileContainer = (TileContainer)target;
+        _tileContainer.gameObject.name = $"[{_tileContainer.GridPosition.x:N0}, {_tileContainer.GridPosition.y:N0}, {_tileContainer.GridPosition.z:N0}]";
     }
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
         _tileContainer = (TileContainer)target;
         
         EditorGUI.BeginChangeCheck();
@@ -22,6 +22,7 @@ public class TileContainerEditor : Editor
         if (EditorGUI.EndChangeCheck()) 
         {
             _tileContainer.tile = tile;
+            Undo.SetCurrentGroupName("Change Tile Type to " + (_tileContainer.tile ? _tileContainer.tile.name : "None"));
             int group = Undo.GetCurrentGroup();
             
             Undo.RecordObject(target, "Change Tile Type");

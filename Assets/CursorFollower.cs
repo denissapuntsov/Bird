@@ -1,16 +1,14 @@
 using System;
-using Pathfinding;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CursorFollower : MonoBehaviour
 {
-    private const string TILE_TAG = "Tile";
-    private AIPath _aiPath;
+    private MovingCharacter _movingCharacter;
 
     private void Start()
     {
-        _aiPath = GetComponent<AIPath>();
+        _movingCharacter = GetComponent<MovingCharacter>();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -21,8 +19,11 @@ public class CursorFollower : MonoBehaviour
         RaycastHit hitInfo;
 
         if (!Physics.Raycast(rayOrigin, out hitInfo)) return;
-        
         if (!hitInfo.collider.transform.parent.GetComponent<TileContainer>()) return;
-        _aiPath.destination = hitInfo.point;
+        var hitTile = hitInfo.collider.transform.parent.GetComponent<TileContainer>();
+        if (hitTile == _movingCharacter.OccupiedTile) return;
+        
+        var path = AStar.instance.CalculatePath(_movingCharacter.OccupiedTile, hitTile, out TileContainer reachableGoal);
+        _movingCharacter.StartPath(path, reachableGoal);
     }
 }
