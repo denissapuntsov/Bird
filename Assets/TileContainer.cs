@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [SelectionBase]
 public class TileContainer : MonoBehaviour
@@ -7,8 +9,21 @@ public class TileContainer : MonoBehaviour
     public Tile tile;
     public GameObject tileChild;
     public TileType tileType;
-    public bool isOccupied = false;
-    public MovingCharacter owner = null;
+    public UnityEvent onTileFree;
+
+    public MovingCharacter Owner
+    {
+        get => _owner;
+        set
+        {
+            _owner = value;
+            if (!value)
+            {
+                onTileFree?.Invoke();
+            }
+        }
+    }
+    private MovingCharacter _owner;
 
     public Vector3 WorldPosition => transform.position;
     public Vector3 GridPosition =>
@@ -18,6 +33,11 @@ public class TileContainer : MonoBehaviour
             transform.localPosition.z / 2.5f
             );
     public Dictionary<Vector3, TileContainer> Neighbors { get; set; }
+
+    private void OnDisable()
+    {
+        onTileFree.RemoveAllListeners();
+    }
 }
 
 public enum TileType

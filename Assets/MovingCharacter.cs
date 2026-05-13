@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
+[SelectionBase]
 public class MovingCharacter : MonoBehaviour
 {
     [SerializeField] private float speed = 5.0f;
@@ -16,10 +17,10 @@ public class MovingCharacter : MonoBehaviour
         {
             if (_occupiedTile)
             {
-                _occupiedTile.owner = null;
+                _occupiedTile.Owner = null;
             }
             _occupiedTile = value;
-            _occupiedTile.owner = this;
+            _occupiedTile.Owner = this;
         }
     }
 
@@ -50,7 +51,6 @@ public class MovingCharacter : MonoBehaviour
     {
         if (path == null) return;
         _move?.Kill();
-        path[1].isOccupied = true;
         _move = transform
             .DOMove(path[1].WorldPosition, speed)
             .SetSpeedBased(true)

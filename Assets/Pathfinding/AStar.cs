@@ -127,7 +127,7 @@ public class AStar : MonoBehaviour
             foreach (var neighbor in current.Neighbors.Values)
             {
                 // same as isOccupied, WIP 
-                if (neighbor.owner && neighbor.owner != character) continue;
+                if (neighbor.Owner && neighbor.Owner != character) continue;
                 
                 if (closedList.Contains(neighbor)) continue;
                 float tentativeGScore = gScoreMap[current] + GetManhattanDistance(current, neighbor);
