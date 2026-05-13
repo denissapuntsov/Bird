@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 [SelectionBase]
 public class MovingCharacter : MonoBehaviour
 {
     [SerializeField] private float speed = 5.0f;
     private Tween _move;
+    [HideInInspector] public UnityEvent<MovingCharacter, TileContainer> onLocationChange;
     
     private TileContainer _occupiedTile;
     public TileContainer OccupiedTile
@@ -46,6 +48,18 @@ public class MovingCharacter : MonoBehaviour
         OccupiedTile = hitTile;
     }
 
+    public void Move(TileContainer goal) => Move(goal, null);
+    
+    public void Move(TileContainer goal, Action onCompletePath)
+    {
+        var path = AStar.instance.CalculatePath(this, goal, out var reachableGoal);
+        if (path != null)
+        {
+            onLocationChange?.Invoke(this, OccupiedTile);
+        }
+        StartPath(path, goal, onCompletePath);
+    }
+    
     public void StartPath(List<TileContainer> path, TileContainer goal) => StartPath(path, goal, null);
     public void StartPath(List<TileContainer> path, TileContainer goal, Action onCompletePath)
     {

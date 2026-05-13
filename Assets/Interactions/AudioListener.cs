@@ -4,7 +4,7 @@ using System.Net;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Listener : MonoBehaviour, ISerializationCallbackReceiver
+public class AudioListener : MonoBehaviour, ISerializationCallbackReceiver
 {
     // a dictionary serialized as List<SoundItem> and a List<UnityEvent>
     private Dictionary<SoundItem, Reaction> _reactions = new Dictionary<SoundItem, Reaction>();
