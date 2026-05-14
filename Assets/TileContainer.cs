@@ -10,6 +10,7 @@ public class TileContainer : MonoBehaviour
     public GameObject tileChild;
     public TileType tileType;
     public UnityEvent onTileFree;
+    public UnityEvent<TileContainer, MovingCharacter> onTileOwnerChange;
 
     public MovingCharacter Owner
     {
@@ -17,6 +18,7 @@ public class TileContainer : MonoBehaviour
         set
         {
             _owner = value;
+            onTileOwnerChange?.Invoke(this, value);
             if (!value)
             {
                 onTileFree?.Invoke();

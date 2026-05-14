@@ -11,6 +11,8 @@ public class MovingCharacter : MonoBehaviour
     private Tween _move;
     [HideInInspector] public UnityEvent<MovingCharacter, TileContainer> onLocationChangeStart;
     [HideInInspector] public UnityEvent<TileContainer> onLocationChangeEnd;
+
+    public TileContainer startupMoveLocation;
     
     private TileContainer _occupiedTile;
     public TileContainer OccupiedTile
@@ -25,7 +27,6 @@ public class MovingCharacter : MonoBehaviour
 
             if (_hasJustStartedMoving)
             {
-                print("onLocationChangeStart" + gameObject.name);
                 onLocationChangeStart?.Invoke(this, _occupiedTile);
                 _hasJustStartedMoving = false;
             }
@@ -36,9 +37,17 @@ public class MovingCharacter : MonoBehaviour
     
     private bool _hasJustStartedMoving;
 
-    private void Awake()
+    private void OnEnable()
     {
         GetOccupiedTile();
+    }
+
+    private void Start()
+    {
+        if (startupMoveLocation)
+        {
+            Move(startupMoveLocation);
+        }
     }
 
     private void Update()
@@ -63,13 +72,14 @@ public class MovingCharacter : MonoBehaviour
         _move?.Kill();
         transform.position = goal.WorldPosition;
         // does not count as a change in position
-        _occupiedTile = goal;
+        OccupiedTile = goal;
     }
 
     public void Move(TileContainer goal) => Move(goal, null);
     
     public void Move(TileContainer goal, Action onCompletePath)
     {
+        if (goal == OccupiedTile) return;
         var path = AStar.instance.CalculatePath(this, goal, out var reachableGoal);
         if (path != null)
         {

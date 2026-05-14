@@ -13,7 +13,7 @@ public class AStar : MonoBehaviour
     // key is GridPosition, value is TileContainer
     private Dictionary<Vector3, TileContainer> _tiles = new Dictionary<Vector3, TileContainer>();
 
-    private void Awake()
+    private void OnEnable()
     {
         if (instance == null) instance = this;
         else if (instance != this) Destroy(gameObject);
@@ -84,6 +84,7 @@ public class AStar : MonoBehaviour
     /// <returns></returns>
     public List<TileContainer> CalculatePath(MovingCharacter character, TileContainer goal, out TileContainer reachableGoal)
     {
+        Debug.Log(character.OccupiedTile + " " + goal);
         var start = character.OccupiedTile;
         TileContainer tileClosestToGoal = start;
         start = _tiles[start.GridPosition];
