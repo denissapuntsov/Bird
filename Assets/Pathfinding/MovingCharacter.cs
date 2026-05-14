@@ -25,6 +25,7 @@ public class MovingCharacter : MonoBehaviour
 
             if (_hasJustStartedMoving)
             {
+                print("onLocationChangeStart" + gameObject.name);
                 onLocationChangeStart?.Invoke(this, _occupiedTile);
                 _hasJustStartedMoving = false;
             }
@@ -57,6 +58,14 @@ public class MovingCharacter : MonoBehaviour
         OccupiedTile = hitTile;
     }
 
+    public void Teleport(TileContainer goal)
+    {
+        _move?.Kill();
+        transform.position = goal.WorldPosition;
+        // does not count as a change in position
+        _occupiedTile = goal;
+    }
+
     public void Move(TileContainer goal) => Move(goal, null);
     
     public void Move(TileContainer goal, Action onCompletePath)
@@ -69,8 +78,9 @@ public class MovingCharacter : MonoBehaviour
         StartPath(path, goal, onCompletePath);
     }
     
-    public void StartPath(List<TileContainer> path, TileContainer goal) => StartPath(path, goal, null);
-    public void StartPath(List<TileContainer> path, TileContainer goal, Action onCompletePath)
+    public void StartPath(List<TileContainer> path, TileContainer goal) => StartPath(path, goal, goal, null);
+    public void StartPath(List<TileContainer> path, TileContainer goal, Action onCompletePath) => StartPath(path, goal, goal, onCompletePath);
+    private void StartPath(List<TileContainer> path, TileContainer goal, TileContainer reachableGoal, Action onCompletePath)
     {
         if (path == null) return;
         _move?.Kill();
@@ -82,13 +92,13 @@ public class MovingCharacter : MonoBehaviour
             .OnComplete(() =>
             {
                 onLocationChangeEnd?.Invoke(OccupiedTile);
-                if (OccupiedTile == goal)
+                if (OccupiedTile == goal || OccupiedTile == reachableGoal)
                 {
                     onCompletePath?.Invoke();
                     return;
                 }
-                var nextPath = AStar.instance.CalculatePath(this, goal, out TileContainer reachableGoal);
-                StartPath(nextPath, reachableGoal, onCompletePath);
+                var nextPath = AStar.instance.CalculatePath(this, goal, out reachableGoal);
+                StartPath(nextPath, goal, reachableGoal, onCompletePath);
             });
     }
 }

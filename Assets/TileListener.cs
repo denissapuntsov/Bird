@@ -5,9 +5,9 @@ using UnityEngine.Events;
 
 public class TileListener : MonoBehaviour
 {
-    [SerializeField] private List<TileStateEvent> tileStateEvents;
-    [SerializeField] private List<CharacterLocationEvent> locationEvents;
-    [SerializeField] private List<TileOccupationEvent> tileOccupationEvents;
+    [SerializeField] private List<TileStateEvent> tileFreedEvents;
+    [SerializeField] private List<CharacterLocationEvent> otherCharacterLocationChangedEvents;
+    [SerializeField] private List<TileOccupationEvent> tileOccupiedByThisEvents;
     
     Dictionary<MovingCharacter, TileContainer> _trackedLastLocations = new Dictionary<MovingCharacter, TileContainer>();
     Dictionary<TileContainer, UnityEvent> _trackedTiles = new Dictionary<TileContainer, UnityEvent>();
@@ -20,14 +20,14 @@ public class TileListener : MonoBehaviour
     }
     private void SubscribeToTileStateEvents()
     {
-        foreach (var tileStateEvent in tileStateEvents)
+        foreach (var tileStateEvent in tileFreedEvents)
         {
             tileStateEvent.tile.onTileFree.AddListener(() => tileStateEvent.reaction.Invoke());
         }
     }
     private void SubscribeToLocationEvents()
     {
-        foreach (var locationEvent in locationEvents)
+        foreach (var locationEvent in otherCharacterLocationChangedEvents)
         {
             _trackedLastLocations.Add(locationEvent.movingCharacter, locationEvent.movingCharacter.OccupiedTile);
             locationEvent.movingCharacter.onLocationChangeStart.AddListener((character, lastLocation) =>
@@ -40,7 +40,7 @@ public class TileListener : MonoBehaviour
 
     private void SubscribeToTileOccupationEvents()
     {
-        foreach (var tileEvent in tileOccupationEvents)
+        foreach (var tileEvent in tileOccupiedByThisEvents)
         {
             _trackedTiles.Add(tileEvent.tile, tileEvent.action);
         }
@@ -58,7 +58,7 @@ public class TileListener : MonoBehaviour
         _trackedLastLocations[movingCharacter] = tileContainer;
     }
 
-    public void MoveToLastCharacterLocation(MovingCharacter movingCharacter)
+    public void MoveToLastLocationOf(MovingCharacter movingCharacter)
     {
         Debug.Log("moving");
         var tile = _trackedLastLocations[movingCharacter];

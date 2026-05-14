@@ -11,16 +11,13 @@ public class Speaker : MonoBehaviour
     private bool _isSpeaking;
     private AudioSource _audioSource;
 
+    [HideInInspector] public bool playOnAwake = false;
     public UnityEvent onFinishSpeaking;
 
     private void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
-    }
-
-    private void Start()
-    {
-        if (CurrentSoundItem == null) return;
+        if (!playOnAwake) return;
         Speak();
     }
 
@@ -37,6 +34,7 @@ public class Speaker : MonoBehaviour
         var waitForClipRemainingTime = new WaitForSeconds(source.GetClipRemainingTime());
         yield return waitForClipRemainingTime;
         onFinishSpeaking?.Invoke();
+        Debug.Log("finished speaking");
         _isSpeaking = false;
     }
 }
