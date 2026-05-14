@@ -7,15 +7,18 @@ public class TileListener : MonoBehaviour
 {
     [SerializeField] private List<TileStateEvent> tileStateEvents;
     [SerializeField] private List<CharacterLocationEvent> locationEvents;
+    [SerializeField] private List<TileOccupationEvent> tileOccupationEvents;
     
     Dictionary<MovingCharacter, TileContainer> _trackedLastLocations = new Dictionary<MovingCharacter, TileContainer>();
-
+    Dictionary<TileContainer, UnityEvent> _trackedTiles = new Dictionary<TileContainer, UnityEvent>();
+    
     private void Awake()
     {
-        SubscribeToTileEvents();
+        SubscribeToTileStateEvents();
         SubscribeToLocationEvents();
+        SubscribeToTileOccupationEvents();
     }
-    private void SubscribeToTileEvents()
+    private void SubscribeToTileStateEvents()
     {
         foreach (var tileStateEvent in tileStateEvents)
         {
@@ -27,12 +30,27 @@ public class TileListener : MonoBehaviour
         foreach (var locationEvent in locationEvents)
         {
             _trackedLastLocations.Add(locationEvent.movingCharacter, locationEvent.movingCharacter.OccupiedTile);
-            locationEvent.movingCharacter.onLocationChange.AddListener((character, lastLocation) =>
+            locationEvent.movingCharacter.onLocationChangeStart.AddListener((character, lastLocation) =>
             {
                 UpdateTrackedLocations(character, lastLocation);
                 locationEvent.reaction.Invoke();
             });
         }
+    }
+
+    private void SubscribeToTileOccupationEvents()
+    {
+        foreach (var tileEvent in tileOccupationEvents)
+        {
+            _trackedTiles.Add(tileEvent.tile, tileEvent.action);
+        }
+        GetComponent<MovingCharacter>().onLocationChangeEnd.AddListener(CheckForTrackedTile);
+    }
+
+    private void CheckForTrackedTile(TileContainer tile)
+    {
+        if (!_trackedTiles.ContainsKey(tile)) return;
+        _trackedTiles[tile]?.Invoke();
     }
 
     private void UpdateTrackedLocations(MovingCharacter movingCharacter, TileContainer tileContainer)
@@ -61,4 +79,11 @@ public class CharacterLocationEvent
 {
     public MovingCharacter movingCharacter;
     public UnityEvent reaction;
+}
+
+[Serializable]
+public class TileOccupationEvent
+{
+    public TileContainer tile;
+    public UnityEvent action;
 }

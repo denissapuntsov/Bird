@@ -9,7 +9,8 @@ public class MovingCharacter : MonoBehaviour
 {
     [SerializeField] private float speed = 5.0f;
     private Tween _move;
-    [HideInInspector] public UnityEvent<MovingCharacter, TileContainer> onLocationChange;
+    [HideInInspector] public UnityEvent<MovingCharacter, TileContainer> onLocationChangeStart;
+    [HideInInspector] public UnityEvent<TileContainer> onLocationChangeEnd;
     
     private TileContainer _occupiedTile;
     public TileContainer OccupiedTile
@@ -21,10 +22,18 @@ public class MovingCharacter : MonoBehaviour
             {
                 _occupiedTile.Owner = null;
             }
+
+            if (_hasJustStartedMoving)
+            {
+                onLocationChangeStart?.Invoke(this, _occupiedTile);
+                _hasJustStartedMoving = false;
+            }
             _occupiedTile = value;
             _occupiedTile.Owner = this;
         }
     }
+    
+    private bool _hasJustStartedMoving;
 
     private void Awake()
     {
@@ -55,7 +64,7 @@ public class MovingCharacter : MonoBehaviour
         var path = AStar.instance.CalculatePath(this, goal, out var reachableGoal);
         if (path != null)
         {
-            onLocationChange?.Invoke(this, OccupiedTile);
+            _hasJustStartedMoving = true;
         }
         StartPath(path, goal, onCompletePath);
     }
@@ -72,6 +81,7 @@ public class MovingCharacter : MonoBehaviour
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
+                onLocationChangeEnd?.Invoke(OccupiedTile);
                 if (OccupiedTile == goal)
                 {
                     onCompletePath?.Invoke();

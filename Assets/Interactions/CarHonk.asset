@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27400574e1b0a274da5e624b1de9e581, type: 3}
-  m_Name: 'crow [TEST]'
+  m_Script: {fileID: 11500000, guid: ad5acf7e9c2010f4c89db750726fad22, type: 3}
+  m_Name: CarHonk
   m_EditorClassIdentifier: 
-  audioClip: {fileID: 8300000, guid: 5a9b7f8683d97644da3a7c01b4a0c045, type: 3}
-  sprite: {fileID: 21300000, guid: 0af7cc83eccacad43aa639289f05ca45, type: 3}
+  range: 1
+  clip: {fileID: 8300000, guid: ab0f177aef654524b854ceb8dd4cbec3, type: 3}

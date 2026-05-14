@@ -11,11 +11,20 @@ public class PathFollower : MonoBehaviour
     private Action _onReachTarget;
     private int _currentTargetIndex = 0;
     private bool _isReversed = false;
+    
+    [HideInInspector] public bool moveOnStart = false;
+    [HideInInspector] public int startPathIndex = 0;
 
     private void Awake()
     {
         _movingCharacter = GetComponent<MovingCharacter>();
         _onReachTarget += GoToNextTarget;
+    }
+
+    private void Start()
+    {
+        if (!moveOnStart) return;
+        MoveAlongPath(startPathIndex);
     }
 
     private void GoToNextTarget()
@@ -50,7 +59,6 @@ public class PathFollower : MonoBehaviour
                 _currentTargetIndex = _isReversed ? _currentTargetIndex - 1 : _currentTargetIndex + 1;
                 break;
         }
-        Debug.Log(_currentTargetIndex);
         MoveToTargetOnPath(_activePath, _currentTargetIndex);
     }
     

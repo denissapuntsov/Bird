@@ -21,9 +21,16 @@ public class PlayerActions : MonoBehaviour
         {
             if (neighbor.Owner && neighbor.Owner != _character)
             {
-                var listener = neighbor.Owner.gameObject.GetComponent<AudioListener>();
+                var listener = neighbor.Owner.gameObject.GetComponent<SoundListener>();
                 listener?.TryKey(_inventory.currentSoundItem);
             }
         }
+    }
+    
+    public void OnListen(InputAction.CallbackContext context)
+    {
+        if (!context.started) return;
+        Debug.Log("Listening");
+        
     }
 }
