@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -70,12 +71,19 @@ public class PathFollower : MonoBehaviour
 }
 
 [Serializable]
-public class CharacterPath
+public class CharacterPath : IEnumerable
 {
     public MovementType movementType;
     public List<TileContainer> targets;
     public TileContainer this[int index] => targets[index];
     public int Length => targets.Count;
+    public bool Contains(TileContainer tile) => targets.Contains(tile);
+    public int IndexOf(TileContainer tile) => targets.IndexOf(tile);
+
+    public IEnumerator GetEnumerator()
+    {
+        return targets.GetEnumerator();
+    }
 }
 
 public enum MovementType

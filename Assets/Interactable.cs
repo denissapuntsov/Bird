@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public Listener Listener => _listener;
-    private Listener _listener;
+    public SoundListener SoundListener => _soundListener;
+    private SoundListener _soundListener;
 
     private void Awake()
     {
-        _listener = GetComponent<Listener>();
+        _soundListener = GetComponent<SoundListener>();
     }
 }

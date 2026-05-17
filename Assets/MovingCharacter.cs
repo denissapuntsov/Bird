@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class MovingCharacter : MonoBehaviour
 {
+    public UnityEvent<TileContainer> onTileReached;
     [SerializeField] private float speed = 5.0f;
     private Tween _move;
     
@@ -14,12 +16,13 @@ public class MovingCharacter : MonoBehaviour
         get => _occupiedTile;
         private set
         {
+            if (value == _occupiedTile) return;
             if (_occupiedTile)
             {
-                _occupiedTile.owner = null;
+                TileManager.instance.Remove(_occupiedTile);
             }
             _occupiedTile = value;
-            _occupiedTile.owner = this;
+            TileManager.instance.Add(this);
         }
     }
 
@@ -44,13 +47,22 @@ public class MovingCharacter : MonoBehaviour
         if (hitTile == OccupiedTile) return;
         OccupiedTile = hitTile;
     }
-
-    public void StartPath(List<TileContainer> path, TileContainer goal) => StartPath(path, goal, null);
-    public void StartPath(List<TileContainer> path, TileContainer goal, Action onCompletePath)
+    
+    public void Move(TileContainer goal) => Move(goal, null);
+    
+    public void Move(TileContainer goal, Action onCompletePath)
+    {
+        if (goal == OccupiedTile) return;
+        var path = AStar.instance.CalculatePath(this, goal, out var reachableGoal);
+        StartPath(path, goal, onCompletePath);
+    }
+    
+    public void StartPath(List<TileContainer> path, TileContainer goal) => StartPath(path, goal, goal);
+    public void StartPath(List<TileContainer> path, TileContainer goal, Action onCompletePath) => StartPath(path, goal, goal);
+    private void StartPath(List<TileContainer> path, TileContainer goal, TileContainer reachableGoal)
     {
         if (path == null) return;
         _move?.Kill();
-        path[1].isOccupied = true;
         _move = transform
             .DOMove(path[1].WorldPosition, speed)
             .SetSpeedBased(true)
@@ -58,13 +70,13 @@ public class MovingCharacter : MonoBehaviour
             .SetEase(Ease.Linear)
             .OnComplete(() =>
             {
-                if (OccupiedTile == goal)
+                onTileReached?.Invoke(OccupiedTile);
+                if (OccupiedTile == goal || OccupiedTile == reachableGoal)
                 {
-                    onCompletePath?.Invoke();
                     return;
                 }
-                var nextPath = AStar.instance.CalculatePath(this, goal, out TileContainer reachableGoal);
-                StartPath(nextPath, reachableGoal, onCompletePath);
+                var nextPath = AStar.instance.CalculatePath(this, goal, out reachableGoal);
+                StartPath(nextPath, goal, reachableGoal);
             });
     }
 }

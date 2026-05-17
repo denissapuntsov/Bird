@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad5acf7e9c2010f4c89db750726fad22, type: 3}
   m_Name: SoundItem_Test
   m_EditorClassIdentifier: 
-  range: 2
+  range: 1
   clip: {fileID: 0}

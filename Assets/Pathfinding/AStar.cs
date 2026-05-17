@@ -8,7 +8,7 @@ public class AStar : MonoBehaviour
     
     public float step = 2.5f;
 
-    [SerializeField] private TileContainer tileStart, tileGoal;
+    private TileContainer _tileStart, _tileGoal;
     
     // key is GridPosition, value is TileContainer
     private Dictionary<Vector3, TileContainer> _tiles = new Dictionary<Vector3, TileContainer>();
@@ -127,7 +127,7 @@ public class AStar : MonoBehaviour
             foreach (var neighbor in current.Neighbors.Values)
             {
                 // same as isOccupied, WIP 
-                if (neighbor.owner && neighbor.owner != character) continue;
+                if (TileManager.instance.GetTileOwner(neighbor) != character && TileManager.instance.GetTileOwner(neighbor) != null) continue;
                 
                 if (closedList.Contains(neighbor)) continue;
                 float tentativeGScore = gScoreMap[current] + GetManhattanDistance(current, neighbor);

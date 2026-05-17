@@ -19,11 +19,10 @@ public class PlayerActions : MonoBehaviour
         if (!_inventory.currentSoundItem) return;
         foreach (var neighbor in AStar.instance.GetNeighborsInRange(_character.OccupiedTile, _inventory.Range))
         {
-            if (neighbor.owner && neighbor.owner != _character)
-            {
-                var listener = neighbor.owner.gameObject.GetComponent<Listener>();
-                listener?.TryKey(_inventory.currentSoundItem);
-            }
+            var owner = TileManager.instance.GetTileOwner(neighbor);
+            if (!owner || owner == _character) continue;
+            var listener = owner.gameObject.GetComponent<SoundListener>();
+            listener?.TryKey(_inventory.currentSoundItem);
         }
     }
 }

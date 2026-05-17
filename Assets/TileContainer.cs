@@ -7,8 +7,6 @@ public class TileContainer : MonoBehaviour
     public Tile tile;
     public GameObject tileChild;
     public TileType tileType;
-    public bool isOccupied = false;
-    public MovingCharacter owner = null;
 
     public Vector3 WorldPosition => transform.position;
     public Vector3 GridPosition =>
